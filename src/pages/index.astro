@@ -1,0 +1,463 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Title from "../components/main/Title.astro";
+import Paragraph from "../components/main/Paragraph.astro";
+import SectionTitle from "../components/main/SectionTitle.astro";
+import HoverableIcon from "../components/shared/HoverableIcon.astro";
+import LinkedinIcon from "../components/icons/LinkedinIcon.astro";
+import GithubIcon from "../components/icons/GithubIcon.astro";
+import TwitterIcon from "../components/icons/TwitterIcon.astro";
+import DocumentIcon from "../components/icons/DocumentIcon.astro";
+import CopyIcon from "../components/icons/CopyIcon.astro";
+import FirebaseIcon from "../components/icons/FirebaseIcon.astro";
+import ReactIcon from "../components/icons/ReactIcon.astro";
+import RedisIcon from "../components/icons/RedisIcon.astro";
+import PythonIcon from "../components/icons/PythonIcon.astro";
+import TwilioIcon from "../components/icons/TwilioIcon.astro";
+import FlutterIcon from "../components/icons/FlutterIcon.astro";
+import CircleIcon from "../components/icons/CircleIcon.astro";
+import SvelteIcon from "../components/icons/SvelteIcon.astro";
+import NextIcon from "../components/icons/NextIcon.astro";
+import FastApiIcon from "../components/icons/FastApiIcon.astro";
+import DjangoIcon from "../components/icons/DjangoIcon.astro";
+import SupabaseIcon from "../components/icons/SupabaseIcon.astro";
+import ExpressIcon from "../components/icons/ExpressIcon.astro";
+import PrismaIcon from "../components/icons/PrismaIcon.astro";
+import AstroIcon from "../components/icons/AstroIcon.astro";
+import TailwindIcon from "../components/icons/TailwindIcon.astro";
+import TimeLine from "../components/main/timeline/TimeLine.astro";
+import TimeLineItem from "../components/main/timeline/TimeLineItem.astro";
+import TimeLineTime from "../components/main/timeline/TimeLineTime.astro";
+import TimeLineTitle from "../components/main/timeline/TimeLineTitle.astro";
+import TimeLineItalic from "../components/main/timeline/TimeLineItalic.astro";
+import LinkCard from "../components/main/card/LinkCard.astro";
+import CardTitle from "../components/main/card/CardTitle.astro";
+import CardContent from "../components/main/card/CardContent.astro";
+import IconCard from "../components/main/icon-card/IconCard.astro";
+import P5Icon from "../components/icons/P5Icon.astro";
+---
+
+<!-- TODO:
+- foto para el portafolio!
+- description de los projects
+- actualizar README de los projects que faltan: Quicknote, MoodleAPIHandler
+- actualizar el CV con los todos los proyectos del portfolio
+- subir el portfolio a github pages
+-->
+<BaseLayout title="Portfolio">
+  <section id="intro" class="flex gap-4 items-center">
+    <img
+      class="w-[150px] rounded-xl border border-razzmatazz-400 dark:border-razzmatazz-700 hover:translate-x-1 transition"
+      src="/images/profile_photo.jpeg"
+      alt="Erick Pulla"
+    />
+    <div class="flex flex-col gap-2">
+      <Title>Erick Pulla</Title>
+      <Paragraph>
+        Hi! I am <span class="text-razzmatazz-600 dark:text-razzmatazz-400"
+          >fullstack developer
+        </span>that loves building random stuff :)
+      </Paragraph>
+      <div
+        class="flex items-center rounded bg-slate-100 dark:bg-gray-900 py-1 px-2"
+      >
+        <input
+          class="bg-inherit text-gray-500 dark:text-gray-400 w-full text-sm sm:text-base"
+          type="text"
+          value="erickpulladsi@gmail.com"
+          id="mail"
+          onclick="this.select()"
+          disabled
+        />
+        <button
+          id="copy-email-btn"
+          data-tippy-content="Copy"
+          class="rounded text-gray-500 dark:text-gray-400 hover:scale-110"
+          ><CopyIcon /></button
+        >
+      </div>
+      <div class="flex gap-3">
+        <a
+          href="https://www.linkedin.com/in/erickpulla/"
+          target="_blank"
+          data-tippy-content="Linkedin"
+          class="border border-[#0078d4] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
+          ><LinkedinIcon /></a
+        >
+        <a
+          href="https://github.com/epulla"
+          target="_blank"
+          data-tippy-content="Github"
+          class="border border-[#383838] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
+          ><GithubIcon /></a
+        >
+        <a
+          href="https://twitter.com/erick_pulla"
+          target="_blank"
+          data-tippy-content="Twitter / X"
+          class="border border-[#03A9F4] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
+          ><TwitterIcon /></a
+        >
+        <a
+          href="#"
+          target="_blank"
+          data-tippy-content="CV"
+          class="border border-[#000] dark:border-[#fff] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer dark:text-white hover:scale-110"
+          ><DocumentIcon /></a
+        >
+      </div>
+    </div>
+  </section>
+  <section id="experience" class="flex flex-col gap-3">
+    <SectionTitle>Experience</SectionTitle>
+    <TimeLine>
+      <TimeLineItem>
+        <TimeLineTime>April 2023 - now</TimeLineTime>
+        <TimeLineTitle>
+          Senior Software Engineer (Novacomp)<TimeLineItalic>
+            San José, Costa Rica
+          </TimeLineItalic>
+        </TimeLineTitle>
+        <Paragraph>
+          - Developed cron job solutions in Apache Airflow for ACH files and
+          reports deliveries according to stakeholders' requirements such as
+          schedule, days (weekdays/holidays/weekend).
+          <br />
+           - Supported production as On Call Person to watch any incident,
+          requirement or special events during the day along with BizOps, DevOps
+          and Backend team.
+        </Paragraph>
+      </TimeLineItem>
+      <TimeLineItem>
+        <TimeLineTime>December 2021 - April 2023</TimeLineTime>
+        <TimeLineTitle>
+          Software Engineer (IOET)<TimeLineItalic>
+            Incline Village, NV, USA
+          </TimeLineItalic>
+        </TimeLineTitle>
+        <Paragraph>
+          - Led the development of a web application (frontend) of statistical
+          dashboard showing metrics about the performance of developers
+          completing Jira tickets during a sprint or a certain time lapse.
+          <br />
+           - Designed and implemented scalable APIs (REST and GraphQL) along
+          with cron jobs for managing first and third party services and
+          reducing time by 90% (from 10 seconds to 1 second)
+        </Paragraph>
+      </TimeLineItem>
+      <TimeLineItem>
+        <TimeLineTime>December 2021 - April 2023</TimeLineTime>
+        <TimeLineTitle>
+          Data Analyst (Guayaquil Municipality)
+          <TimeLineItalic>Guayaquil, Guayas, Ecuador</TimeLineItalic>
+        </TimeLineTitle>
+        <Paragraph>
+          - Collected and cleaned demographic raw data about pregnant women from
+          low-income neighborhoods in Guayaquil.
+          <br />
+           - Led the development and design of a frontend application that
+          helped to track syphilis cases in Guayaquil city using Google Maps.
+        </Paragraph>
+      </TimeLineItem>
+      <TimeLineItem>
+        <TimeLineTime>February 2020 - January 2021</TimeLineTime>
+        <TimeLineTitle>
+          Software Engineer (Fish Industry Santa Priscila)
+          <TimeLineItalic>Guayaquil, Guayas, Ecuador</TimeLineItalic>
+        </TimeLineTitle>
+        <Paragraph>
+          - Developed an automated bot that browses the Ecuadorian tax website
+          to extract relevant information for the company.
+          <br />
+           - Developed and implemented an e-learning system for seasonal
+          evaluation of workers and trained HR staff to manage it.
+        </Paragraph>
+      </TimeLineItem>
+      <TimeLineItem>
+        <TimeLineTime>February 2019 - February 2020</TimeLineTime>
+        <TimeLineTitle>
+          Master Assistant (Casa Grande University)
+          <TimeLineItalic>Guayaquil, Guayas, Ecuador</TimeLineItalic>
+        </TimeLineTitle>
+        <Paragraph>
+          Designed and developed mini games that helped a class lesson be more
+          interactive for students (games such as roulette with prices, tic tac
+          toe, dice roller, coin flipper).
+        </Paragraph>
+      </TimeLineItem>
+    </TimeLine>
+  </section>
+
+  <section id="projects" class="flex flex-col gap-3">
+    <SectionTitle>Projects</SectionTitle>
+    <LinkCard url="https://moodle-api-handler-jjcm.vercel.app/app">
+      <CardTitle>
+        <div class="flex items-center gap-3">
+          Moodle API Handler <span
+            class="text-green-400"
+            data-tippy-content="Active in Vercel"><CircleIcon /></span
+          >
+        </div>
+      </CardTitle>
+      <CardContent>
+        Moodle API Handler is an open-source tiny app that helps to manage your <a
+          class="underline"
+          href="https://docs.moodle.org/dev/Web_service_API_functions"
+          target="_blank"
+          rel="noopener noreferrer">API functions from Moodle</a
+        > (you can read more about Moodle WebServices <a
+          class="underline"
+          href="https://docs.moodle.org/dev/Web_service_API_functions"
+          target="_blank"
+          rel="noopener noreferrer">here</a
+        >).
+        <span class="flex gap-3 pt-3">
+          <HoverableIcon dataTippyContent="Svelte">
+            <SvelteIcon />
+          </HoverableIcon>
+           +
+          <HoverableIcon dataTippyContent="Firebase">
+            <FirebaseIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://github.com/epulla/quicknote">
+      <CardTitle>Quicknote</CardTitle>
+      <CardContent>
+        Quicknote is an open-source app that helps to create and share volatile
+        messages which only text is allowed. This app is perfect to quickly
+        share passwords, private tokens, private credentials and gossip :)
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="React">
+            <ReactIcon />
+          </HoverableIcon>
+           +
+          <HoverableIcon dataTippyContent="FastAPI">
+            <FastApiIcon />
+          </HoverableIcon>
+           +
+          <HoverableIcon dataTippyContent="Redis">
+            <RedisIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://github.com/epulla/twilio_minimal_video_call_app">
+      <CardTitle>Twilio Video Call App</CardTitle>
+      <CardContent>
+        This is a minimal application for videocalling (Peer-to-Peer) using <a
+          class="underline"
+          href="https://www.twilio.com/docs"
+          target="_blank"
+          rel="noopener noreferrer">Twilio API</a
+        > (you must need to get access to Twilio credentials to use the app).
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="FastAPI">
+            <FastApiIcon />
+          </HoverableIcon>
+           +
+          <HoverableIcon dataTippyContent="Twilio">
+            <TwilioIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://github.com/epulla/pokedex-flutter">
+      <CardTitle>Mobile Pokedex App</CardTitle>
+      <CardContent>
+        This is a project about showing an interactive Pokedex in a mobile
+        version. This project was created using Flutter, Dart and <a
+          class="underline"
+          href="https://pokeapi.co/"
+          target="_blank"
+          rel="noopener noreferrer">PokéApi</a
+        > (free pókemon API).
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="Flutter">
+            <FlutterIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://github.com/epulla/BingoGenerator">
+      <CardTitle>Bingo Generator</CardTitle>
+      <CardContent>
+        This project is a Bingo generator (Ecuador version). It is one of my
+        very first projects as a programming student. Hope you like it! :D
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="Python">
+            <PythonIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+  </section>
+  <section id="techs" class="flex flex-col gap-3">
+    <SectionTitle>Favorite Techs</SectionTitle>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <IconCard>
+        <HoverableIcon
+          dataTippyContent="I personally love it along with SvelteKit"
+        >
+          <SvelteIcon size={56} />
+        </HoverableIcon>
+         Svelte
+      </IconCard>
+      <IconCard>
+        <HoverableIcon>
+          <NextIcon size={56} />
+        </HoverableIcon>
+         Next.js
+      </IconCard>
+      <IconCard>
+        <HoverableIcon dataTippyContent="My first language <3">
+          <PythonIcon size={56} />
+        </HoverableIcon>
+         Python
+      </IconCard>
+      <IconCard>
+        <HoverableIcon
+          dataTippyContent="Really nice service! Specially its NoSQL database (FireStore) and realtime changes"
+        >
+          <FirebaseIcon size={56} />
+        </HoverableIcon>
+         Firebase
+      </IconCard>
+      <IconCard>
+        <HoverableIcon
+          dataTippyContent="Damn good service! Specially its SQL database and realtime changes"
+        >
+          <SupabaseIcon size={56} />
+        </HoverableIcon>
+         Supabase
+      </IconCard>
+      <IconCard>
+        <HoverableIcon dataTippyContent="Best ORM!">
+          <PrismaIcon size={56} />
+        </HoverableIcon>
+         Prisma
+      </IconCard>
+      <IconCard>
+        <HoverableIcon>
+          <ExpressIcon size={56} />
+        </HoverableIcon>
+         Express
+      </IconCard>
+      <IconCard>
+        <HoverableIcon>
+          <FastApiIcon size={56} />
+        </HoverableIcon>
+         FastAPI
+      </IconCard>
+      <IconCard>
+        <HoverableIcon>
+          <DjangoIcon size={56} />
+        </HoverableIcon>
+         Django
+      </IconCard>
+      <IconCard>
+        <HoverableIcon
+          dataTippyContent="Good and easy framework for static sites (like this portfolio)"
+        >
+          <AstroIcon size={56} />
+        </HoverableIcon>
+         Astro
+      </IconCard>
+      <IconCard>
+        <HoverableIcon dataTippyContent="Best JS library ever!">
+          <P5Icon size={56} />
+        </HoverableIcon>
+         p5.js
+      </IconCard>
+      <IconCard>
+        <HoverableIcon dataTippyContent="Best CSS library ever!">
+          <TailwindIcon size={56} />
+        </HoverableIcon>
+         tailwindcss
+      </IconCard>
+    </div>
+  </section>
+  <section id="education" class="flex flex-col gap-3">
+    <SectionTitle>Education</SectionTitle>
+    <TimeLine>
+      <TimeLineItem>
+        <TimeLineTime>February 2017 - March 2022</TimeLineTime>
+        <TimeLineTitle>
+          Engineer Degree (ESPOL)<TimeLineItalic>
+            Guayaquil, Guayas, Ecuador
+          </TimeLineItalic>
+        </TimeLineTitle>
+        <Paragraph>Major in Computer Science Engineering</Paragraph>
+      </TimeLineItem>
+    </TimeLine>
+  </section>
+</BaseLayout>
+
+<script is:inline src="https://unpkg.com/@popperjs/core@2"></script>
+<script is:inline src="https://unpkg.com/tippy.js@6"></script>
+<script is:inline>
+  tippy("[data-tippy-content]", {
+    placement: "bottom",
+    theme: "light",
+  });
+
+  const copyEmailBtnTippy = tippy("#copy-email-btn", {
+    placement: "bottom",
+    theme: "light",
+    hideOnClick: false,
+  })[0];
+
+  // copy mail to clipboard
+  // reference: https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
+  const copyEmailBtn = document.getElementById("copy-email-btn");
+  copyEmailBtn.addEventListener("click", () => {
+    const mailElement = document.getElementById("mail");
+    // Select the text field
+    mailElement.select();
+    mailElement.setSelectionRange(0, 99999); // For mobile devices
+
+    // Copy the text inside the text field
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(mailElement.value);
+      copyEmailBtnTippy.setContent("Copied!");
+
+      setTimeout(() => {
+        copyEmailBtnTippy.setContent("Copy");
+      }, 4000);
+    } else {
+      // alert("hey")
+      mailElement.removeAttribute("disabled");
+      mailElement.setAttribute("readonly", true);
+      mailElement.select();
+    }
+  });
+</script>
+
+<style is:global>
+  .dark .tippy-box[data-theme~="light"] {
+    background-color: #fff;
+    color: #111827;
+  }
+
+  .dark
+    .tippy-box[data-theme~="light"][data-placement^="top"]
+    > .tippy-arrow::before {
+    border-top-color: #fff;
+  }
+  .dark
+    .tippy-box[data-theme~="light"][data-placement^="bottom"]
+    > .tippy-arrow::before {
+    border-bottom-color: #fff;
+  }
+  .dark
+    .tippy-box[data-theme~="light"][data-placement^="left"]
+    > .tippy-arrow::before {
+    border-left-color: #fff;
+  }
+  .dark
+    .tippy-box[data-theme~="light"][data-placement^="right"]
+    > .tippy-arrow::before {
+    border-right-color: #fff;
+  }
+</style>

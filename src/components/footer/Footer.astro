@@ -1,0 +1,40 @@
+---
+import Paragraph from "../main/Paragraph.astro";
+import HeartIcon from "../icons/HeartIcon.astro";
+import AstroIcon from "../icons/AstroIcon.astro";
+import SvelteIcon from "../icons/SvelteIcon.astro";
+import HoverableIcon from "../shared/HoverableIcon.astro";
+---
+
+<footer
+  class="max-w-3xl mx-auto flex flex-col justify-center items-center my-5 py-4 px-5 gap-2 border-t border-gray-200 dark:border-gray-700"
+>
+  <section id="built-with" class="flex gap-2">
+    <HoverableIcon>
+      <AstroIcon />
+    </HoverableIcon>
+    <Paragraph>+</Paragraph>
+    <HoverableIcon>
+      <SvelteIcon />
+    </HoverableIcon>
+  </section>
+  <section id="made-by" class="flex gap-2">
+    <Paragraph>Made with</Paragraph>
+    <Paragraph>
+      <span
+        class="text-[#fff0] block hover:text-razzmatazz-400 transition hover:scale-125"
+        ><HeartIcon /></span
+      >
+    </Paragraph>
+    <Paragraph>by epulla</Paragraph>
+  </section>
+  <section id="based-on">
+    <Paragraph>
+      Design based on <a
+        href="https://eduardorl.vercel.app/"
+        target="_blank"
+        class="underline">Eduardo RL's portofolio</a
+      >
+    </Paragraph>
+  </section>
+</footer>

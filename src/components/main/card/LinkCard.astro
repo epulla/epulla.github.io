@@ -1,0 +1,18 @@
+---
+import ExternalLinkIcon from "../../icons/ExternalLinkIcon.astro";
+const { url } = Astro.props;
+---
+
+<div
+  class="flex p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition"
+>
+  <div class="flex flex-1 flex-col">
+    <slot />
+  </div>
+  <a
+    href={url}
+    target="_blank"
+    class="flex-none w-16 flex items-center justify-center text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 transition rounded"
+    ><ExternalLinkIcon /></a
+  >
+</div>
