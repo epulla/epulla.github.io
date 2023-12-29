@@ -43,11 +43,10 @@ import P5Icon from "../components/icons/P5Icon.astro";
   - Linkearlo al botón de CV del portfolio
   - fix responsive first section
  -->
-
 <BaseLayout title="Portfolio">
   <section id="intro" class="flex gap-4 items-center">
     <img
-      class="w-[150px] rounded-xl border border-razzmatazz-400 dark:border-razzmatazz-700 hover:translate-x-1 transition"
+      class="w-[115px] sm:w-[150px] md:w-[200px] rounded-xl border border-razzmatazz-400 dark:border-razzmatazz-700 hover:translate-x-1 transition"
       src="/images/profile_photo.jpeg"
       alt="Erick Pulla"
     />
@@ -103,8 +102,10 @@ import P5Icon from "../components/icons/P5Icon.astro";
           target="_blank"
           data-tippy-content="CV"
           class="border border-[#000] dark:border-[#fff] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer dark:text-white hover:scale-110"
-          ><DocumentIcon /></a
         >
+          <span class="hidden sm:inline"><DocumentIcon /></span>
+          <span class="inline-flex sm:hidden h-full items-center px-[4px]">CV</span>
+        </a>
       </div>
     </div>
   </section>
