@@ -35,6 +35,8 @@ import CardTitle from "../components/main/card/CardTitle.astro";
 import CardContent from "../components/main/card/CardContent.astro";
 import IconCard from "../components/main/icon-card/IconCard.astro";
 import P5Icon from "../components/icons/P5Icon.astro";
+import ViteIcon from "../components/icons/ViteIcon.astro";
+import ChromeIcon from "../components/icons/ChromeIcon.astro";
 ---
 
 <BaseLayout title="Portfolio">
@@ -187,6 +189,28 @@ import P5Icon from "../components/icons/P5Icon.astro";
 
   <section id="projects" class="flex flex-col gap-3">
     <SectionTitle>Projects</SectionTitle>
+    <LinkCard url="https://github.com/epulla/easy-web-macros">
+      <CardTitle>
+        <div class="flex items-center gap-3">Easy Web Macros</div>
+      </CardTitle>
+      <CardContent>
+        Google Chrome Extension that will allow an user to record your web
+        actions and replay them with a single click. (Will be published soon in)
+        <span class="flex gap-3 pt-3">
+          <HoverableIcon dataTippyContent="Svelte">
+            <SvelteIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Vite">
+            <ViteIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Chrome API">
+            <ChromeIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
     <LinkCard url="https://github.com/epulla/moodle-api-handler">
       <CardTitle>
         <div class="flex items-center gap-3">Moodle API Handler</div>
