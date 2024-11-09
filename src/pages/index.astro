@@ -37,6 +37,7 @@ import IconCard from "../components/main/icon-card/IconCard.astro";
 import P5Icon from "../components/icons/P5Icon.astro";
 import ViteIcon from "../components/icons/ViteIcon.astro";
 import ChromeIcon from "../components/icons/ChromeIcon.astro";
+import TypescriptIcon from "../components/icons/TypescriptIcon.astro";
 import DrizzleIcon from "../components/icons/DrizzleIcon.astro";
 ---
 
@@ -231,13 +232,33 @@ import DrizzleIcon from "../components/icons/DrizzleIcon.astro";
 
   <section id="projects" class="flex flex-col gap-3">
     <SectionTitle>Projects</SectionTitle>
+    <LinkCard>
+      <CardTitle>
+        <div class="flex items-center gap-3">Prod Tickets</div>
+      </CardTitle>
+      <CardContent>
+        Prod Tickets: Jira clone made with Sveltekit (frontend) and Nest.js
+        (backend) for ticketing. This project was implemented for the ITB
+        (Bolivarian Technological Institute or ITB in spanish) (released
+        privately on 09/2024)
+        <span class="flex gap-3 pt-3">
+          <HoverableIcon dataTippyContent="Svelte">
+            <SvelteIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Typescript">
+            <TypescriptIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
     <LinkCard url="https://github.com/epulla/easy-web-macros">
       <CardTitle>
         <div class="flex items-center gap-3">Easy Web Macros</div>
       </CardTitle>
       <CardContent>
         Google Chrome Extension that will allow an user to record your web
-        actions and replay them with a single click. (Will be published soon in)
+        actions and replay them with a single click.
         <span class="flex gap-3 pt-3">
           <HoverableIcon dataTippyContent="Svelte">
             <SvelteIcon />
