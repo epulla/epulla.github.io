@@ -10,6 +10,12 @@ let fontGraphics;
 
 let showInstructions = true;
 
+let PARTICLE_COUNT = /Mobi|Android|iPhone|iPad/.test(navigator.userAgent)
+  ? 50
+  : 100;
+
+let staticSky;
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
@@ -18,7 +24,11 @@ function setup() {
   let canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("sketch-holder");
   noStroke();
-  frameRate(30);
+  if (/Mobi|Android|iPhone|iPad/.test(navigator.userAgent)) {
+    frameRate(30); // o incluso 24
+  } else {
+    frameRate(60);
+  }
 
   // Crear imagen de texto en un gráfico
   fontGraphics = createGraphics(width, height);
@@ -42,39 +52,38 @@ function setup() {
   }
 
   usedPoints = new Array(textPoints.length).fill(false);
+
+  // Crear el gráfico estático
+  staticSky = createGraphics(width, height);
+
+  // Cielo degradado
+  for (let y = 0; y < height; y++) {
+    let inter = map(y, 0, height, 0, 1);
+    let c = lerpColor(color(10, 10, 35), color(0, 0, 15), inter);
+    staticSky.stroke(c);
+    staticSky.line(0, y, width, y);
+  }
+
+  // Estrellas (fijas)
+  staticSky.noStroke();
+  for (let i = 0; i < 200; i++) {
+    let x = random(width);
+    let y = random(height * 0.9);
+    let size = random(1, 3);
+    let alpha = random(180, 255);
+    staticSky.fill(255, alpha);
+    staticSky.ellipse(x, y, size);
+  }
 }
 
 function draw() {
-  drawSky();
-  drawStars();
+  image(staticSky, 0, 0); // dibuja el fondo estático
   drawCity();
   drawFireworks();
 
   if (showInstructions) {
     drawInstructions();
   }
-}
-
-function drawSky() {
-  for (let y = 0; y < height; y++) {
-    let inter = map(y, 0, height, 0, 1);
-    let c = lerpColor(color(10, 10, 35), color(0, 0, 15), inter);
-    stroke(c);
-    line(0, y, width, y);
-  }
-}
-
-function drawStars() {
-  push();
-  randomSeed(99);
-  for (let i = 0; i < 200; i++) {
-    let x = random(width);
-    let y = random(height * 0.9);
-    let alpha = map(sin(frameCount * 0.05 + i), -1, 1, 100, 255);
-    fill(255, alpha);
-    ellipse(x, y, random(1, 3));
-  }
-  pop();
 }
 
 function drawCity() {
@@ -104,7 +113,7 @@ function drawInstructions() {
   let message = isTouch
     ? "Toca ambos lados con los pulgares\nrepetidamente"
     : "Presiona las teclas A y D repetidamente";
-  
+
   if (isTouch) {
     textSize(width * 0.05); // más grande para móviles
   }
@@ -148,6 +157,10 @@ function handleFireworkTrigger(x) {
 }
 
 function drawFireworks() {
+  // if (fireworks.length > 10) {
+  //   fireworks.splice(0, fireworks.length - 10); // conserva solo los 10 más recientes
+  // }
+
   for (let i = fireworks.length - 1; i >= 0; i--) {
     fireworks[i].update();
     fireworks[i].show();
@@ -182,7 +195,7 @@ class Firework {
       if (this.firework.pos.y <= this.explodeHeight) {
         this.exploded = true;
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
           let p = new Particle(
             this.firework.pos.x,
             this.firework.pos.y,
