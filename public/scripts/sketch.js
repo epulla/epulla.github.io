@@ -10,10 +10,6 @@ let fontGraphics;
 
 let showInstructions = true;
 
-let PARTICLE_COUNT = /Mobi|Android|iPhone|iPad/.test(navigator.userAgent)
-  ? 50
-  : 100;
-
 let staticSky;
 
 function windowResized() {
@@ -29,6 +25,8 @@ function setup() {
   } else {
     frameRate(60);
   }
+
+  pixelDensity(1); // para evitar problemas de escala en pantallas de alta resolución
 
   // Crear imagen de texto en un gráfico
   fontGraphics = createGraphics(width, height);
@@ -157,10 +155,6 @@ function handleFireworkTrigger(x) {
 }
 
 function drawFireworks() {
-  // if (fireworks.length > 10) {
-  //   fireworks.splice(0, fireworks.length - 10); // conserva solo los 10 más recientes
-  // }
-
   for (let i = fireworks.length - 1; i >= 0; i--) {
     fireworks[i].update();
     fireworks[i].show();
@@ -195,7 +189,7 @@ class Firework {
       if (this.firework.pos.y <= this.explodeHeight) {
         this.exploded = true;
 
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
+        for (let i = 0; i < 100; i++) {
           let p = new Particle(
             this.firework.pos.x,
             this.firework.pos.y,
