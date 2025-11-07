@@ -159,7 +159,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
-  letter = "FELIZ CUMPLE MI GEN!".replace(/\s/g, "").split("");
+  letter = "FELIZ CUMPLE MI GEN! TE QUIERO MUCHO".replace(/\s/g, "").split("");
   textCounter = 0;
   gravity = createVector(0, 0.2);
   addFirework();
