@@ -82,7 +82,12 @@ class Particle {
       this.seekComplete = true;
     }
     if (this.firework) {
-      this.vel = createVector(0, -10);
+        // Calculate velocity needed to reach middle-upper area (30% from top)
+        // Using physics: v² = u² + 2as, where final v=0, a=gravity(0.2), s=distance
+        let targetY = height * 0.3; // Target explosion point at 30% from top
+        let distance = height - targetY; // Distance to travel upward
+        let velocityNeeded = -sqrt(2 * 0.2 * distance); // Negative because going up
+        this.vel = createVector(0, velocityNeeded);
     }
   }
 
@@ -148,13 +153,13 @@ let textCounter = 0;
 let font;
 
 function preload() {
-  font = loadFont("/fonts/Montserrat-VariableFont_wght.ttf");
+  font = loadFont("/fonts/MomoTrustDisplay-Regular.ttf");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   colorMode(HSB);
-  letter = "FELI CUMPLE MI GEN!".replace(/\s/g, "").split("");
+  letter = "FELIZ CUMPLE MI GEN!".replace(/\s/g, "").split("");
   textCounter = 0;
   gravity = createVector(0, 0.2);
   addFirework();
