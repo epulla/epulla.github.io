@@ -148,7 +148,7 @@ let textCounter = 0;
 let font;
 
 function preload() {
-  font = loadFont("fonts/Montserrat-VariableFont_wght.ttf");
+  font = loadFont("/fonts/Montserrat-VariableFont_wght.ttf");
 }
 
 function setup() {
