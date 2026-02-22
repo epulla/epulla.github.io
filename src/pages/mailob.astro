@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Love 💌</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"
+    ></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0a0a0f;
+        --text: #f0e6d3;
+        --accent: #c9956a;
+        --gold: #d4a853;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Cormorant Garamond", serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition: background 2s ease;
+      }
+
+      /* ── TYPEWRITER SCREEN ── */
+      #typewriter-screen {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #0a0a0f;
+        z-index: 100;
+      }
+
+      #canvas-container {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+
+      #typewriter-text {
+        position: relative;
+        z-index: 1;
+        font-family: "Playfair Display", serif;
+        font-size: clamp(1.8rem, 5vw, 3.5rem);
+        font-style: italic;
+        color: #f0e6d3;
+        letter-spacing: 0.04em;
+        text-align: center;
+        padding: 0 2rem;
+        text-shadow: 0 0 40px rgba(201, 149, 106, 0.4);
+        min-height: 1.4em;
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        background: var(--accent);
+        margin-left: 4px;
+        vertical-align: middle;
+        animation: blink 0.7s step-end infinite;
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* ── MAIN CONTENT ── */
+      #main-content {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 4rem 1.5rem 6rem;
+        min-height: 100vh;
+      }
+
+      /* floating petals canvas */
+      #petals-canvas {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .content-wrapper {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 680px;
+      }
+
+      /* ── LETTER ── */
+      .letter {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(201, 149, 106, 0.25);
+        border-radius: 2px;
+        padding: 3.5rem 3rem;
+        backdrop-filter: blur(4px);
+        box-shadow:
+          0 0 80px rgba(201, 149, 106, 0.08),
+          inset 0 0 40px rgba(0, 0, 0, 0.2);
+        position: relative;
+        animation: fadeSlideUp 1s ease forwards;
+      }
+
+      .letter::before {
+        content: "";
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        border: 1px solid rgba(201, 149, 106, 0.1);
+        pointer-events: none;
+      }
+
+      @keyframes fadeSlideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .letter-date {
+        font-size: 0.85rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 2.5rem;
+        opacity: 0.8;
+      }
+
+      .letter h2 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+        font-style: italic;
+        font-weight: 400;
+        margin-bottom: 2rem;
+        color: var(--gold);
+      }
+
+      .letter p {
+        font-size: 1.15rem;
+        line-height: 2;
+        font-weight: 300;
+        margin-bottom: 1.5rem;
+        color: rgba(240, 230, 211, 0.9);
+      }
+
+      .letter .signature {
+        margin-top: 2.5rem;
+        font-family: "Playfair Display", serif;
+        font-style: italic;
+        font-size: 1.4rem;
+        color: var(--accent);
+        text-align: right;
+      }
+
+      .highlight {
+        color: var(--gold);
+        font-weight: 400;
+      }
+
+      /* ── BUTTONS ── */
+      .buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2.5rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.1rem;
+        letter-spacing: 0.1em;
+        padding: 0.8em 2.5em;
+        border-radius: 2px;
+        border: none;
+        cursor: pointer;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease,
+          font-size 0.5s ease,
+          padding 0.5s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-yes {
+        background: linear-gradient(135deg, #c9956a, #d4a853);
+        color: #0a0a0f;
+        font-weight: 700;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 20px rgba(201, 149, 106, 0.4);
+      }
+
+      .btn-yes:hover {
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 8px 30px rgba(201, 149, 106, 0.6);
+      }
+
+      .btn-no {
+        background: transparent;
+        color: rgba(240, 230, 211, 0.5);
+        border: 1px solid rgba(240, 230, 211, 0.2);
+        font-size: 1rem;
+      }
+
+      .btn-no:hover {
+        border-color: rgba(240, 230, 211, 0.4);
+        color: rgba(240, 230, 211, 0.7);
+      }
+
+      /* ── RESPONSE MESSAGE ── */
+      #response-msg {
+        margin-top: 2rem;
+        font-family: "Playfair Display", serif;
+        font-style: italic;
+        font-size: clamp(1.1rem, 3vw, 1.5rem);
+        text-align: center;
+        min-height: 2em;
+        color: var(--gold);
+        opacity: 0;
+        transition: opacity 0.6s ease;
+        line-height: 1.6;
+      }
+
+      #response-msg.visible {
+        opacity: 1;
+      }
+
+      /* ── RAINBOW BG ── */
+      body.yes-mode {
+        background: linear-gradient(135deg, #1a0a2e, #2d1b4e, #0d2a1a, #2a1a0d);
+        background-size: 400% 400%;
+        animation: rainbowBg 4s ease infinite;
+      }
+
+      @keyframes rainbowBg {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TYPEWRITER SCREEN -->
+    <div id="typewriter-screen">
+      <div id="canvas-container"></div>
+      <div id="typewriter-text">
+        <span id="tw-span"></span><span class="cursor"></span>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content">
+      <div class="content-wrapper">
+        <div class="letter">
+          <div class="letter-date">
+            Mañana por la noche · Con todo mi cariño
+          </div>
+          <h2>Para mi amor,</h2>
+          <p>
+            Sé que hoy no nos pudimos ver, y eso me pesó todo el día. Así que
+            quiero proponerte algo especial:
+          </p>
+          <p>
+            ¿Me harías el honor de acompañarme a cenar mañana? Un lugar bonito,
+            buena comida y, lo más importante,
+            <span class="highlight">tu compañía</span>.
+          </p>
+          <p>
+            Te paso a buscar a las <span class="highlight">7:00 PM</span>. Solo
+            tienes que decirme que sí. ✨
+          </p>
+          <div class="signature">— Tu admirador secreto 🌹</div>
+        </div>
+
+        <div class="buttons">
+          <button class="btn btn-yes" id="btn-yes">Sí, claro que sí 💛</button>
+          <button class="btn btn-no" id="btn-no">No</button>
+        </div>
+
+        <div id="response-msg"></div>
+      </div>
+    </div>
+
+    <script is:raw>
+      // ─── TYPEWRITER LOGIC ───────────────────────────────────────────────
+      const phrases = [
+        "My love",
+        "Todo el día has estado en mi mente",
+        "No nos pudimos ver hoy",
+        "Pero quiero verte mañana",
+        "En un lugar bonito...",
+      ];
+
+      const twSpan = document.getElementById("tw-span");
+      let phraseIdx = 0,
+        charIdx = 0,
+        deleting = false;
+      const TYPE_SPEED = 70,
+        DELETE_SPEED = 35,
+        PAUSE = 1800,
+        PAUSE_END = 800;
+
+      function typewriterTick() {
+        const phrase = phrases[phraseIdx];
+        if (!deleting) {
+          twSpan.textContent = phrase.slice(0, ++charIdx);
+          if (charIdx === phrase.length) {
+            deleting = true;
+            const isLast = phraseIdx === phrases.length - 1;
+            setTimeout(typewriterTick, isLast ? PAUSE * 1.5 : PAUSE);
+            if (isLast) {
+              setTimeout(
+                showMainContent,
+                PAUSE * 1.5 + phrase.length * DELETE_SPEED + 600,
+              );
+            }
+            return;
+          }
+        } else {
+          twSpan.textContent = phrase.slice(0, --charIdx);
+          if (charIdx === 0) {
+            deleting = false;
+            phraseIdx++;
+            if (phraseIdx >= phrases.length) return;
+            setTimeout(typewriterTick, PAUSE_END);
+            return;
+          }
+        }
+        setTimeout(typewriterTick, deleting ? DELETE_SPEED : TYPE_SPEED);
+      }
+
+      setTimeout(typewriterTick, 600);
+
+      function showMainContent() {
+        const screen = document.getElementById("typewriter-screen");
+        screen.style.transition = "opacity 1.2s ease";
+        screen.style.opacity = "0";
+        setTimeout(() => {
+          screen.style.display = "none";
+          const main = document.getElementById("main-content");
+          main.style.display = "flex";
+          initPetals();
+        }, 1200);
+      }
+
+      // ─── P5: STARFIELD ON TYPEWRITER SCREEN ─────────────────────────────
+      new p5(function (s) {
+        let stars = [];
+        s.setup = function () {
+          const cnv = s.createCanvas(window.innerWidth, window.innerHeight);
+          cnv.parent("canvas-container");
+          for (let i = 0; i < 160; i++) {
+            stars.push({
+              x: s.random(s.width),
+              y: s.random(s.height),
+              r: s.random(0.5, 2),
+              spd: s.random(0.1, 0.4),
+            });
+          }
+        };
+        s.draw = function () {
+          s.clear();
+          s.noStroke();
+          for (let st of stars) {
+            let alpha = s.map(
+              s.sin(s.frameCount * 0.02 + st.x),
+              -1,
+              1,
+              80,
+              220,
+            );
+            s.fill(201, 149, 106, alpha);
+            s.ellipse(st.x, st.y, st.r * 2);
+            st.y += st.spd;
+            if (st.y > s.height) {
+              st.y = 0;
+              st.x = s.random(s.width);
+            }
+          }
+        };
+        s.windowResized = function () {
+          s.resizeCanvas(window.innerWidth, window.innerHeight);
+        };
+      });
+
+      // ─── P5: FLOATING PETALS ────────────────────────────────────────────
+      function initPetals() {
+        new p5(function (s) {
+          let petals = [];
+          class Petal {
+            constructor() {
+              this.reset(true);
+            }
+            reset(init) {
+              this.x = s.random(s.width);
+              this.y = init ? s.random(-200, s.height) : s.random(-50, -10);
+              this.size = s.random(4, 10);
+              this.speed = s.random(0.4, 1.2);
+              this.drift = s.random(-0.5, 0.5);
+              this.rot = s.random(s.TWO_PI);
+              this.rotSpd = s.random(-0.02, 0.02);
+              this.alpha = s.random(60, 140);
+            }
+            update() {
+              this.y += this.speed;
+              this.x += this.drift + s.sin(this.y * 0.01 + this.x) * 0.3;
+              this.rot += this.rotSpd;
+              if (this.y > s.height + 20) this.reset(false);
+            }
+            draw() {
+              s.push();
+              s.translate(this.x, this.y);
+              s.rotate(this.rot);
+              s.noStroke();
+              s.fill(212, 168, 83, this.alpha);
+              s.ellipse(0, 0, this.size, this.size * 1.6);
+              s.pop();
+            }
+          }
+          s.setup = function () {
+            const c = s.createCanvas(window.innerWidth, window.innerHeight);
+            // attach to the existing petals-canvas placeholder's parent, fixed position
+            c.elt.style.position = "fixed";
+            c.elt.style.top = "0";
+            c.elt.style.left = "0";
+            c.elt.style.pointerEvents = "none";
+            c.elt.style.zIndex = "0";
+            document.body.appendChild(c.elt);
+            for (let i = 0; i < 50; i++) petals.push(new Petal());
+          };
+          s.draw = function () {
+            s.clear();
+            petals.forEach((p) => {
+              p.update();
+              p.draw();
+            });
+          };
+          s.windowResized = function () {
+            s.resizeCanvas(window.innerWidth, window.innerHeight);
+          };
+        });
+
+        // ─── BUTTON LOGIC (init here so DOM is visible) ──────────────────
+        const btnYes = document.getElementById("btn-yes");
+        const btnNo = document.getElementById("btn-no");
+        const msg = document.getElementById("response-msg");
+
+        const noMessages = [
+          "Mmmm...",
+          "No te veo tan segura de que no quieras ir eh!",
+          "Okok estuvo buena la broma jajaj",
+          "Okeyyy tendré que tomar medidas mas drásticas 😈",
+        ];
+
+        let noCount = 0;
+        let yesFontSize = 1.2;
+        let noFontSize = 1.0;
+
+        function showMsg(text) {
+          msg.classList.remove("visible");
+          void msg.offsetWidth;
+          msg.textContent = text;
+          setTimeout(() => {
+            msg.classList.add("visible");
+            msg.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 50);
+        }
+
+        btnYes.addEventListener("click", () => {
+          document.body.classList.add("yes-mode");
+          showMsg(
+            "¡Sabía que ibas a decir que sí! Nos vemos mañana my love 😊",
+          );
+          btnYes.disabled = true;
+          btnNo.style.display = "none";
+        });
+
+        btnNo.addEventListener("click", () => {
+          const text =
+            noCount < noMessages.length ? noMessages[noCount] : "Okeyyyy... 🥺";
+          showMsg(text);
+          noCount++;
+
+          if (noCount >= 4) {
+            yesFontSize = Math.min(yesFontSize + 0.25, 3);
+            noFontSize = Math.max(noFontSize - 0.18, 0.4);
+            btnYes.style.fontSize = yesFontSize + "rem";
+            btnYes.style.padding = `${0.8 * (yesFontSize / 1.2)}em ${2.5 * (yesFontSize / 1.2)}em`;
+            btnNo.style.fontSize = noFontSize + "rem";
+            btnNo.style.padding = `${0.6 * (noFontSize / 1.0)}em ${1.5 * (noFontSize / 1.0)}em`;
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
