@@ -18,15 +18,6 @@
       rel="stylesheet"
     />
 
-    <!-- p5.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"
-    ></script>
-
-    <!-- canvas-confetti -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
-    ></script>
-
     <style>
       *,
       *::before,
@@ -313,14 +304,17 @@
       #canvas-wrapper {
         width: 100%;
         max-width: 400px;
-        aspect-ratio: 1;
+        aspect-ratio: 1 / 1;
         position: relative;
+        overflow: hidden;
       }
 
       #canvas-wrapper canvas {
-        display: block;
+        position: absolute !important;
+        top: 0;
+        left: 0;
         width: 100% !important;
-        height: auto !important;
+        height: 100% !important;
         border-radius: 50%;
         filter: drop-shadow(0 8px 24px rgba(232, 87, 122, 0.25));
       }
@@ -336,17 +330,29 @@
 
       /* ── Responsive ── */
       @media (max-width: 680px) {
+        .page {
+          padding: 1.5rem 1rem 3rem;
+        }
+        .header {
+          margin-bottom: 1.5rem;
+        }
         .main-card {
           flex-direction: column;
           align-items: center;
-          padding: 1.8rem;
+          padding: 1.2rem;
+          gap: 1.5rem;
+        }
+        .right-panel {
+          order: -1;
+          width: 100%;
         }
         .left-panel {
           flex: none;
           width: 100%;
         }
         #canvas-wrapper {
-          max-width: 320px;
+          max-width: min(85vw, 320px);
+          width: 100%;
         }
       }
     </style>
@@ -355,7 +361,7 @@
     <div class="page">
       <!-- Header -->
       <header class="header">
-        <p class="header-eyebrow">para nosotros (Dome y Erick) ✦</p>
+        <p class="header-eyebrow">para nosotros ✦</p>
         <h1 class="header-title">
           La Ruleta de los<br /><span>Plansitos</span>
         </h1>
@@ -394,6 +400,14 @@
       </div>
     </div>
 
+    <script
+      is:inline
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"
+    ></script>
+    <script
+      is:inline
+      src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
+    ></script>
     <script is:inline>
       (function () {
         // ── Palette: warm romantic tones ─────────────────────────────────────
@@ -528,15 +542,27 @@
           const wrap = document.getElementById("canvas-wrapper");
 
           p5inst = new p5(function (p) {
-            const SIZE = Math.min(wrap.clientWidth, 400);
-            const CX = SIZE / 2,
-              CY = SIZE / 2,
+            let SIZE, CX, CY, R;
+
+            function updateSize() {
+              SIZE =
+                wrap.clientWidth || wrap.getBoundingClientRect().width || 300;
+              CX = SIZE / 2;
+              CY = SIZE / 2;
               R = SIZE * 0.44;
+              p.resizeCanvas(SIZE, SIZE);
+            }
 
             p.setup = function () {
-              p.createCanvas(SIZE, SIZE).parent("canvas-wrapper");
+              const initSize = wrap.clientWidth || 300;
+              p.createCanvas(initSize, initSize).parent("canvas-wrapper");
               p.angleMode(p.RADIANS);
               p.textFont("serif");
+              updateSize();
+            };
+
+            p.windowResized = function () {
+              updateSize();
             };
 
             p.draw = function () {
