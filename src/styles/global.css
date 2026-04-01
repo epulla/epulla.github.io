@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes:
+    acid --default,
+    dracula --prefersdark;
+}
+@plugin "daisyui/theme" {
+  name: "acid";
+  default: true;
+  --color-neutral: #c7cadc;
+  --color-neutral-content: #000616;
+  --color-error-content: #fff;
+  --color-info-content: #fff;
+}
+@variant dark (&:where([data-theme=dracula], [data-theme=dracula] *));
