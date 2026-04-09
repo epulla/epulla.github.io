@@ -1,0 +1,202 @@
+---
+// pages/timeline.astro
+import ParticlesBackground from "@/features/mylove/components/particles-background.astro";
+import CoverSlide from "@/features/mylove/components/cover-slide.astro";
+import EventSlide from "@/features/mylove/components/event-slide.astro";
+import EventModal from "@/features/mylove/components/event-modal.astro";
+import SlideMenu from "@/features/mylove/components/slide-menu.astro";
+import { getSlides } from "@/features/mylove/data/events";
+
+const slides = getSlides();
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timeline de Nuestro Amor 💕</title>
+    <!-- Swiper CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <ParticlesBackground />
+
+    <div id="slider-track">
+      <CoverSlide />
+      {
+        slides.map((slideEvents, i) => (
+          <EventSlide
+            events={slideEvents}
+            slideIndex={i + 1}
+            totalSlides={slides.length}
+          />
+        ))
+      }
+    </div>
+
+    <SlideMenu totalSlides={slides.length} />
+    <EventModal />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --magenta: #e040fb;
+    --gold: #ffd54f;
+    --purple: #9c27b0;
+    --dark: #0d001a;
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #f3e5f5;
+    --text-dim: rgba(243, 229, 245, 0.55);
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--dark);
+    color: var(--text);
+    font-family: "EB Garamond", Georgia, serif;
+  }
+
+  #slider-track {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .slide {
+    flex: 0 0 100vw;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+</style>
+
+<script type="module">
+  import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm";
+
+  const track = document.getElementById("slider-track");
+  const totalSlides = track.querySelectorAll(".slide").length;
+
+  let current = 0;
+  let unlocked = false;
+  let animating = false;
+
+  /* ── Leer ?slide= de la URL ── */
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlSlide = parseInt(urlParams.get("slide") ?? "0", 10);
+  const pendingSlide =
+    urlSlide >= 1 && urlSlide < totalSlides ? urlSlide : null;
+
+  /* ── Navegar a un slide ── */
+  function goTo(idx) {
+    if (idx < 0 || idx >= totalSlides) return;
+    if (idx > 0 && !unlocked) return;
+    if (animating || idx === current) return;
+
+    animating = true;
+    current = idx;
+
+    gsap.to(track, {
+      x: `${-(idx * 100)}vw`,
+      duration: 0.85,
+      ease: "power3.inOut",
+      onComplete: () => {
+        animating = false;
+        window.dispatchEvent(
+          new CustomEvent("timeline:slideEnter", {
+            detail: { slideIndex: idx },
+          }),
+        );
+      },
+    });
+
+    // Actualizar URL sin agregar entrada al historial
+    const params = new URLSearchParams(window.location.search);
+    if (idx === 0) {
+      params.delete("slide");
+    } else {
+      params.set("slide", String(idx));
+    }
+    const newUrl = params.toString()
+      ? `${window.location.pathname}?${params}`
+      : window.location.pathname;
+    history.replaceState(null, "", newUrl);
+  }
+
+  /* ── Desbloquear (viene de CoverSlide tras contraseña correcta) ── */
+  window.addEventListener("timeline:unlock", () => {
+    unlocked = true;
+    // Mostrar el menú hamburguesa
+    window.dispatchEvent(new CustomEvent("timeline:unlocked"));
+    // Si había ?slide=N ir a ese slide, si no al primero
+    goTo(pendingSlide ?? 1);
+  });
+
+  /* ── Navegación desde SlideMenu ── */
+  window.addEventListener("timeline:goTo", (e) => {
+    goTo(e.detail.slideIndex);
+  });
+
+  /* ── Rueda / trackpad ── */
+  let lastWheel = 0;
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      const now = Date.now();
+      if (now - lastWheel < 800) return;
+      lastWheel = now;
+      const dir =
+        e.deltaY > 20 || e.deltaX > 20
+          ? 1
+          : e.deltaY < -20 || e.deltaX < -20
+            ? -1
+            : 0;
+      if (dir) goTo(current + dir);
+    },
+    { passive: true },
+  );
+
+  /* ── Touch ── */
+  let touchX = 0;
+  window.addEventListener(
+    "touchstart",
+    (e) => {
+      touchX = e.touches[0].clientX;
+    },
+    { passive: true },
+  );
+  window.addEventListener("touchend", (e) => {
+    const dx = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 55) goTo(current + (dx > 0 ? 1 : -1));
+  });
+
+  /* ── Teclado ── */
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") goTo(current + 1);
+    if (e.key === "ArrowLeft") goTo(current - 1);
+  });
+</script>
