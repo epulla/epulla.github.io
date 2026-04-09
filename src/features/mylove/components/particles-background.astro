@@ -1,0 +1,88 @@
+---
+// components/ParticlesBackground.astro
+---
+
+<div id="tsparticles"></div>
+<div class="bg-overlay"></div>
+
+<style>
+  #tsparticles {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .bg-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background:
+      radial-gradient(
+        ellipse at 25% 65%,
+        rgba(156, 39, 176, 0.28) 0%,
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse at 78% 18%,
+        rgba(224, 64, 251, 0.18) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 50% 92%,
+        rgba(255, 213, 79, 0.1) 0%,
+        transparent 40%
+      );
+    backdrop-filter: blur(3px);
+    pointer-events: none;
+  }
+</style>
+
+<script type="module">
+  import { tsParticles } from "https://cdn.jsdelivr.net/npm/@tsparticles/engine@3/+esm";
+  import { loadSlim } from "https://cdn.jsdelivr.net/npm/@tsparticles/slim@3/+esm";
+
+  await loadSlim(tsParticles);
+
+  await tsParticles.load({
+    id: "tsparticles",
+    options: {
+      fullScreen: false,
+      background: { color: { value: "transparent" } },
+      fpsLimit: 60,
+      particles: {
+        number: { value: 130, density: { enable: true } },
+        color: {
+          value: ["#e040fb", "#ffd54f", "#9c27b0", "#f48fb1", "#ce93d8"],
+        },
+        shape: { type: "circle" },
+        opacity: {
+          value: { min: 0.2, max: 0.85 },
+          animation: { enable: true, speed: 0.6, sync: false },
+        },
+        size: {
+          value: { min: 1.5, max: 4.5 },
+          animation: { enable: true, speed: 1.5, sync: false },
+        },
+        move: {
+          enable: true,
+          direction: "bottom",
+          speed: { min: 0.4, max: 1.8 },
+          straight: false,
+          outModes: { default: "out", top: "none" },
+          random: true,
+        },
+        wobble: {
+          enable: true,
+          distance: 10,
+          speed: { angle: 8, move: 3 },
+        },
+        shadow: {
+          enable: true,
+          blur: 8,
+          color: { value: "#e040fb" },
+        },
+      },
+      detectRetina: true,
+    },
+  });
+</script>

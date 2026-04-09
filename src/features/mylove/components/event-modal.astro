@@ -1,0 +1,479 @@
+---
+// components/EventModal.astro
+// Modal con carousel Swiper para imgs[] y autoplay cada 15s
+---
+
+<div
+  id="event-modal"
+  class="modal"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel">
+    <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
+    <div class="modal-inner">
+      <h2 class="modal-title" id="modal-title"></h2>
+
+      <!-- Carousel (se construye dinámicamente) -->
+      <div class="carousel-wrap" id="carousel-wrap">
+        <!-- Imagen única (sin carousel) -->
+        <div class="single-img-wrap" id="single-img-wrap" style="display:none">
+          <img id="single-img" src="" alt="" class="modal-img" />
+        </div>
+
+        <!-- Swiper (múltiples imágenes) -->
+        <div class="swiper" id="modal-swiper" style="display:none">
+          <div class="swiper-wrapper" id="swiper-wrapper"></div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+          <!-- Barra de progreso del autoplay -->
+          <div class="autoplay-bar-wrap">
+            <div class="autoplay-bar" id="autoplay-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-date" id="modal-date"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ── Modal shell ── */
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .modal[aria-hidden="false"] {
+    pointer-events: all;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 0, 18, 0.82);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+
+  .modal[aria-hidden="false"] .modal-backdrop {
+    opacity: 1;
+  }
+
+  .modal-panel {
+    position: relative;
+    z-index: 2;
+    background: rgba(22, 0, 34, 0.95);
+    border: 1px solid rgba(224, 64, 251, 0.22);
+    border-radius: 14px;
+    padding: 2.5rem 2rem 2rem;
+    max-width: 580px;
+    width: 92vw;
+    max-height: 92vh;
+    overflow-y: auto;
+    opacity: 0;
+    box-shadow:
+      0 0 80px rgba(224, 64, 251, 0.18),
+      0 0 0 1px rgba(255, 213, 79, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover {
+    background: var(--magenta);
+    color: #fff;
+  }
+
+  .modal-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .modal-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.15;
+    background: linear-gradient(120deg, var(--magenta), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding-right: 2rem; /* espacio para el botón close */
+  }
+
+  /* ── Imagen única ── */
+  .single-img-wrap {
+    width: 100% !important;
+    height: 260px !important;
+    min-height: 260px !important;
+    max-height: 260px !important;
+    border-radius: 10px;
+    overflow: hidden !important;
+    border: 1px solid var(--border);
+    position: relative !important;
+    display: block;
+  }
+
+  .modal-img {
+    width: 100% !important;
+    height: 260px !important;
+    min-height: 260px !important;
+    max-height: 260px !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    display: block !important;
+  }
+
+  /* ── Swiper shell (el contenedor lo maneja is:global abajo) ── */
+  .swiper {
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  /* Botones de navegación */
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: var(--magenta) !important;
+    background: rgba(22, 0, 34, 0.7);
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50%;
+    backdrop-filter: blur(4px);
+  }
+
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 0.9rem !important;
+    font-weight: 700;
+  }
+
+  /* Paginación */
+  .swiper-pagination-bullet {
+    background: var(--text-dim) !important;
+    opacity: 1 !important;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: var(--magenta) !important;
+    box-shadow: 0 0 8px var(--magenta);
+  }
+
+  /* Barra de progreso del autoplay */
+  .autoplay-bar-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    z-index: 10;
+  }
+
+  .autoplay-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--purple), var(--magenta));
+    box-shadow: 0 0 6px var(--magenta);
+    transition: width linear;
+  }
+
+  /* ── Texto ── */
+  .modal-desc {
+    font-size: 1.02rem;
+    line-height: 1.78;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .modal-date {
+    font-family: "Cinzel", serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  /* Scrollbar */
+  .modal-panel::-webkit-scrollbar {
+    width: 4px;
+  }
+  .modal-panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .modal-panel::-webkit-scrollbar-thumb {
+    background: var(--purple);
+    border-radius: 2px;
+  }
+</style>
+
+<script type="module">
+  import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm";
+  import Swiper from "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs";
+
+  const AUTOPLAY_DELAY = 15000; // 15 segundos
+
+  const modal = document.getElementById("event-modal");
+  const backdrop = modal.querySelector(".modal-backdrop");
+  const panel = modal.querySelector(".modal-panel");
+  const closeBtn = document.getElementById("modal-close");
+  const modalTitle = document.getElementById("modal-title");
+  const modalDesc = document.getElementById("modal-desc");
+  const modalDate = document.getElementById("modal-date");
+
+  const singleWrap = document.getElementById("single-img-wrap");
+  const singleImg = document.getElementById("single-img");
+  const swiperEl = document.getElementById("modal-swiper");
+  const swiperWrap = document.getElementById("swiper-wrapper");
+  const autoplayBar = document.getElementById("autoplay-bar");
+
+  let isOpen = false;
+  let swiperInst = null;
+  let autoplayTick = null;
+
+  /* ── Barra de progreso del autoplay ── */
+  function startProgressBar() {
+    stopProgressBar();
+    autoplayBar.style.transition = "none";
+    autoplayBar.style.width = "0%";
+    // Forzar reflow
+    autoplayBar.getBoundingClientRect();
+    autoplayBar.style.transition = `width ${AUTOPLAY_DELAY}ms linear`;
+    autoplayBar.style.width = "100%";
+  }
+
+  function stopProgressBar() {
+    autoplayBar.style.transition = "none";
+    autoplayBar.style.width = "0%";
+  }
+
+  function resetProgressBar() {
+    stopProgressBar();
+    requestAnimationFrame(() => startProgressBar());
+  }
+
+  /* ── Abrir modal ── */
+  function openModal(event) {
+    if (isOpen) return;
+    isOpen = true;
+
+    // Rellenar texto
+    modalTitle.textContent = event.title;
+    modalDesc.textContent = event.description;
+    modalDate.textContent = event.date;
+
+    const imgs = event.imgs ?? [];
+
+    if (imgs.length <= 1) {
+      /* ── Imagen única o sin imagen ── */
+      swiperEl.style.display = "none";
+      if (imgs.length === 1) {
+        singleImg.src = imgs[0];
+        singleImg.alt = event.title;
+        singleWrap.style.display = "block";
+      } else {
+        singleWrap.style.display = "none";
+      }
+    } else {
+      /* ── Múltiples imágenes → Swiper ── */
+      singleWrap.style.display = "none";
+      swiperEl.style.display = "block";
+
+      // Reconstruir slides
+      swiperWrap.innerHTML = imgs
+        .map(
+          (src) => `
+        <div class="swiper-slide">
+          <img src="${src}" alt="${event.title}" loading="lazy" />
+        </div>
+      `,
+        )
+        .join("");
+
+      // Destruir instancia anterior si existe
+      if (swiperInst) {
+        swiperInst.destroy(true, true);
+        swiperInst = null;
+      }
+
+      swiperInst = new Swiper("#modal-swiper", {
+        loop: imgs.length > 1,
+        speed: 600,
+        autoplay: {
+          delay: AUTOPLAY_DELAY,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        on: {
+          autoplayTimeLeft(_s, _time, progress) {
+            // progress va de 1→0, nosotros queremos 0→100%
+            autoplayBar.style.transition = "none";
+            autoplayBar.style.width = `${(1 - progress) * 100}%`;
+          },
+          slideChange() {
+            resetProgressBar();
+          },
+          autoplayPause() {
+            stopProgressBar();
+          },
+          autoplayResume() {
+            startProgressBar();
+          },
+        },
+      });
+
+      startProgressBar();
+    }
+
+    // Mostrar modal con GSAP
+    modal.setAttribute("aria-hidden", "false");
+    const tl = gsap.timeline();
+    tl.set(modal, { visibility: "visible", pointerEvents: "all" })
+      .to(backdrop, { opacity: 1, duration: 0.35, ease: "power2.out" })
+      .fromTo(
+        panel,
+        { opacity: 0, scale: 0.84, y: 24 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: "back.out(1.8)" },
+        "-=0.2",
+      );
+  }
+
+  /* ── Cerrar modal ── */
+  function closeModal() {
+    if (!isOpen) return;
+    isOpen = false;
+    modal.setAttribute("aria-hidden", "true");
+    stopProgressBar();
+
+    gsap
+      .timeline({
+        onComplete: () => {
+          gsap.set(modal, { visibility: "hidden", pointerEvents: "none" });
+          // Pausar swiper al cerrar
+          swiperInst?.autoplay?.stop();
+        },
+      })
+      .to(panel, {
+        opacity: 0,
+        scale: 0.9,
+        y: 16,
+        duration: 0.3,
+        ease: "power2.in",
+      })
+      .to(backdrop, { opacity: 0, duration: 0.25 }, "-=0.15");
+  }
+
+  /* ── Eventos de cierre ── */
+  closeBtn.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", closeModal);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
+
+  /* ── Delegación de clic en .clickable ── */
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest(".clickable");
+    if (!el) return;
+    const raw = el.dataset.event ?? el.closest("[data-event]")?.dataset.event;
+    if (!raw) return;
+    try {
+      openModal(JSON.parse(raw));
+    } catch {}
+  });
+
+  /* ── Hover botón close ── */
+  closeBtn.addEventListener("mouseenter", () =>
+    gsap.to(closeBtn, { rotate: 90, duration: 0.3, ease: "power2.out" }),
+  );
+  closeBtn.addEventListener("mouseleave", () =>
+    gsap.to(closeBtn, { rotate: 0, duration: 0.3, ease: "power2.out" }),
+  );
+</script>
+
+<style is:global>
+  /* Estilos para elementos generados dinámicamente por Swiper */
+  #modal-swiper .swiper-slide {
+    position: relative !important;
+    height: 260px !important;
+    min-height: 260px !important;
+    max-height: 260px !important;
+    overflow: hidden !important;
+  }
+
+  #modal-swiper .swiper-slide img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    display: block !important;
+  }
+
+  #modal-swiper .swiper-button-prev,
+  #modal-swiper .swiper-button-next {
+    color: #e040fb !important;
+    background: rgba(22, 0, 34, 0.7) !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    backdrop-filter: blur(4px) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+
+  #modal-swiper .swiper-button-prev::after,
+  #modal-swiper .swiper-button-next::after {
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+  }
+
+  #modal-swiper .swiper-pagination-bullet {
+    background: rgba(243, 229, 245, 0.55) !important;
+    opacity: 1 !important;
+  }
+
+  #modal-swiper .swiper-pagination-bullet-active {
+    background: #e040fb !important;
+    box-shadow: 0 0 8px #e040fb !important;
+  }
+</style>

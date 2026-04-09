@@ -1,0 +1,301 @@
+---
+// components/CoverSlide.astro
+---
+
+<section class="slide slide-cover" data-slide="0">
+  <div class="cover-content">
+    <h1 class="cover-title anim-item">
+      Timeline de<br /><em>Nuestro Amor</em>
+    </h1>
+
+    <h2 class="cover-subtitle anim-item">
+      Dome <span class="heart-sep">♡</span> Erick
+    </h2>
+
+    <p class="cover-dedication anim-item">
+      Dedicado a mi amor,<br />
+      <em>att de tu corazón</em>
+    </p>
+
+    <div class="password-box anim-item">
+      <label class="pw-label" for="pw-input">
+        Ingresa la contraseña para continuar
+      </label>
+      <div class="pw-input-row">
+        <input
+          type="password"
+          id="pw-input"
+          class="pw-input"
+          placeholder="contraseña secreta..."
+          autocomplete="off"
+        />
+        <button id="pw-btn" class="pw-btn" aria-label="Continuar">→</button>
+      </div>
+      <p id="pw-error" class="pw-error" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="scroll-hint" id="scroll-hint">
+    <span>desliza</span>
+    <div class="scroll-arrow">⟶</div>
+  </div>
+</section>
+
+<style>
+  .slide-cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cover-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  /* GSAP maneja la entrada — los items empiezan invisibles */
+  .anim-item {
+    opacity: 0;
+  }
+
+  .cover-eyebrow {
+    font-family: "Cinzel", serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.38em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .cover-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+
+  .cover-title em {
+    font-style: italic;
+    background: linear-gradient(120deg, var(--magenta), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cover-subtitle {
+    font-family: "Cinzel", serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.7rem);
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: var(--text-dim);
+  }
+
+  .heart-sep {
+    color: var(--magenta);
+    display: inline-block;
+    animation: heartbeat 1.8s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.38);
+    }
+  }
+
+  .cover-dedication {
+    font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+    color: var(--text-dim);
+    line-height: 1.75;
+  }
+  .cover-dedication em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* ── Password ── */
+  .password-box {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pw-label {
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-family: "Cinzel", serif;
+  }
+
+  .pw-input-row {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+    transition: box-shadow 0.3s;
+  }
+
+  .pw-input-row:focus-within {
+    box-shadow:
+      0 0 0 1px var(--magenta),
+      0 0 16px rgba(224, 64, 251, 0.3);
+  }
+
+  .pw-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: "EB Garamond", serif;
+    font-size: 1rem;
+    padding: 0.65rem 1rem;
+    width: 240px;
+    letter-spacing: 0.15em;
+  }
+
+  .pw-input::placeholder {
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .pw-btn {
+    background: linear-gradient(135deg, var(--purple), var(--magenta));
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 0 1.1rem;
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
+  .pw-btn:hover {
+    filter: brightness(1.15);
+  }
+
+  .pw-error {
+    font-size: 0.8rem;
+    color: #ff6b9d;
+    min-height: 1.1em;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Scroll hint ── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0; /* GSAP lo mostrará */
+    pointer-events: none;
+  }
+
+  .scroll-hint span {
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: "Cinzel", serif;
+  }
+
+  .scroll-arrow {
+    font-size: 1.4rem;
+    color: var(--magenta);
+  }
+</style>
+
+<script type="module">
+  import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm";
+
+  /* ── Entrada en cascada ── */
+  gsap.fromTo(
+    ".anim-item",
+    { opacity: 0, y: 28 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 0.9,
+      ease: "power3.out",
+      stagger: 0.13,
+      delay: 0.3,
+    },
+  );
+
+  /* ── Password logic ── */
+  const PASSWORD = "cariciasprohibidas";
+  const pwInput = document.getElementById("pw-input");
+  const pwBtn = document.getElementById("pw-btn");
+  const pwError = document.getElementById("pw-error");
+  const pwBox = pwInput.closest(".password-box");
+  const scrollHint = document.getElementById("scroll-hint");
+
+  // Animar la flecha de desliza en loop una vez visible
+  function showScrollHint() {
+    gsap.to(scrollHint, { opacity: 0.65, duration: 0.6, ease: "power2.out" });
+    gsap.to(".scroll-arrow", {
+      x: 7,
+      repeat: -1,
+      yoyo: true,
+      duration: 0.7,
+      ease: "sine.inOut",
+    });
+  }
+
+  function checkPassword() {
+    if (pwInput.value === PASSWORD) {
+      pwError.textContent = "";
+
+      // Desvanecer el formulario con GSAP
+      gsap.to(pwBox, {
+        opacity: 0,
+        y: 12,
+        duration: 0.5,
+        ease: "power2.in",
+        onComplete: () => {
+          pwBox.style.visibility = "hidden";
+        },
+      });
+
+      showScrollHint();
+
+      // Avanzar al slide 1 después de un momento
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("timeline:unlock"));
+      }, 1100);
+    } else {
+      pwError.textContent = "Contraseña incorrecta 💔 inténtalo de nuevo";
+      pwInput.value = "";
+
+      gsap.fromTo(
+        pwInput.closest(".pw-input-row"),
+        { x: 0 },
+        {
+          x: 10,
+          duration: 0.06,
+          repeat: 7,
+          yoyo: true,
+          ease: "none",
+          onComplete: () => gsap.set(".pw-input-row", { x: 0 }),
+        },
+      );
+    }
+  }
+
+  pwBtn.addEventListener("click", checkPassword);
+  pwInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") checkPassword();
+  });
+</script>

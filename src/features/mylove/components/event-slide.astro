@@ -1,0 +1,520 @@
+---
+// components/EventSlide.astro
+import type { OurEvent } from "@/features/mylove/data/events";
+
+interface Props {
+  events: OurEvent[];
+  slideIndex: number;
+  totalSlides: number;
+}
+
+const { events, slideIndex, totalSlides } = Astro.props;
+const positions = ["below", "above", "below"] as const;
+---
+
+<section class="slide slide-events" data-slide={slideIndex}>
+  <!-- ═══ DESKTOP: timeline horizontal ═══ -->
+  <div class="timeline-bar desktop-only">
+    <div class="timeline-line">
+      <div class="tl-line-fill"></div>
+    </div>
+
+    {
+      events.map((event, idx) => {
+        const pos = positions[idx];
+        const firstImg = event.imgs?.[0];
+        const eventJson = JSON.stringify(event);
+        return (
+          <div class={`tl-event pos-${pos}`} data-event-idx={idx}>
+            {pos === "above" && (
+              <div class="event-card card-above">
+                <h3 class="event-title clickable" data-event={eventJson}>
+                  {event.title}
+                </h3>
+                {firstImg && (
+                  <div class="event-img-wrap clickable" data-event={eventJson}>
+                    <img
+                      src={firstImg}
+                      alt={event.title}
+                      class="event-img"
+                      loading="lazy"
+                    />
+                    <div class="img-glow" />
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div class="tl-dot">
+              <div class="dot-ring" />
+              <div class="dot-inner" />
+              <span class="dot-date">{event.date}</span>
+            </div>
+
+            {pos === "below" && (
+              <div class="event-card card-below">
+                {firstImg && (
+                  <div class="event-img-wrap clickable" data-event={eventJson}>
+                    <img
+                      src={firstImg}
+                      alt={event.title}
+                      class="event-img"
+                      loading="lazy"
+                    />
+                    <div class="img-glow" />
+                  </div>
+                )}
+                <h3 class="event-title clickable" data-event={eventJson}>
+                  {event.title}
+                </h3>
+              </div>
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <!-- ═══ MOBILE: stack vertical ═══ -->
+  <div class="mobile-stack mobile-only">
+    <div class="mobile-line"><div class="mobile-line-fill"></div></div>
+
+    {
+      events.map((event, idx) => {
+        const firstImg = event.imgs?.[0];
+        const eventJson = JSON.stringify(event);
+        return (
+          <div class="mobile-event" data-event-idx={idx}>
+            <div class="mobile-dot-col">
+              <div class="tl-dot">
+                <div class="dot-ring" />
+                <div class="dot-inner" />
+              </div>
+            </div>
+            <div class="mobile-card clickable" data-event={eventJson}>
+              {firstImg && (
+                <div class="mobile-img-wrap">
+                  <img
+                    src={firstImg}
+                    alt={event.title}
+                    class="event-img"
+                    loading="lazy"
+                  />
+                  <div class="img-glow" />
+                </div>
+              )}
+              <div class="mobile-meta">
+                <span class="dot-date">{event.date}</span>
+                <h3 class="event-title">{event.title}</h3>
+              </div>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <div class="slide-number">{slideIndex} / {totalSlides}</div>
+</section>
+
+<style>
+  .slide-events {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Breakpoint toggle ── */
+  .desktop-only {
+    display: flex;
+  }
+  .mobile-only {
+    display: none;
+  }
+
+  @media (max-width: 700px) {
+    .desktop-only {
+      display: none !important;
+    }
+    .mobile-only {
+      display: flex !important;
+    }
+  }
+
+  /* ════════════════════════════════
+     DESKTOP – timeline horizontal
+  ════════════════════════════════ */
+  .timeline-bar {
+    position: relative;
+    width: 88vw;
+    max-width: 1200px;
+    align-items: center;
+    justify-content: space-around;
+    height: 65vh;
+  }
+
+  .timeline-line {
+    position: absolute;
+    top: 50%;
+    left: 4%;
+    right: 4%;
+    height: 1px;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.06);
+    overflow: visible;
+  }
+
+  .tl-line-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--purple) 0%,
+      var(--magenta) 50%,
+      var(--gold) 100%
+    );
+    box-shadow:
+      0 0 8px var(--magenta),
+      0 0 22px rgba(224, 64, 251, 0.35);
+  }
+
+  .tl-event {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 300px;
+    opacity: 0;
+  }
+
+  .pos-below {
+    flex-direction: column;
+  }
+  .pos-above {
+    flex-direction: column-reverse;
+  }
+
+  .event-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+  }
+
+  .card-above {
+    margin-bottom: 0.8rem;
+  }
+  .card-below {
+    margin-top: 0.8rem;
+  }
+
+  .event-img-wrap {
+    position: relative;
+    width: 145px !important;
+    height: 145px !important;
+    min-width: 145px !important;
+    min-height: 145px !important;
+    max-width: 145px !important;
+    max-height: 145px !important;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    will-change: transform;
+    flex-shrink: 0;
+  }
+
+  /* ════════════════════════════════
+     MOBILE – stack vertical
+  ════════════════════════════════ */
+  .mobile-stack {
+    position: relative;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 88vw;
+    max-width: 420px;
+    padding: 1.5rem 0;
+    height: 82vh;
+    overflow-y: auto;
+    justify-content: flex-start;
+    scrollbar-width: none;
+  }
+  .mobile-stack::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 14px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+  }
+
+  .mobile-line-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: linear-gradient(
+      180deg,
+      var(--purple) 0%,
+      var(--magenta) 50%,
+      var(--gold) 100%
+    );
+    box-shadow: 0 0 8px var(--magenta);
+  }
+
+  .mobile-event {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    opacity: 0;
+  }
+
+  .mobile-dot-col {
+    flex-shrink: 0;
+    padding-top: 0.2rem;
+  }
+
+  .mobile-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 0.85rem;
+    transition:
+      border-color 0.25s,
+      background 0.25s;
+  }
+
+  .mobile-card:hover,
+  .mobile-card:active {
+    background: rgba(224, 64, 251, 0.07);
+    border-color: rgba(224, 64, 251, 0.35);
+  }
+
+  .mobile-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .mobile-meta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  /* ════════════════════════════════
+     COMPARTIDOS
+  ════════════════════════════════ */
+  .tl-dot {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .dot-ring {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--magenta);
+    opacity: 0.4;
+    animation: ringPulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes ringPulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.4;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  .dot-inner {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--gold), var(--magenta));
+    box-shadow:
+      0 0 10px var(--magenta),
+      0 0 28px rgba(224, 64, 251, 0.45);
+  }
+
+  .dot-date {
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-family: "Cinzel", serif;
+    white-space: nowrap;
+    opacity: 0.85;
+  }
+
+  .event-img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    filter: saturate(0.8) brightness(0.88);
+    transition: filter 0.35s;
+    display: block !important;
+  }
+
+  .event-img-wrap:hover .event-img,
+  .mobile-img-wrap:hover .event-img {
+    filter: saturate(1.15) brightness(1.05);
+  }
+
+  .img-glow {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(224, 64, 251, 0.18),
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+
+  .event-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(0.85rem, 1.25vw, 1.05rem);
+    font-weight: 400;
+    text-align: center;
+    color: var(--text);
+    cursor: pointer;
+    line-height: 1.35;
+    padding: 0 0.4rem;
+    transition: color 0.2s;
+  }
+
+  .event-title:hover {
+    color: var(--gold);
+  }
+
+  .slide-number {
+    position: absolute;
+    bottom: 2rem;
+    right: 2.5rem;
+    font-family: "Cinzel", serif;
+    font-size: 1rem;
+    letter-spacing: 0.22em;
+    color: #fff;
+    opacity: 0;
+  }
+</style>
+
+<script type="module">
+  import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm";
+
+  const isMobile = () => window.innerWidth <= 700;
+
+  window.addEventListener("timeline:slideEnter", (e) => {
+    const idx = e.detail.slideIndex;
+    const slide = document.querySelector(`.slide[data-slide="${idx}"]`);
+    if (!slide?.classList.contains("slide-events")) return;
+
+    const numEl = slide.querySelector(".slide-number");
+
+    if (isMobile()) {
+      const mobileEvents = slide.querySelectorAll(".mobile-event");
+      const lineFill = slide.querySelector(".mobile-line-fill");
+
+      gsap.set(mobileEvents, { opacity: 0, x: -16 });
+      gsap.set(lineFill, { height: "0%" });
+      gsap.set(numEl, { opacity: 0 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.to(lineFill, { height: "100%", duration: 1, ease: "power2.inOut" });
+      tl.to(
+        mobileEvents,
+        { opacity: 1, x: 0, duration: 0.5, stagger: 0.2 },
+        "-=0.6",
+      );
+      mobileEvents.forEach((ev) => {
+        tl.fromTo(
+          ev.querySelector(".dot-inner"),
+          { scale: 0 },
+          { scale: 1, duration: 0.4, ease: "back.out(2.5)" },
+          "<0.08",
+        );
+      });
+      tl.to(numEl, { opacity: 1, duration: 0.3 }, "-=0.2");
+    } else {
+      const tlEvents = slide.querySelectorAll(".tl-event");
+      const fill = slide.querySelector(".tl-line-fill");
+
+      gsap.set(tlEvents, { opacity: 0, scale: 0.92 });
+      gsap.set(fill, { width: "0%" });
+      gsap.set(numEl, { opacity: 0 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      tl.to(fill, { width: "100%", duration: 0.9, ease: "power2.inOut" });
+      tlEvents.forEach((ev, i) => {
+        tl.to(
+          ev,
+          { opacity: 1, scale: 1, duration: 0.65 },
+          `-=${i === 0 ? 0.3 : 0.4}`,
+        );
+        tl.fromTo(
+          ev.querySelector(".dot-inner"),
+          { scale: 0 },
+          { scale: 1, duration: 0.5, ease: "back.out(2.5)" },
+          "<0.15",
+        );
+      });
+      tl.to(numEl, { opacity: 1, duration: 0.4 }, "-=0.2");
+
+      slide.querySelectorAll(".event-img-wrap").forEach((wrap) => {
+        wrap.addEventListener("mouseenter", () =>
+          gsap.to(wrap, {
+            scale: 1.06,
+            rotate: -1.5,
+            duration: 0.35,
+            ease: "power2.out",
+            boxShadow: "0 10px 35px rgba(224,64,251,0.45), 0 0 0 1px #e040fb",
+          }),
+        );
+        wrap.addEventListener("mouseleave", () =>
+          gsap.to(wrap, {
+            scale: 1,
+            rotate: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            boxShadow: "none",
+          }),
+        );
+      });
+    }
+  });
+</script>
