@@ -103,9 +103,16 @@ export const events: OurEvent[] = [
       Estabamos hablando, yo al tratar de no parecer muy intenso, te decía lo de "ser amigos, conocernos mas y blabla". Por dentro, yo estaba muriendo en vida, diciéndome a mi mismo "Erick por dios, por qué eres tan quedado?". Así estaba en mi mente, hasta que me dijiste, en un tono de indignacion jaja que si de verdad SOLO quería ser tu amigo!
       Yo, con el corazón a mil, y muerto del miedo, dije que NOO, y que queria darte un piquito. Y de repente, llegó el momento. Fue en la avenida Samborondón, casi dando vuelta al puente. Eran las 7:40PM aproximadamente.  Me dijiste que podría ser antes de llegar a casa pero no me pude resistir más.
       Me parqueé y te dije que no me aguantaba más. Fue un momento INOLVIDABLE. Me acuerdo que después de eso, te pregunté si ya eramos novios y tú me dijiste que tenía que proponértelo formalmente. Yo te dije que haría las cosas bien. 
-      Fue un gran momento, gracias por darme mi primero de muchos besitos mi amor. Te amo mucho.
+      Fue un gran momento, gracias por darme el primero de nuestro 100 besos amor. Te amo mucho.
       `,
     date: "2026-02-20",
+  },
+  {
+    title: "Mi primer regalo ratita para ti 🐭",
+    description: `Ese día, después de nuestro primer beso, me sentí tan feliz que quería regalarte algo. Quería regalarte algo que te guste mucho y que te haga pensar en mí. Decidí hacerte que no sabía si te iba a gustar pero quería hacerlo para ti. Un regalo ratita jiji. No creas que he perdido la página!! Solo la cambié de lugar jiji.
+      La puedes encontrar aquí: <a href="https://epulla.github.io/mylove/invitation-gf/" target="_blank">link</a>
+      `,
+    date: "2026-02-21",
   },
   {
     title: "Me dijiste SI para ser novios",
@@ -116,7 +123,20 @@ export const events: OurEvent[] = [
   {
     title: "Nuestro primer mesesaurio",
     description: `Ese día... no sé ni cómo describirlo. Que DIA PARA MAS BONITO! Fue nuestro primer mesesaurio, un domingo 22 de Marzo. Ese día ya lo tenía planeado desde antes. Ya tenía los regalitos listos, el outfit listo, el plan listo, TODO listoo!! Mi mamá me vió muy feliz y me deseó un lindo día. Te fui a ver temprano para desayunar juntos.
+      Comimos unos omelettes y unos pancakes. JAJAJ incluso probamos todas las jaleas para los pancakes. Estuvieron muy ricos! Yo te dí mis regalos jeje que fueron un origami de corazón 3D el cual tenía dentro una cadenita con un corazón. Tenía nervios por si esa cadenita te iba a gustar jeje. Mis regalos no fueron muchos, solo tenía eso y un plan para el día,
+      en cambio tu cargabas una bolsita con un montón de regalitos para mí y me los fuiste dando uno por uno a lo largo del día. Ahi tuve la dicha de tener conmigo a Yoshi, a Primerosaurio, la carta que compilaba nuestras primeras veces y la foto con tu camara polaroid jeje. Todos esos regalos los tengo conmigo y la foto la llevo conmigo a todas partes en mi celular jeje.
+      Incluso me compré un forrito de celular transparente para presumirla jiji. Raios me fui por las ramas. Continuando, después de desayunar, fuimos a atender a la niña Sammy. Se nos iba el día jaja y aun faltaban cosas por hacer. Después de atender a la niña Sammy, nos fuimos a Plaza Lagos a hacer unas preguntas de las 100 que tenía preparadas para hacer tiempito.
+      De ahi, paseamos un rato por Plaza Lagos sacaste tu camara para tomarnos unas fotos. Sin embargo, no encontrabamos quien nos tome. Un guardia incluso nos trató feo ayyy. Sin embargo, gracias a tu ingenio, viste una pareja que se estaba tomando unas selfies y fuiste a ayudarlos. Yo me quedé modo estatua jaja hasta que entendí las intenciones. Era un ojo por ojo.
+      Tu les tomabas las fotos para que ellos nos las tomen a nosotros. Fuiste muy ingeniosa!! Al final, la pareja nos tomó unas cuantas fotos y tu me diste la primera. Desafortunadamente, solo la primera foto salió bien y el resto no se grabó en los rollos. Me diste la única que si salió bien y la cargo conmigo a todas partes jeje. Ya acabando el día, fuimos a comer a PF Changs.
+      Nos atendieron bonito, incluso fuimos a la parte de arriba y comimos delicioso! Aqui nos tomamos fotitos jeje. Ya se estaba haciendo un poquito tarde asi que ya nos fuimos a casita. Mi abuelita se había caido la noche anterior por lo que yo tenía que regresar pronto para cuidarla. Ya dejándote en casita, tu me diste la carta con de nuestro primer mesesaurio donde compilaste
+      todo lo que habiamos vivido desde que nos conocimos en Enero jeje. Esa carta me sirvió de inspiración para crear esta página web con nuestro timeline que estás viendo ahora mismo. Gracias por ese detalle mi amor, me encantó mucho y lo guardo con mucho cariño. Fue un día maravilloso, gracias por compartirlo conmigo mi amor. Te amo mucho.
       `,
+    imgs: [
+      "/images/mylove/1er-mesesaurio-1.webp",
+      "/images/mylove/1er-mesesaurio-2.webp",
+      "/images/mylove/1er-mesesaurio-3.webp",
+      "/images/mylove/1er-mesesaurio-4.webp",
+    ],
     date: "2026-03-22",
   },
   {
