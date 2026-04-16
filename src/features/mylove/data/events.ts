@@ -110,7 +110,7 @@ export const events: OurEvent[] = [
   {
     title: "Mi primer regalo ratita para ti 🐭",
     description: `Ese día, después de nuestro primer beso, me sentí tan feliz que quería regalarte algo. Quería regalarte algo que te guste mucho y que te haga pensar en mí. Decidí hacerte que no sabía si te iba a gustar pero quería hacerlo para ti. Un regalo ratita jiji. No creas que he perdido la página!! Solo la cambié de lugar jiji.
-      La puedes encontrar aquí: <a href="https://epulla.github.io/mylove/invitation-gf/" target="_blank">link</a>
+      La puedes encontrar aquí: <a href="/mylove/invitation-gf" target="_blank">link</a>
       `,
     date: "2026-02-21",
   },
