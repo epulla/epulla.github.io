@@ -214,7 +214,10 @@
     font-size: 1.02rem;
     line-height: 1.78;
     color: var(--text-dim);
-    font-style: italic;
+    a {
+      color: var(--magenta);
+      text-decoration: underline;
+    }
   }
 
   .modal-date {
@@ -290,7 +293,7 @@
 
     // Rellenar texto
     modalTitle.textContent = event.title;
-    modalDesc.textContent = event.description;
+    modalDesc.innerHTML = event.description;
     modalDate.textContent = event.date;
 
     const imgs = event.imgs ?? [];
