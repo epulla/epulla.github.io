@@ -63,7 +63,7 @@
       });
   }
 
-  function playTrack(idx) {
+  function playTrack(idx: number) {
     if (idx < 0 || idx >= songs.length) return;
     currentIndex = idx;
     audio.src = songs[idx].path;
@@ -91,8 +91,8 @@
   });
 
   /* ── Select specific song ── */
-  window.addEventListener("music:select", (e) => {
-    const idx = e.detail.index;
+  window.addEventListener("music:select", (e: Event) => {
+    const idx = (e as CustomEvent).detail.index;
     if (idx === currentIndex) {
       // Toggle play/pause on the currently-active track
       if (audio.paused) {
