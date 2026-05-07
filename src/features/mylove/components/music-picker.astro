@@ -1,0 +1,593 @@
+---
+// components/MusicPicker.astro
+// Drawer with song list — mirrors SlideMenu structure
+import type { OurSong } from "@/features/mylove/data/songs";
+import { songs } from "@/features/mylove/data/songs";
+---
+
+<!-- Music toggle button (hidden until unlock) -->
+<button
+  id="music-toggle"
+  class="music-toggle"
+  aria-label="Música"
+  style="display:none"
+>
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M9 18V5l12-2v13"></path>
+    <circle cx="6" cy="18" r="3"></circle>
+    <circle cx="18" cy="16" r="3"></circle>
+  </svg>
+</button>
+
+<!-- Drawer -->
+<div id="music-drawer" class="drawer" aria-hidden="true">
+  <div class="drawer-backdrop"></div>
+  <div class="drawer-panel">
+    <div class="drawer-header">
+      <h2 class="drawer-title">Música</h2>
+      <div class="header-actions">
+        <button
+          id="play-pause-toggle"
+          class="header-btn"
+          aria-label="Reproducir / Pausar"
+        >
+          <svg
+            class="icon-play"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            stroke="none"
+          >
+            <polygon points="6 4 20 12 6 20 6 4"></polygon>
+          </svg>
+          <svg
+            class="icon-pause"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            stroke="none"
+            style="display:none"
+          >
+            <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+            <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+          </svg>
+        </button>
+        <button id="mute-toggle" class="header-btn" aria-label="Silenciar">
+          <svg
+            class="icon-sound"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path
+              d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"
+            ></path>
+          </svg>
+          <svg
+            class="icon-muted"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style="display:none"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+        <button id="music-drawer-close" class="drawer-close" aria-label="Cerrar"
+          >✕</button
+        >
+      </div>
+    </div>
+
+    <div class="song-list">
+      {
+        songs.map((song, i) => (
+          <button class="song-item" data-index={i}>
+            <img
+              src={song.cover}
+              alt={song.title}
+              class="song-cover"
+              loading="lazy"
+            />
+            <div class="song-meta">
+              <span class="song-title">{song.title}</span>
+              <span class="song-duration">{song.duration || "--:--"}</span>
+            </div>
+            <div class="now-playing">
+              <span class="bar" />
+              <span class="bar" />
+              <span class="bar" />
+            </div>
+          </button>
+        ))
+      }
+
+      {
+        songs.length === 0 && (
+          <p class="empty-hint">
+            Agrega canciones en <code>src/features/mylove/data/songs.ts</code>
+          </p>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ── Music toggle button ── */
+  .music-toggle {
+    position: fixed;
+    top: 1.4rem;
+    right: calc(1.6rem + 42px + 0.6rem);
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    color: var(--text);
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+    padding: 0;
+  }
+
+  .music-toggle:hover {
+    background: rgba(224, 64, 251, 0.15);
+    border-color: var(--magenta);
+  }
+
+  .music-toggle.is-active {
+    background: rgba(224, 64, 251, 0.2);
+    border-color: var(--magenta);
+    box-shadow: 0 0 12px rgba(224, 64, 251, 0.25);
+  }
+
+  /* ── Drawer ── */
+  .drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .drawer[aria-hidden="false"] {
+    pointer-events: all;
+    visibility: visible;
+  }
+
+  .drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 0, 18, 0.72);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .drawer[aria-hidden="false"] .drawer-backdrop {
+    opacity: 1;
+  }
+
+  .drawer-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(360px, 92vw);
+    height: 100%;
+    background: rgba(18, 0, 28, 0.96);
+    border-left: 1px solid rgba(224, 64, 251, 0.18);
+    box-shadow: -8px 0 60px rgba(224, 64, 251, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.77, 0, 0.18, 1);
+    overflow-y: auto;
+  }
+
+  .drawer[aria-hidden="false"] .drawer-panel {
+    transform: translateX(0);
+  }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.8rem 1.6rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+  }
+
+  .drawer-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    font-style: italic;
+    background: linear-gradient(120deg, var(--magenta), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .header-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    transition: background 0.2s;
+  }
+  .header-btn:hover {
+    background: var(--magenta);
+    color: #fff;
+  }
+
+  .drawer-close {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .drawer-close:hover {
+    background: var(--magenta);
+    color: #fff;
+  }
+
+  /* ── Song list ── */
+  .song-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.2rem 1.4rem;
+    flex: 1;
+  }
+
+  .song-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    width: 100%;
+    padding: 0.65rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--text);
+    text-align: left;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+
+  .song-item:hover {
+    background: rgba(224, 64, 251, 0.08);
+    border-color: rgba(224, 64, 251, 0.25);
+  }
+
+  /* ── Active / selected glow ── */
+  .song-item.is-active {
+    animation: itemGlowPulse 1.8s ease-in-out infinite alternate;
+  }
+
+  @keyframes itemGlowPulse {
+    0% {
+      box-shadow: 0 0 0 1px var(--magenta), 0 0 8px rgba(224, 64, 251, 0.15);
+    }
+    100% {
+      box-shadow: 0 0 0 1px var(--magenta), 0 0 22px rgba(224, 64, 251, 0.55);
+    }
+  }
+
+  .song-cover {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .song-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .song-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .song-duration {
+    font-family: "Cinzel", serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+
+  /* ── Now playing bars ── */
+  .now-playing {
+    display: none;
+    align-items: flex-end;
+    gap: 2.5px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .song-item.is-active .now-playing {
+    display: flex;
+  }
+
+  .now-playing .bar {
+    width: 3px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 1px;
+    animation: barBounce 0.8s ease-in-out infinite alternate;
+  }
+
+  .now-playing .bar:nth-child(1) {
+    animation-delay: 0s;
+  }
+  .now-playing .bar:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .now-playing .bar:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  /* Paused: render as a 2-thick-bar pause icon */
+  .song-item.is-active.is-paused {
+    animation-play-state: paused;
+    opacity: 0.75;
+  }
+  .song-item.is-active.is-paused .now-playing {
+    gap: 4px;
+    align-items: center;
+  }
+  .song-item.is-active.is-paused .now-playing .bar {
+    animation: none;
+    width: 4px;
+    height: 14px;
+    border-radius: 1.5px;
+  }
+  .song-item.is-active.is-paused .now-playing .bar:nth-child(2) {
+    display: none;
+  }
+
+  @keyframes barBounce {
+    0% {
+      height: 4px;
+    }
+    100% {
+      height: 14px;
+    }
+  }
+
+  .empty-hint {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 2rem 1rem;
+    line-height: 1.6;
+  }
+
+  .empty-hint code {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+
+  /* scrollbar */
+  .drawer-panel::-webkit-scrollbar {
+    width: 3px;
+  }
+  .drawer-panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .drawer-panel::-webkit-scrollbar-thumb {
+    background: var(--purple);
+    border-radius: 2px;
+  }
+</style>
+
+<script type="module">
+  import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm";
+
+  const toggle = document.getElementById("music-toggle");
+  const drawer = document.getElementById("music-drawer");
+  const backdrop = drawer.querySelector(".drawer-backdrop");
+  const closeBtn = document.getElementById("music-drawer-close");
+  const muteBtn = document.getElementById("mute-toggle");
+  const iconSound = muteBtn.querySelector(".icon-sound");
+  const iconMuted = muteBtn.querySelector(".icon-muted");
+  const playPauseBtn = document.getElementById("play-pause-toggle");
+  const iconPlay = playPauseBtn.querySelector(".icon-play");
+  const iconPause = playPauseBtn.querySelector(".icon-pause");
+  const songItems = drawer.querySelectorAll(".song-item");
+  const durationEls = drawer.querySelectorAll(".song-duration");
+
+  let isOpen = false;
+  let durationsLoaded = false;
+  let currentTrackIdx = -1;
+
+  /* ── Show toggle on unlock ── */
+  window.addEventListener("timeline:unlock", () => {
+    toggle.style.display = "flex";
+    gsap.fromTo(
+      toggle,
+      { opacity: 0, scale: 0.7 },
+      { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" },
+    );
+  });
+
+  /* ── Open / close ── */
+  function openDrawer() {
+    isOpen = true;
+    drawer.setAttribute("aria-hidden", "false");
+    toggle.classList.add("is-active");
+    if (!durationsLoaded) loadDurations();
+  }
+
+  function closeDrawer() {
+    isOpen = false;
+    drawer.setAttribute("aria-hidden", "true");
+    toggle.classList.remove("is-active");
+  }
+
+  toggle.addEventListener("click", () =>
+    isOpen ? closeDrawer() : openDrawer(),
+  );
+  closeBtn.addEventListener("click", closeDrawer);
+  backdrop.addEventListener("click", closeDrawer);
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isOpen) closeDrawer();
+  });
+
+  /* ── Duration extraction (lazy on first open) ── */
+  async function loadDurations() {
+    if (durationsLoaded) return;
+    durationsLoaded = true;
+
+    const { songs } = await import("@/features/mylove/data/songs");
+    songItems.forEach((item, i) => {
+      if (!songs[i]) return;
+      const helper = new Audio();
+      helper.preload = "metadata";
+      helper.addEventListener("loadedmetadata", () => {
+        const dur = helper.duration;
+        if (!isNaN(dur) && isFinite(dur)) {
+          const m = Math.floor(dur / 60);
+          const s = Math.floor(dur % 60)
+            .toString()
+            .padStart(2, "0");
+          durationEls[i].textContent = `${m}:${s}`;
+        }
+        helper.src = "";
+      });
+      helper.src = songs[i].path;
+    });
+  }
+
+  /* ── Active track sync ── */
+  function setActiveTrack(idx) {
+    songItems.forEach((item, i) =>
+      item.classList.toggle("is-active", i === idx),
+    );
+  }
+
+  window.addEventListener("music:trackChanged", (e) => {
+    currentTrackIdx = e.detail.index;
+    setActiveTrack(currentTrackIdx);
+  });
+
+  /* ── Play / pause state sync ── */
+  window.addEventListener("music:playStateChanged", (e) => {
+    const { playing, index } = e.detail;
+    songItems.forEach((item, i) => {
+      item.classList.toggle("is-paused", i === index && !playing);
+    });
+    // Header play/pause button icon reflects current track state
+    iconPlay.style.display = playing ? "none" : "block";
+    iconPause.style.display = playing ? "block" : "none";
+  });
+
+  /* ── Click song → play ── */
+  songItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      const idx = Number(item.dataset.index);
+      window.dispatchEvent(
+        new CustomEvent("music:select", { detail: { index: idx } }),
+      );
+    });
+  });
+
+  /* ── Play / pause toggle (same behaviour as clicking the active item) ── */
+  playPauseBtn.addEventListener("click", () => {
+    if (currentTrackIdx < 0) return;
+    window.dispatchEvent(
+      new CustomEvent("music:select", { detail: { index: currentTrackIdx } }),
+    );
+  });
+
+  /* ── Mute toggle ── */
+  muteBtn.addEventListener("click", () => {
+    window.dispatchEvent(new CustomEvent("music:toggleMute"));
+  });
+
+  window.addEventListener("music:muteChanged", (e) => {
+    const { muted } = e.detail;
+    iconSound.style.display = muted ? "none" : "block";
+    iconMuted.style.display = muted ? "block" : "none";
+  });
+
+  /* ── Hover GSAP ── */
+  closeBtn.addEventListener("mouseenter", () =>
+    gsap.to(closeBtn, { rotate: 90, duration: 0.3, ease: "power2.out" }),
+  );
+  closeBtn.addEventListener("mouseleave", () =>
+    gsap.to(closeBtn, { rotate: 0, duration: 0.3, ease: "power2.out" }),
+  );
+</script>

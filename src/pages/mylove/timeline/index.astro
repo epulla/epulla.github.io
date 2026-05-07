@@ -5,6 +5,8 @@ import CoverSlide from "@/features/mylove/components/cover-slide.astro";
 import EventSlide from "@/features/mylove/components/event-slide.astro";
 import EventModal from "@/features/mylove/components/event-modal.astro";
 import SlideMenu from "@/features/mylove/components/slide-menu.astro";
+import MusicPicker from "@/features/mylove/components/music-picker.astro";
+import AudioPlayer from "@/features/mylove/components/audio-player.astro";
 import { getSlides } from "@/features/mylove/data/events";
 
 const slides = getSlides();
@@ -45,7 +47,9 @@ const slides = getSlides();
     </div>
 
     <SlideMenu totalSlides={slides.length} />
+    <MusicPicker />
     <EventModal />
+    <AudioPlayer />
   </body>
 </html>
 

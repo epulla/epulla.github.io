@@ -1,0 +1,116 @@
+---
+// components/AudioPlayer.astro
+// Headless — no visible UI. Owns the <audio> element and music state.
+---
+
+<script>
+  import { songs } from "@/features/mylove/data/songs";
+
+  let currentIndex = -1;
+  let muted = false;
+
+  const audio = document.createElement("audio");
+  audio.id = "bg-audio";
+  audio.loop = true;
+  audio.preload = "auto";
+  audio.volume = 0.5;
+  document.body.appendChild(audio);
+
+  audio.addEventListener("error", () => {
+    const err = audio.error;
+    console.error("[audio-player] error", {
+      code: err?.code,
+      message: err?.message,
+      src: audio.currentSrc,
+    });
+  });
+
+  audio.addEventListener("canplay", () => {
+    console.log("[audio-player] canplay", audio.currentSrc);
+  });
+
+  function dispatchTrackChanged() {
+    window.dispatchEvent(
+      new CustomEvent("music:trackChanged", {
+        detail: { index: currentIndex },
+      }),
+    );
+  }
+
+  function dispatchPlayState() {
+    window.dispatchEvent(
+      new CustomEvent("music:playStateChanged", {
+        detail: { playing: !audio.paused, index: currentIndex },
+      }),
+    );
+  }
+
+  audio.addEventListener("play", dispatchPlayState);
+  audio.addEventListener("pause", dispatchPlayState);
+
+  let pendingPlay = false;
+
+  function tryPlay() {
+    const playPromise = audio.play();
+    if (!playPromise) return;
+    playPromise
+      .then(() => {
+        pendingPlay = false;
+      })
+      .catch((err) => {
+        console.warn("[audio-player] play() failed:", err.name, err.message);
+        pendingPlay = true;
+      });
+  }
+
+  function playTrack(idx) {
+    if (idx < 0 || idx >= songs.length) return;
+    currentIndex = idx;
+    audio.src = songs[idx].path;
+    audio.load();
+    tryPlay();
+    dispatchTrackChanged();
+  }
+
+  /* ── Retry playback on next user interaction if autoplay was blocked ── */
+  function retryOnInteraction() {
+    if (pendingPlay) tryPlay();
+  }
+  ["click", "keydown", "touchstart"].forEach((evt) => {
+    window.addEventListener(evt, retryOnInteraction, true);
+  });
+
+  /* ── Start random song on unlock ── */
+  window.addEventListener("timeline:unlock", () => {
+    if (songs.length === 0) {
+      console.warn("[audio-player] no songs in data file");
+      return;
+    }
+    const idx = Math.floor(Math.random() * songs.length);
+    playTrack(idx);
+  });
+
+  /* ── Select specific song ── */
+  window.addEventListener("music:select", (e) => {
+    const idx = e.detail.index;
+    if (idx === currentIndex) {
+      // Toggle play/pause on the currently-active track
+      if (audio.paused) {
+        tryPlay();
+      } else {
+        audio.pause();
+      }
+      return;
+    }
+    playTrack(idx);
+  });
+
+  /* ── Toggle mute ── */
+  window.addEventListener("music:toggleMute", () => {
+    muted = !muted;
+    audio.muted = muted;
+    window.dispatchEvent(
+      new CustomEvent("music:muteChanged", { detail: { muted } }),
+    );
+  });
+</script>
