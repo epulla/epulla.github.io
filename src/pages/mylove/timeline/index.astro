@@ -95,7 +95,7 @@ const slides = getSlides();
   }
 </style>
 
-<script type="module">
+<script type="module" is:inline>
   import { gsap } from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm";
 
   const track = document.getElementById("slider-track");
@@ -200,3 +200,4 @@ const slides = getSlides();
     if (e.key === "ArrowLeft") goTo(current - 1);
   });
 </script>
+
