@@ -25,23 +25,24 @@ const positions = ["below", "above", "below"] as const;
         const firstImg = event.imgs?.[0];
         const eventJson = JSON.stringify(event);
         return (
-          <div class={`tl-event pos-${pos}`} data-event-idx={idx}>
-            {pos === "above" && (
+          <div
+            class={`tl-event pos-${pos} ${firstImg ? "has-img" : "no-img"}`}
+            data-event-idx={idx}
+          >
+            {pos === "above" && firstImg && (
               <div class="event-card card-above">
                 <h3 class="event-title clickable" data-event={eventJson}>
                   {event.title}
                 </h3>
-                {firstImg && (
-                  <div class="event-img-wrap clickable" data-event={eventJson}>
-                    <img
-                      src={firstImg}
-                      alt={event.title}
-                      class="event-img"
-                      loading="lazy"
-                    />
-                    <div class="img-glow" />
-                  </div>
-                )}
+                <div class="event-img-wrap clickable" data-event={eventJson}>
+                  <img
+                    src={firstImg}
+                    alt={event.title}
+                    class="event-img"
+                    loading="lazy"
+                  />
+                  <div class="img-glow" />
+                </div>
               </div>
             )}
 
@@ -51,23 +52,30 @@ const positions = ["below", "above", "below"] as const;
               <span class="dot-date">{event.date}</span>
             </div>
 
-            {pos === "below" && (
+            {pos === "below" && firstImg && (
               <div class="event-card card-below">
-                {firstImg && (
-                  <div class="event-img-wrap clickable" data-event={eventJson}>
-                    <img
-                      src={firstImg}
-                      alt={event.title}
-                      class="event-img"
-                      loading="lazy"
-                    />
-                    <div class="img-glow" />
-                  </div>
-                )}
+                <div class="event-img-wrap clickable" data-event={eventJson}>
+                  <img
+                    src={firstImg}
+                    alt={event.title}
+                    class="event-img"
+                    loading="lazy"
+                  />
+                  <div class="img-glow" />
+                </div>
                 <h3 class="event-title clickable" data-event={eventJson}>
                   {event.title}
                 </h3>
               </div>
+            )}
+
+            {!firstImg && (
+              <h3
+                class={`event-title clickable title-floating title-${pos}`}
+                data-event={eventJson}
+              >
+                {event.title}
+              </h3>
             )}
           </div>
         );
@@ -229,6 +237,22 @@ const positions = ["below", "above", "below"] as const;
     flex-shrink: 0;
   }
 
+  /* Title alone (no image) — sits on the same horizontal line as the dot */
+  .title-floating {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 180px;
+    margin: 0;
+  }
+  .title-above {
+    bottom: calc(50% + 28px);
+  }
+  .title-below {
+    top: calc(50% + 28px);
+  }
+
   /* ════════════════════════════════
      MOBILE – stack vertical
   ════════════════════════════════ */
@@ -339,22 +363,26 @@ const positions = ["below", "above", "below"] as const;
 
   .dot-ring {
     position: absolute;
+    top: 8px;
+    left: 50%;
     width: 32px;
     height: 32px;
     border-radius: 50%;
     border: 1px solid var(--magenta);
     opacity: 0.4;
     animation: ringPulse 2.5s ease-in-out infinite;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
   }
 
   @keyframes ringPulse {
     0%,
     100% {
-      transform: scale(1);
+      transform: translate(-50%, -50%) scale(1);
       opacity: 0.4;
     }
     50% {
-      transform: scale(1.5);
+      transform: translate(-50%, -50%) scale(1.5);
       opacity: 0;
     }
   }
@@ -439,10 +467,14 @@ const positions = ["below", "above", "below"] as const;
 
   const isMobile = () => window.innerWidth <= 700;
 
+  const playedSlides = new Set();
+
   window.addEventListener("timeline:slideEnter", (e) => {
     const idx = e.detail.slideIndex;
     const slide = document.querySelector(`.slide[data-slide="${idx}"]`);
     if (!slide?.classList.contains("slide-events")) return;
+    if (playedSlides.has(idx)) return;
+    playedSlides.add(idx);
 
     const numEl = slide.querySelector(".slide-number");
 
@@ -455,21 +487,21 @@ const positions = ["below", "above", "below"] as const;
       gsap.set(numEl, { opacity: 0 });
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.to(lineFill, { height: "100%", duration: 1, ease: "power2.inOut" });
+      tl.to(lineFill, { height: "100%", duration: 0.5, ease: "power2.inOut" });
       tl.to(
         mobileEvents,
-        { opacity: 1, x: 0, duration: 0.5, stagger: 0.2 },
-        "-=0.6",
+        { opacity: 1, x: 0, duration: 0.3, stagger: 0.09 },
+        "-=0.35",
       );
       mobileEvents.forEach((ev) => {
         tl.fromTo(
           ev.querySelector(".dot-inner"),
           { scale: 0 },
-          { scale: 1, duration: 0.4, ease: "back.out(2.5)" },
-          "<0.08",
+          { scale: 1, duration: 0.25, ease: "back.out(2.5)" },
+          "<0.04",
         );
       });
-      tl.to(numEl, { opacity: 1, duration: 0.3 }, "-=0.2");
+      tl.to(numEl, { opacity: 1, duration: 0.2 }, "-=0.15");
     } else {
       const tlEvents = slide.querySelectorAll(".tl-event");
       const fill = slide.querySelector(".tl-line-fill");
@@ -479,21 +511,21 @@ const positions = ["below", "above", "below"] as const;
       gsap.set(numEl, { opacity: 0 });
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.to(fill, { width: "100%", duration: 0.9, ease: "power2.inOut" });
+      tl.to(fill, { width: "100%", duration: 0.45, ease: "power2.inOut" });
       tlEvents.forEach((ev, i) => {
         tl.to(
           ev,
-          { opacity: 1, scale: 1, duration: 0.65 },
-          `-=${i === 0 ? 0.3 : 0.4}`,
+          { opacity: 1, scale: 1, duration: 0.35 },
+          `-=${i === 0 ? 0.2 : 0.25}`,
         );
         tl.fromTo(
           ev.querySelector(".dot-inner"),
           { scale: 0 },
-          { scale: 1, duration: 0.5, ease: "back.out(2.5)" },
-          "<0.15",
+          { scale: 1, duration: 0.3, ease: "back.out(2.5)" },
+          "<0.08",
         );
       });
-      tl.to(numEl, { opacity: 1, duration: 0.4 }, "-=0.2");
+      tl.to(numEl, { opacity: 1, duration: 0.25 }, "-=0.15");
 
       slide.querySelectorAll(".event-img-wrap").forEach((wrap) => {
         wrap.addEventListener("mouseenter", () =>
