@@ -1,0 +1,1184 @@
+---
+// Feliz 4to Mesesaurio mi amor 🦕💛
+// Parallax scrollytelling día→noche con dinosaurios. Un solo archivo.
+// Arte de dinosaurios de fondo: OpenMoji (CC BY-SA 4.0) — https://openmoji.org
+// Stegosaurus protagonista dibujado a mano en el mismo estilo.
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feliz 4to Mesesaurio 🦕💛</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Fredoka:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- GSAP + ScrollTrigger (CDN, embebido) -->
+    <script
+      is:inline
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    ></script>
+    <script
+      is:inline
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+    ></script>
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      body {
+        font-family: "Fredoka", sans-serif;
+        background: #0d1030;
+        color: #fff;
+        overflow-x: hidden;
+      }
+
+      /* ── Scroll track ── */
+      #scroll-track {
+        position: relative;
+        height: 850vh;
+      }
+      #stage {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      /* ── Cielo ── */
+      #sky {
+        position: absolute;
+        inset: 0;
+        will-change: background;
+      }
+
+      /* nubes */
+      .cloud {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        filter: blur(1px);
+        box-shadow:
+          40px 8px 0 -4px rgba(255, 255, 255, 0.9),
+          -38px 10px 0 -6px rgba(255, 255, 255, 0.9),
+          14px -14px 0 -4px rgba(255, 255, 255, 0.85);
+        will-change: transform, opacity;
+        pointer-events: none;
+      }
+
+      /* ── Estrellas ── */
+      #stars {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        will-change: opacity;
+        pointer-events: none;
+      }
+      /* .star -> bloque global (creado por JS) */
+      /* estrella fugaz */
+      #shooting-star {
+        position: absolute;
+        top: 16%;
+        left: 70%;
+        width: 130px;
+        height: 2px;
+        background: linear-gradient(
+          to left,
+          rgba(255, 255, 255, 0.95),
+          rgba(255, 255, 255, 0)
+        );
+        border-radius: 2px;
+        opacity: 0;
+        transform: rotate(18deg);
+        pointer-events: none;
+      }
+      #shooting-star::after {
+        content: "";
+        position: absolute;
+        right: -2px;
+        top: -2px;
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.9);
+      }
+
+      /* ── Sol y Luna ── */
+      .celestial {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        border-radius: 50%;
+        will-change: transform, opacity;
+      }
+      #sun {
+        width: clamp(70px, 12vw, 140px);
+        height: clamp(70px, 12vw, 140px);
+        margin-left: calc(clamp(70px, 12vw, 140px) / -2);
+        background: radial-gradient(circle at 40% 38%, #fff6d6, #ffd54f 55%, #ffb300);
+        box-shadow:
+          0 0 60px 20px rgba(255, 201, 64, 0.55),
+          0 0 120px 50px rgba(255, 179, 0, 0.3);
+      }
+      #moon {
+        width: clamp(80px, 13vw, 150px);
+        height: clamp(80px, 13vw, 150px);
+        margin-left: calc(clamp(80px, 13vw, 150px) / -2);
+        background: radial-gradient(circle at 38% 36%, #ffffff, #e9ecff 60%, #c7cdf2);
+        box-shadow:
+          0 0 50px 14px rgba(220, 226, 255, 0.6),
+          0 0 110px 44px rgba(180, 190, 255, 0.28);
+        opacity: 0;
+      }
+      .crater {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(170, 178, 220, 0.5);
+      }
+
+      /* ── Colinas ── */
+      .ground {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        bottom: 0;
+        will-change: transform;
+      }
+      #hills-back {
+        height: 44%;
+        z-index: 0;
+        background: linear-gradient(to top, #8fbf7f, #aedca0);
+        clip-path: polygon(
+          0 42%, 14% 30%, 28% 40%, 42% 26%, 58% 40%, 72% 26%,
+          86% 38%, 100% 30%, 100% 100%, 0 100%
+        );
+        opacity: 0.9;
+      }
+      #hills-mid {
+        height: 32%;
+        z-index: 2;
+        background: linear-gradient(to top, #6fae6a, #8ac881);
+        clip-path: polygon(
+          0 52%, 16% 36%, 32% 52%, 50% 34%, 66% 52%, 82% 36%,
+          100% 50%, 100% 100%, 0 100%
+        );
+      }
+      #ground-front {
+        height: 17%;
+        background: linear-gradient(to top, #4f8f52, #66a861);
+      }
+
+      /* matorrales / helechos lejanos: .fern-far -> bloque global (creado por JS) */
+      /* helechos de primer plano (marco) */
+      .fern-front {
+        position: absolute;
+        bottom: -6px;
+        width: clamp(90px, 16vw, 200px);
+        z-index: 7;
+        pointer-events: none;
+        will-change: transform;
+      }
+      .fern-front.left {
+        left: -10px;
+      }
+      .fern-front.right {
+        right: -10px;
+        transform: scaleX(-1);
+      }
+      /* matas de pasto: .grass -> bloque global (creado por JS) */
+
+      /* ── Dinos de fondo ── */
+      .dino-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      #layer-far {
+        z-index: 1;
+      }
+      #layer-mid {
+        z-index: 3;
+      }
+      #layer-near {
+        z-index: 5;
+      }
+      #grass-layer {
+        z-index: 5;
+      }
+      /* NOTA: las reglas de .bg-dino/.inner/.star/.grass/.fern-far/.fly-heart
+         viven en el bloque <style is:global> de abajo porque esos elementos
+         se crean por JS y no reciben el atributo de scope de Astro. */
+
+      /* ── Dinos protagonistas ── */
+      #main-dinos {
+        position: absolute;
+        left: 50%;
+        bottom: 7%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: clamp(0px, 1vw, 14px);
+        z-index: 6;
+        width: min(92vw, 660px);
+        will-change: transform;
+      }
+      .main-dino {
+        position: relative;
+        width: clamp(140px, 27vw, 290px);
+        transform-origin: bottom center;
+        will-change: transform;
+      }
+      .main-dino .breath {
+        transform-origin: bottom center;
+        animation: breathe var(--br, 3.2s) ease-in-out infinite;
+      }
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: translateY(0) scaleY(1);
+        }
+        50% {
+          transform: translateY(-3px) scaleY(1.015);
+        }
+      }
+      .main-dino svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 0.28));
+      }
+      /* ojos para dormir (párpado) — ocultos de día */
+      .sleep-lid {
+        opacity: 0;
+      }
+
+      #love-heart {
+        position: absolute;
+        left: 50%;
+        bottom: 100%;
+        margin-bottom: -8px;
+        transform: translate(-50%, 0) scale(0);
+        font-size: clamp(30px, 5vw, 54px);
+        opacity: 0;
+        z-index: 7;
+        will-change: transform, opacity;
+        filter: drop-shadow(0 0 12px rgba(255, 120, 160, 0.7));
+      }
+
+      .zzz {
+        position: absolute;
+        left: 64%;
+        bottom: 100%;
+        margin-bottom: 6px;
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800;
+        color: #fff;
+        opacity: 0;
+        z-index: 7;
+        pointer-events: none;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      /* ── Intro ── */
+      #intro {
+        position: fixed;
+        inset: 0;
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: center;
+        padding: clamp(2.5rem, 9vh, 6rem) 2rem 2rem;
+        pointer-events: none;
+        transition: opacity 0.6s ease;
+      }
+      #intro h1 {
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800;
+        font-size: clamp(1.8rem, 6vw, 3.4rem);
+        color: #5a3d2b;
+        text-shadow: 0 2px 0 rgba(255, 255, 255, 0.6);
+        line-height: 1.1;
+        margin-bottom: 0.6rem;
+      }
+      #intro p {
+        font-size: clamp(1rem, 3vw, 1.4rem);
+        color: #6b4a33;
+        margin-bottom: 1.6rem;
+        font-weight: 500;
+      }
+      .scroll-hint {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        color: #5a3d2b;
+        font-weight: 600;
+        font-size: clamp(0.95rem, 2.6vw, 1.2rem);
+      }
+      .scroll-mouse {
+        width: 30px;
+        height: 50px;
+        border: 3px solid #5a3d2b;
+        border-radius: 16px;
+        position: relative;
+      }
+      .scroll-mouse::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 8px;
+        width: 5px;
+        height: 9px;
+        margin-left: -2.5px;
+        background: #5a3d2b;
+        border-radius: 3px;
+        animation: wheel 1.4s ease-in-out infinite;
+      }
+      @keyframes wheel {
+        0% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        70% {
+          transform: translateY(14px);
+          opacity: 0;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .arrow {
+        font-size: 1.6rem;
+        animation: bounce 1.4s ease-in-out infinite;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(10px);
+        }
+      }
+
+      /* ── Mensajes de la historia (durante el día→noche) ── */
+      #story {
+        position: fixed;
+        left: 50%;
+        top: 18%;
+        transform: translateX(-50%);
+        z-index: 21;
+        width: min(92vw, 720px);
+        text-align: center;
+        pointer-events: none;
+      }
+      .story-msg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        margin: 0;
+        opacity: 0;
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800;
+        font-size: clamp(1.4rem, 5vw, 2.8rem);
+        line-height: 1.15;
+        color: #fff;
+        /* legible sobre cielo claro (día) y oscuro (noche) */
+        text-shadow:
+          0 2px 10px rgba(0, 0, 0, 0.45),
+          0 0 18px rgba(0, 0, 0, 0.35),
+          0 0 26px rgba(255, 210, 230, 0.5);
+        will-change: opacity, transform;
+      }
+
+      /* ── Mensaje final ── */
+      #final {
+        position: fixed;
+        left: 50%;
+        top: 20%;
+        transform: translate(-50%, -10px);
+        z-index: 22;
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+        width: min(92vw, 760px);
+        padding: 0 1rem;
+      }
+      #final h2 {
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800;
+        font-size: clamp(1.6rem, 6vw, 3.6rem);
+        line-height: 1.12;
+        color: #fff;
+        text-shadow:
+          0 0 18px rgba(255, 182, 193, 0.85),
+          0 2px 10px rgba(0, 0, 0, 0.4);
+      }
+      #final .accent {
+        color: #ffd6e6;
+      }
+      #reset-btn {
+        margin-top: 1.4rem;
+        font-family: "Fredoka", sans-serif;
+        font-size: clamp(0.85rem, 2.4vw, 1.05rem);
+        font-weight: 500;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1.5px solid rgba(255, 255, 255, 0.5);
+        border-radius: 999px;
+        padding: 0.55em 1.4em;
+        cursor: pointer;
+        pointer-events: auto;
+        backdrop-filter: blur(6px);
+        transition:
+          transform 0.25s ease,
+          background 0.25s ease;
+      }
+      #reset-btn:hover {
+        transform: translateY(-2px) scale(1.04);
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      /* ── Corazones voladores ── */
+      #hearts {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      /* .fly-heart -> bloque global (creado por JS) */
+
+      @media (max-width: 640px) {
+        #main-dinos {
+          bottom: 9%;
+        }
+        #final {
+          top: 14%;
+        }
+      }
+    </style>
+
+    <!-- Estilos GLOBALES: aplican a elementos creados por JS (sin atributo
+         de scope de Astro): herd, estrellas, pasto, helechos lejanos,
+         corazones voladores. -->
+    <style is:global>
+      .bg-dino {
+        position: absolute;
+        will-change: transform, opacity;
+      }
+      .bg-dino svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.16));
+      }
+      .layer-far .bg-dino {
+        opacity: 0.62;
+      }
+      .layer-mid .bg-dino {
+        opacity: 0.85;
+      }
+      .layer-near .bg-dino {
+        opacity: 1;
+      }
+      .bg-dino .inner {
+        animation: dino-walkbob var(--bob, 2s) ease-in-out infinite;
+        transform-origin: bottom center;
+      }
+      .bg-dino.flyer .inner {
+        animation: dino-flap var(--bob, 3s) ease-in-out infinite;
+      }
+      @keyframes dino-walkbob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+      @keyframes dino-flap {
+        0%,
+        100% {
+          transform: translateY(0) rotate(-2deg);
+        }
+        50% {
+          transform: translateY(-10px) rotate(2deg);
+        }
+      }
+      .star {
+        position: absolute;
+        background: #fff;
+        border-radius: 50%;
+        animation: dino-twinkle var(--tw, 3s) ease-in-out infinite alternate;
+      }
+      @keyframes dino-twinkle {
+        from {
+          opacity: 0.25;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .grass {
+        position: absolute;
+        bottom: 8%;
+        z-index: 4;
+        opacity: 0.9;
+        pointer-events: none;
+      }
+      .fern-far {
+        position: absolute;
+        bottom: 30%;
+        width: 34px;
+        height: 30px;
+        opacity: 0.45;
+        will-change: transform;
+        pointer-events: none;
+      }
+      .fly-heart {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: var(--hs, 24px);
+        will-change: transform, opacity;
+        opacity: 0;
+      }
+      @media (max-width: 640px) {
+        .layer-far .bg-dino:nth-child(2n) {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="scroll-track">
+      <div id="stage">
+        <div id="sky"></div>
+
+        <div id="stars"></div>
+        <div id="shooting-star"></div>
+
+        <!-- sol y luna -->
+        <div id="sun" class="celestial"></div>
+        <div id="moon" class="celestial">
+          <span class="crater" style="width:18%;height:18%;left:24%;top:28%"></span>
+          <span class="crater" style="width:12%;height:12%;left:58%;top:22%"></span>
+          <span class="crater" style="width:22%;height:22%;left:52%;top:54%"></span>
+          <span class="crater" style="width:10%;height:10%;left:30%;top:62%"></span>
+        </div>
+
+        <!-- nubes -->
+        <div class="cloud" data-depth="0.3" style="width:60px;height:30px;left:12%;top:18%"></div>
+        <div class="cloud" data-depth="0.5" style="width:80px;height:40px;left:62%;top:12%"></div>
+        <div class="cloud" data-depth="0.4" style="width:50px;height:26px;left:80%;top:30%"></div>
+        <div class="cloud" data-depth="0.6" style="width:70px;height:34px;left:34%;top:8%"></div>
+
+        <!-- colinas -->
+        <div id="hills-back" class="ground"></div>
+        <div id="hills-mid" class="ground"></div>
+
+        <!-- capas de dinos (se rellenan por JS) -->
+        <div class="dino-layer layer-far" id="layer-far"></div>
+        <div class="dino-layer layer-mid" id="layer-mid"></div>
+
+        <!-- suelo frontal -->
+        <div id="ground-front" class="ground" style="z-index:4"></div>
+
+        <!-- capa cercana de dinos (encima del suelo frontal) -->
+        <div class="dino-layer layer-near" id="layer-near"></div>
+
+        <!-- pasto -->
+        <div class="dino-layer" id="grass-layer"></div>
+
+        <!-- helechos de primer plano -->
+        <div class="fern-front left" id="fern-left"></div>
+        <div class="fern-front right" id="fern-right"></div>
+
+        <!-- dinos protagonistas -->
+        <div id="main-dinos">
+          <div class="main-dino" id="stego"></div>
+          <div class="main-dino" id="bronto"></div>
+          <div id="love-heart">💛</div>
+          <div class="zzz" id="zzz1">z</div>
+          <div class="zzz" id="zzz2">Z</div>
+          <div class="zzz" id="zzz3">z</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- corazones finales -->
+    <div id="hearts"></div>
+
+    <!-- mensajes de la historia (aparecen durante la transición día→noche) -->
+    <div id="story">
+      <p class="story-msg" data-i="0">Hola mi amor</p>
+      <p class="story-msg" data-i="1">Hemos estado separados un tiempito</p>
+      <p class="story-msg" data-i="2">Sin poder vernos mucho</p>
+      <p class="story-msg" data-i="3">
+        Pero quiero que sepas que siempre pienso en ti
+      </p>
+    </div>
+
+    <!-- mensaje final -->
+    <div id="final">
+      <h2>Feliz <span class="accent">4to Mesesaurio</span><br />mi amor 🦕💛</h2>
+      <button id="reset-btn" type="button">↺ Reinicia la animación</button>
+    </div>
+
+    <!-- intro -->
+    <div id="intro">
+      <h1>Feliz 4to Mesesaurio 🦕💛</h1>
+      <p>Una pequeña historia prehistórica para ti…</p>
+      <div class="scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Desliza hacia abajo</span>
+        <span class="arrow">⬇️</span>
+      </div>
+    </div>
+
+    <script is:raw>
+      // ════════════════════════════════════════════════════════════
+      //  ARTE DE DINOSAURIOS
+      //  Fondo: OpenMoji (CC BY-SA 4.0). viewBox 0 0 72 72.
+      //  Protagonista Stegosaurus: dibujado a mano (mismo estilo).
+      // ════════════════════════════════════════════════════════════
+      const DINO = {
+        sauropod: `<g id="color"> <path fill="#A57939" stroke="none" d="M5,52c0,0,15-3,17-10s14.6667-11.1667,20.8333-8.5833c0,0,6.3333,0.5833,8.25-7.4167C53,18,55,9,62,10 s6.1667,6.3333,4.0833,7.1667C64,18,61,18,60,19.5s-2.1667,16.1667-6.5833,19.8333c0,0-4.9167,6.5-4.6667,9.5833 C49,52,50.5833,61.25,47,61c-3.6293-0.2532-3-7-3-8s-8-3-11-1s-2.1667,8-4.5833,8.5S23.5,60.8333,22.75,59.9167 C22,59,23.3494,53.229,22.25,51.25"/> </g> <g id="hair"/> <g id="skin"/> <g id="skin-shadow"/> <g id="line"> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5,52c0,0,15-3,17-10 s14.6667-11.1667,20.8333-8.5833c0,0,6.3333,0.5833,8.25-7.4167C53,18,55,9,62,10s6.1667,6.3333,4.0833,7.1667C64,18,61,18,60,19.5 s-2.1667,16.1667-6.5833,19.8333c0,0-4.9167,6.5-4.6667,9.5833C49,52,50.5833,61.25,47,61c-3.6293-0.2532-3-7-3-8s-8-3-11-1 s-2.1667,8-4.5833,8.5S23.5,60.8333,22.75,59.9167C22,59,23.3494,53.229,22.25,51.25"/> </g>`,
+        trex: `<g id="color"> <path fill="#B1CC33" stroke="#B1CC33" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.8" d="M38,55c0,0,9,4,12-8S38,55,38,55z"/> <path fill="#B1CC33" stroke="#B1CC33" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.8" d="M39,48c0,0,6.125-2.6797,6.6514,0.8374c0.1505,1.0055-0.2436,2.0175-0.9153,2.7807l-4.736,5.3818L40,57 c0.0019,0.0006,6.4303,1.91,5.1667,3.4167C43.0002,62.9998,34.0014,61.0003,34,61l0-0.0001l1-4.9998L34.9999,56 C19.003,59.9992,15.0015,45.0056,15,45h0c0.005,0.0041,14.1677,11.6649,20.0833,1.8333C41,37,38.1667,17.1667,50.5833,17.5833 c8.358,0.2805,9.844,4.7143,9.9224,7.583c0.0381,1.393-0.2557,2.417-0.2557,2.417c-0.0778,0.5793-0.1852,1.086-0.3188,1.53 c-1.1539,3.8354-4.2597,2.9991-7.0978,3.97c-3.1663,1.0832-2.0836,4.4158-2.0833,4.4167l0.0001,0C56.5,36.0001,56,43,54,41 c-2-2-3.1666,1.3332-3.1666,1.3332l-0.0001,0.0002C50.8333,42.3336,51,49,49,51"/> <path fill="#5C9E31" stroke="#5C9E31" stroke-miterlimit="10" stroke-width="1.8" d="M51,43c2,0,4,3,4,3 c1,4-4.4167,8.3333-4.4167,8.3333S62,57,52.6667,57.3333C43.3333,57.6667,46,55,46,55l0,0c0,0,3-2,5-9"/> </g> <g id="hair"/> <g id="skin"/> <g id="skin-shadow"/> <g id="line"> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M43,41c0,0,2-3.8333,4.5-1.4167C50,42,47,43,46,42s-2,2-2,2"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M39,48c0,0,6.125-2.6797,6.6514,0.8374c0.1505,1.0055-0.2436,2.0174-0.9153,2.7807L40,57c0,0,6.4305,1.9098,5.1667,3.4167 C43,63,34,61,34,61l1-5c-16,4-20-11-20-11s14.1667,11.6667,20.0833,1.8333s3.0833-29.6667,15.5-29.25 c8.358,0.2805,9.844,4.7143,9.9224,7.583c0.0381,1.393-0.2557,2.417-0.2557,2.417c-0.0778,0.5793-0.1852,1.086-0.3188,1.53 c-1.1539,3.8354-4.2597,2.9991-7.0978,3.97C49.6667,34.1667,50.75,37.5,50.75,37.5C56.5,36,56,43,54,41 s-3.1667,1.3333-3.1667,1.3333S51,49,49,51"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M54.5,44.8333c3.5,2.8333-3.9167,9.5-3.9167,9.5S62,57,52.6667,57.3333C43.3333,57.6667,46,55,46,55"/> </g>`,
+        mammoth: `<g id="color"> <path fill="#a57939" d="M63.4565,57H57.3549a.9991.9991,0,0,1-.9941-.8945c-.5352-5.0459-2.21-9.0528-4.0723-9.7451-.8076-.3028-1.7666.0556-2.8428,1.0654-2.5791,2.3252-5.5439,1.4287-7.9248.7109-1.6006-.4834-2.9824-.9023-3.7891-.2959-1.0957.82-1.6308,3.5625-1.5918,8.15A1,1,0,0,1,35.14,57H29.3725a1,1,0,0,1-.9815-1.19c2.2256-11.458.5918-16.7325-.0957-18.3018-2.2881.3467-2.8564.6436-5.1963,2.1358a76.999,76.999,0,0,0,1.6641,13.371,1.0007,1.0007,0,0,1-.6816,1.167l-2.2666.7012a1,1,0,0,1-1.1407-.42c-5.1679-8.1582-5.0068-18.6709-4.998-19.1152,0-5.4268,4.2353-10.1016,7.9717-14.2266.7724-.8525,1.5322-1.6914,2.24-2.5195a.9982.9982,0,0,1,.2041-.1807c5.49-3.6758,9.08-.9688,11.5908,1.7988a.939.939,0,0,1,.1231.168c.89,1.5234,3.6054,2.2021,6.2314,2.8584,2.7061.6758,5.5029,1.375,7.0039,3.1269A19.4814,19.4814,0,0,0,56.39,29.9854c2.254,1.1328,4.1788,2.1005,5.5157,5.2187.01.0225.0195.0449.0283.0674a22.1667,22.1667,0,0,1,1.3691,5.4736,1,1,0,1,1-1.98.2793c-.1231-.8682-.26-1.6406-.4112-2.331-.84,5.5087,2.6094,15.2363,3.4356,16.8515A1.0009,1.0009,0,0,1,63.4565,57Z"/> <path fill="#6a462f" d="M43.2221,57h-4.625a.9994.9994,0,0,1-1-1c0-1.9873-1.6621-5.8271-2.3028-7.14a1,1,0,0,1,.46-1.337c.4961-.2431,5.6924-.86,6.1953-1.0888a.9969.9969,0,0,1,1.3242.4961c.8282,1.82.9356,7.8652.9483,9.0586a1,1,0,0,1-1,1.0107Z"/> <path fill="#6a462f" d="M54.2748,57H48.768a.9994.9994,0,0,1-1-1c0-2.6338-.586-8.6885-.5918-8.749a1,1,0,0,1,.8984-1.0918c.5664-.0469,5.4971-.3887,6.042-.4756a1.0009,1.0009,0,0,1,1.1455.8291,55.1518,55.1518,0,0,1,.01,9.5664A1,1,0,0,1,54.2748,57Z"/> <path fill="#d0cfce" d="M14.4272,43.3652a9.6285,9.6285,0,0,1-6.1778-1.9511,7.7354,7.7354,0,0,1-2.5166-6.2178,8.6835,8.6835,0,0,1,2.5254-6.584c2.8887-2.7441,7.1553-2.5576,7.3379-2.55a1,1,0,0,1,.0928,1.9883A6.5232,6.5232,0,0,0,10.2133,34.71a3.1332,3.1332,0,0,0,.8672,2.1386,5.1525,5.1525,0,0,0,3.8066,1.2188c4.8389,0,6.53-4.9492,6.6-5.16a1,1,0,0,1,.9239-.6865.9411.9411,0,0,1,.958.6357c.9521,2.4493.8974,4.5909-.1621,6.3653-2.003,3.3574-6.876,4.0029-7.0821,4.0283A11.32,11.32,0,0,1,14.4272,43.3652Z"/> </g> <g id="line"> <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22.4372,33.219C25.4878,41.0712,16,42.2575,16,42.2575s-9.2673,1.5253-9.2673-7.0614,8.8126-8.1347,8.8126-8.1347"/> <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M30.619,21.6929a2.78,2.78,0,0,1,1.87-.8014c1.122,0,3.511,2.3509,3.511,8.0144s-3.0912,2.5723-3.0912,2.5723-1.1827,3.75-4.1114.22H27.2327"/> <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.6764,35.3693c0-6.125,5.8544-11.3033,9.971-16.1176,4.6372-3.1014,7.6315-1.2966,10.2955,1.64,2.1029,3.6044,10.6727,2.9453,13.3667,6.1655,6.0884,5.9367,10.4218,2.6495,12.0032,13.8278"/> <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M23.7851,53.2265l-2.2663.7015a32.6584,32.6584,0,0,1-4.2645-11.9308"/> <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M59.7938,40.8848C59.8755,46.8315,62.77,54.6585,63.4562,56H57.3548c-.6982-6.5813-3.6734-13.9134-8.5927-9.3041C43.155,51.7505,34.991,38.4012,35.14,56H29.3723c2.8725-14.782-.5189-19.5829-.5189-19.5829"/> <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M36.1923,48.4223S38.597,53.3417,38.597,56h4.6255"/> <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M48.1713,47.1546s.5967,6.132.5967,8.8454h5.5066"/> </g>`,
+        dragon: `<g id="color"> <path fill="#B1CC33" stroke="#B1CC33" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M46,24c-1.0833-0.5833-4-1-5.9167-0.9167C38.1667,23.1667,37,21,37,21c-0.9,1.35-0.315,2.7675,0.6007,3.9184 c1.1508,1.4463,2.8225,2.3985,4.6286,2.7916C47.7267,28.9066,48,30,48,30l-0.1945,2.8581 c3.8914,1.5502,4.6086,4.4578,4.8891,5.4505l-4.3577,0.0076c3.4697,2.4416,4.3264,7.3677,4.3264,7.3677L50,46 c-0.1667,3-3.5,7.9167-8,11s-2.25,7.75-2.25,7.75S34,58,42,51s0.5833-15,0.5833-15c1.5833,12-4.4167,14.5833-4.4167,14.5833 C30.3333,52.1667,29.75,47.25,29.75,47.25l3.75,1.4167c8.5,0.6667,0.1667-11.0833,0.1667-11.0833 C24.3333,32.1667,20,40,19.5833,38.5833c-0.4167-1.4167,1.5833-4.75,1.5833-4.75c-1.8333-1.1667-10.8333,3.0833-10.8333,3.0833 C9.6667,35.8333,17.5833,31,17.5833,31C16.1667,29,10,29,10,29s4-6,14.1667-2.8333L37,34c0,0-6.7368-6.8764-8-12 c-1.2801-5.1922,2.6184-8.4931,2-8l-3.3306-4.3319c1.9432-0.5218,3.5669,0.7807,4.1322,1.2131l-1.578-5.122 c2.5024,0.1211,3.7895,2.1179,4.2473,2.7901L36,5l3.9167,3.5c0,0,2.0833-1.5,3,0.25C43.8333,10.5,46,14,49.0833,14.5833 c3.0833,0.5833,1.5,3.9167,1.5,3.9167S46,17,44,17s-2.75,1.5833-2.75,1.5833S41,18,45,20S46,24,46,24"/> <path fill="#EA5A47" stroke="none" d="M50,21c0,0,4,2,3,4c0,0,3.3333,0,4.1667,2.5C58,30,63,28,63,28l-4.3333-2.1667c0,0,0-2.8333-1.3333-2.8333 C56,23,53,20,50,21z"/> </g> <g id="hair"/> <g id="skin"/> <g id="skin-shadow"/> <g id="line"> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M52.6632,45.6838c0,0-0.8567-4.9261-4.3264-7.3677"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M52.6945,38.3086c-0.2805-0.9927-0.9977-3.9003-4.8891-5.4505"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M48,30c0,0-0.2733-1.0934-5.7707-2.29c-1.806-0.3931-3.4777-1.3453-4.6286-2.7916C36.685,23.7675,36.1,22.35,37,21 c0,0,1.1667,2.1667,3.0833,2.0833C42,23,44.9167,23.4167,46,24"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M46,24c0,0,3-2-1-4s-3.75-1.4167-3.75-1.4167S42,17,44,17s6.5833,1.5,6.5833,1.5s1.5833-3.3333-1.5-3.9167 C46,14,43.8333,10.5,42.9167,8.75c-0.9167-1.75-3-0.25-3-0.25L36,5"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M24.1667,26.1667C14,23,10,29,10,29s6.1667,0,7.5833,2c0,0-7.9167,4.8333-7.25,5.9167c0,0,9-4.25,10.8333-3.0833 c0,0-2,3.3333-1.5833,4.75c0.4167,1.4167,4.75-6.4167,14.0833-1c0,0,8.3333,11.75-0.1667,11.0833L29.75,47.25 c0,0,0.5833,4.9167,8.4167,3.3333c0,0,6-2.5833,4.4167-14.5833c0,0,7.4167,8-0.5833,15s-2.25,13.75-2.25,13.75S37.5,60.0833,42,57 s7.8333-8,8-11"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M31,14c0.6184-0.4931-3.2801,2.8078-2,8c1.2632,5.1236,8,12,8,12"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M34.4709,8.5493c-0.4579-0.6722-1.7449-2.669-4.2473-2.7901"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M31.8016,10.8812c-0.5653-0.4324-2.189-1.7348-4.1322-1.2131"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M50,21c0,0,4,2,3,4c0,0,3.3333,0,4.1667,2.5C58,30,63,28,63,28l-4.3333-2.1667c0,0,0-2.8333-1.3333-2.8333C56,23,53,20,50,21z"/> </g>`,
+        lizard: `<g id="color"> <path fill="#B1CC33" stroke="none" d="M39.9167,47.3583c0,0,7.8819-2.3583,13.9826-0.8583S68,46,68,46s-7.6667,0.6667-15.3333-3.6667 S39,40.8333,32.5,40.4167c-6.5-0.4167-14.1667-4.5833-17.8333-7C11,31,8.5833,31.25,8.5833,31.25S8,32,6,33s-5,2,1,4 s8.8333,5.8333,8.8333,5.8333S21.8333,48.8583,39.9167,47.3583z"/> </g> <g id="hair"/> <g id="skin"/> <g id="skin-shadow"/> <g id="line"> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M39.9167,46.5c0,0,7.8819-1.5,13.9826,0S68,46,68,46s-7.6667,0.6667-15.3333-3.6667S39,40.8333,32.5,40.4167 c-6.5-0.4167-14.1667-4.5833-17.8333-7C11,31,8.5833,31.25,8.5833,31.25S8,32,6,33s-5,2,1,4s8.8333,4.8333,8.8333,4.8333"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M21.387,45.0264c0,0,5.7159,1.8069,10.613,1.3902"/> <line x1="19" x2="16" y1="43" y2="50" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> <line x1="16" x2="15" y1="48" y2="48" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> <line x1="17" x2="18" y1="48" y2="49" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> <line x1="36.5466" x2="36.0791" y1="46.5061" y2="53.3712" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> <line x1="35.4177" x2="34.4902" y1="51.7302" y2="52.104" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> <line x1="36.3451" x2="37.6034" y1="51.3563" y2="51.803" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> </g>`,
+        croc: `<g id="color"> <path fill="#5C9E31" stroke="#5C9E31" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M46,52c0,0,17,2,19,0v-1c0,0,3-3,1-4s-5,0-5,0s-2.9167-1.3333-6.4583-4.6667C54.5417,42.3333,53,41,51,43c0,0-2-3-8-3s-24,1-24,1 s-6-1,0-3s11-2,12,0c0,0-2.6667-8.4167-17.3333-5.2083C13.6667,32.7917,1,36,8,48c0,0,2,4,8,4H46z"/> <path fill="#B1CC33" stroke="#B1CC33" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M23,47c0,0-4.8121,4-3.406,5S23,55,23,55h4l-3.0324-3c0,0,2.0324-1,3.0324-3s0-3.2403,0-3.2403"/> <path fill="#B1CC33" stroke="#B1CC33" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M40,47c0,0-4.8121,4-3.406,5S40,55,40,55h4l-3.0324-3c0,0,2.0324-1,3.0324-3s0-3.2403,0-3.2403"/> </g> <g id="hair"/> <g id="skin"/> <g id="skin-shadow"/> <g id="line"> <line x1="29" x2="33" y1="52" y2="52" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M46,52c0,0,17,2,19,0v-1c0,0,3-3,1-4s-5,0-5,0s-2.9167-1.3333-6.4583-4.6667C54.5417,42.3333,53,41,51,43c0,0-2-3-8-3s-24,1-24,1 s-6-1,0-3s11-2,12,0c0,0-2.6667-8.4167-17.3333-5.2083C13.6667,32.7917,1,36,8,48c0,0,2,4,8,4"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M23,47c0,0-4.8121,4-3.406,5S23,55,23,55h4l-3.0324-3c0,0,2.0324-1,3.0324-3s0-3.2403,0-3.2403"/> <path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M40,47c0,0-4.8121,4-3.406,5S40,55,40,55h4l-3.0324-3c0,0,2.0324-1,3.0324-3s0-3.2403,0-3.2403"/> </g>`,
+      };
+
+      // Recolorea un markup OpenMoji: cambia los fills de color por un
+      // tono pastel (mantiene los trazos negros del grupo "line").
+      function recolor(markup, fill, fill2) {
+        let m = markup;
+        // colores de relleno comunes en OpenMoji
+        const greens = ["#B1CC33", "#5C9E31"];
+        const browns = ["#A57939", "#a57939", "#6a462f"];
+        greens.forEach((g, i) => {
+          m = m.split(g).join(i === 1 && fill2 ? fill2 : fill);
+        });
+        browns.forEach((b, i) => {
+          m = m.split(b).join(i === 2 && fill2 ? fill2 : fill);
+        });
+        return m;
+      }
+
+      function svgWrap(inner) {
+        return (
+          `<svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">` +
+          inner +
+          `</svg>`
+        );
+      }
+
+      // ── Stegosaurus protagonista (dibujado a mano, estilo OpenMoji) ──
+      function stegoSVG() {
+        return svgWrap(`
+          <g id="color">
+            <path fill="#8fd6b4" d="M14 46 C12 38 16 33 24 32 C30 31 40 31 48 33 C56 35 60 39 59 45 C58 50 52 52 44 52 L20 52 C16 52 14.5 49 14 46 Z"/>
+            <path fill="#8fd6b4" d="M59 41 c4-1 8 0 9 4 c1 4-2 7-6 7 c-3 0-6-2-6-5 c0-3 1-5 3-6 Z"/>
+            <path fill="#8fd6b4" d="M14 44 c-5 1-9 4-11 8 c3 0 6-1 8-2 c2-1 4-3 5-4 Z"/>
+            <ellipse fill="#b6e8cf" cx="34" cy="46" rx="16" ry="5"/>
+            <path fill="#ffc8a0" d="M21 33 c-1-7 3-11 6-12 c1 6-1 10-3 13 Z"/>
+            <path fill="#ffb38a" d="M31 31 c-1-8 3-13 6-14 c1 7-1 12-3 15 Z"/>
+            <path fill="#ffc8a0" d="M41 31 c0-8 4-12 7-13 c1 7-2 11-4 14 Z"/>
+            <path fill="#ffb38a" d="M51 33 c1-6 4-9 7-9 c0 5-2 9-4 11 Z"/>
+          </g>
+          <g id="line">
+            <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 46 C12 38 16 33 24 32 C30 31 40 31 48 33 C56 35 60 39 59 45 C58 50 52 52 44 52 L20 52 C16 52 14.5 49 14 46 Z"/>
+            <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M59 41 c4-1 8 0 9 4 c1 4-2 7-6 7 c-3 0-6-2-6-5 c0-3 1-5 3-6 Z"/>
+            <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 44 c-5 1-9 4-11 8 c3 0 6-1 8-2 c2-1 4-3 5-4"/>
+            <path fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round" d="M21 33 c-1-7 3-11 6-12 c1 6-1 10-3 13"/>
+            <path fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round" d="M31 31 c-1-8 3-13 6-14 c1 7-1 12-3 15"/>
+            <path fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round" d="M41 31 c0-8 4-12 7-13 c1 7-2 11-4 14"/>
+            <path fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round" d="M51 33 c1-6 4-9 7-9 c0 5-2 9-4 11"/>
+            <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" d="M22 52 v8"/>
+            <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" d="M30 52 v9"/>
+            <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" d="M42 52 v9"/>
+            <path fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" d="M50 52 v8"/>
+            <circle class="eye-open eye-stego" cx="63" cy="44" r="1.7" fill="#000"/>
+            <path class="sleep-lid lid-stego" fill="none" stroke="#000" stroke-width="1.6" stroke-linecap="round" d="M60.5 44 q2.5 2 5 0"/>
+            <circle cx="62" cy="48" r="2.2" fill="#ff9bb3" opacity="0.6"/>
+            <path fill="none" stroke="#000" stroke-width="1.4" stroke-linecap="round" d="M64 48 q2 1 3-1"/>
+          </g>
+        `);
+      }
+
+      // Inyecta protagonistas, con grupo .breath para respiración suave.
+      function heroSVG(inner) {
+        // Envuelve el contenido del svg en un <g class="breath">
+        const i = inner.indexOf(">");
+        const open = inner.slice(0, i + 1);
+        const rest = inner.slice(i + 1, inner.lastIndexOf("</svg>"));
+        return open + `<g class="breath">` + rest + `</g></svg>`;
+      }
+
+      // Bronto = sauropod OpenMoji recoloreado morado pastel + ojo/cachete
+      function brontoSVG() {
+        const recolored = recolor(DINO.sauropod, "#b39ddb");
+        // añadir ojo, cachete y párpado de sueño cerca de la cabeza (~x60,y15)
+        const extras =
+          `<circle class="eye-open eye-bronto" cx="60.5" cy="14.5" r="1.7" fill="#000"/>` +
+          `<path class="sleep-lid lid-bronto" fill="none" stroke="#000" stroke-width="1.5" stroke-linecap="round" d="M58.5 14.5 q2 1.6 4 0"/>` +
+          `<circle cx="58.5" cy="18" r="2" fill="#ff9bb3" opacity="0.55"/>`;
+        return svgWrap(recolored + extras);
+      }
+
+      document.getElementById("stego").innerHTML = heroSVG(stegoSVG());
+      document.getElementById("bronto").innerHTML = heroSVG(brontoSVG());
+
+      // ── Helechos (SVG simple) ──
+      function fernSVG(color) {
+        return (
+          `<svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">` +
+          `<g fill="${color}">` +
+          `<path d="M50 110 C50 70 30 50 18 40 C34 48 46 60 50 78 C50 50 60 30 78 18 C64 34 54 52 52 76 C58 58 74 48 92 46 C72 54 56 70 50 110 Z"/>` +
+          `<path d="M50 110 C48 80 40 64 28 54 C42 60 50 72 52 88 Z"/>` +
+          `</g></svg>`
+        );
+      }
+      document.getElementById("fern-left").innerHTML = fernSVG("#2f6b3a");
+      document.getElementById("fern-right").innerHTML = fernSVG("#2f6b3a");
+
+      // matas de pasto
+      function grassSVG(color) {
+        return (
+          `<svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg" width="60" height="30">` +
+          `<g fill="${color}">` +
+          `<path d="M30 30 C28 18 24 10 20 4 C26 10 30 18 30 30 Z"/>` +
+          `<path d="M30 30 C32 16 38 8 46 2 C38 12 34 20 34 30 Z"/>` +
+          `<path d="M28 30 C24 20 16 14 8 10 C18 16 24 22 26 30 Z"/>` +
+          `</g></svg>`
+        );
+      }
+
+      // ════════════════════════════════════════════════════════════
+      //  HERD: generar dinos de fondo (3 capas)
+      // ════════════════════════════════════════════════════════════
+      // paleta pastel para recolorear dinos de fondo
+      const PASTELS = [
+        "#9ec1f0", "#f6a5a5", "#f7c873", "#a9e0c5", "#c5a3e0",
+        "#f4a9cf", "#8fd6b4", "#ffc8a0", "#b39ddb",
+      ];
+      const GROUND_SPECIES = ["trex", "mammoth", "lizard", "croc", "sauropod"];
+
+      let dinoSeq = 0;
+      function makeDino(species, color, size, flip, bob) {
+        const wrap = document.createElement("div");
+        wrap.className = "bg-dino";
+        if (species === "dragon") wrap.classList.add("flyer");
+        wrap.style.width = size + "px";
+        wrap.style.setProperty("--bob", bob + "s");
+        const inner = document.createElement("div");
+        inner.className = "inner";
+        if (flip) inner.style.transform = "scaleX(-1)";
+        let mk = recolor(DINO[species], color);
+        inner.innerHTML = svgWrap(mk);
+        wrap.appendChild(inner);
+        wrap.dataset.id = "d" + dinoSeq++;
+        return wrap;
+      }
+
+      function rand(a, b) {
+        return a + Math.random() * (b - a);
+      }
+      function pick(arr) {
+        return arr[(Math.random() * arr.length) | 0];
+      }
+
+      const exitDinos = []; // para animar la salida nocturna
+
+      function populateLayer(layerId, opts) {
+        const layer = document.getElementById(layerId);
+        for (let i = 0; i < opts.count; i++) {
+          const isFlyer = opts.flyers && Math.random() < opts.flyerChance;
+          const species = isFlyer ? "dragon" : pick(GROUND_SPECIES);
+          const size = rand(opts.minSize, opts.maxSize);
+          const flip = Math.random() < 0.5;
+          const bob = rand(1.6, 2.8);
+          const color = pick(PASTELS);
+          const d = makeDino(species, color, size, flip, bob);
+          // posición horizontal repartida en todo el ancho
+          const leftPct = (i / opts.count) * 100 + rand(-5, 5);
+          d.style.left = leftPct + "%";
+          if (isFlyer) {
+            d.style.top = rand(opts.skyTop[0], opts.skyTop[1]) + "%";
+          } else {
+            d.style.bottom = rand(opts.botMin, opts.botMax) + "%";
+          }
+          // dirección de salida nocturna: hacia el borde más cercano
+          d._exitLeft = leftPct < 50;
+          d._flyer = isFlyer;
+          layer.appendChild(d);
+          exitDinos.push(d);
+        }
+      }
+
+      // FAR: muchos, pequeños, lejos (sobre las colinas)
+      populateLayer("layer-far", {
+        count: 9,
+        minSize: 30,
+        maxSize: 52,
+        botMin: 30,
+        botMax: 40,
+        flyers: true,
+        flyerChance: 0.35,
+        skyTop: [12, 34],
+      });
+      // MID: medianos
+      populateLayer("layer-mid", {
+        count: 6,
+        minSize: 52,
+        maxSize: 84,
+        botMin: 17,
+        botMax: 24,
+        flyers: true,
+        flyerChance: 0.25,
+        skyTop: [18, 40],
+      });
+      // NEAR: pocos, grandes (delante del suelo frontal)
+      populateLayer("layer-near", {
+        count: 4,
+        minSize: 80,
+        maxSize: 120,
+        botMin: 3,
+        botMax: 9,
+        flyers: false,
+        flyerChance: 0,
+        skyTop: [0, 0],
+      });
+
+      // pasto disperso
+      const grassLayer = document.getElementById("grass-layer");
+      for (let i = 0; i < 10; i++) {
+        const g = document.createElement("div");
+        g.className = "grass";
+        g.style.left = rand(2, 96) + "%";
+        g.style.bottom = rand(3, 12) + "%";
+        const sc = rand(0.5, 1.2);
+        g.style.transform = `scale(${sc})`;
+        g.style.opacity = rand(0.5, 0.9);
+        g.innerHTML = grassSVG(pick(["#3f8a46", "#4f9a52", "#367a3d"]));
+        grassLayer.appendChild(g);
+      }
+
+      // helechos lejanos
+      for (let i = 0; i < 6; i++) {
+        const f = document.createElement("div");
+        f.className = "fern-far";
+        f.style.left = rand(4, 94) + "%";
+        f.style.bottom = rand(28, 38) + "%";
+        const sc = rand(0.6, 1.1);
+        f.style.transform = `scale(${sc})`;
+        f.innerHTML = fernSVG("#4a8f54");
+        document.getElementById("hills-mid").parentElement.insertBefore(
+          f,
+          document.getElementById("layer-far")
+        );
+      }
+
+      // ── estrellas ──
+      const starsEl = document.getElementById("stars");
+      let starsHTML = "";
+      for (let i = 0; i < 110; i++) {
+        const sz = Math.random() * 2.4 + 0.8;
+        starsHTML +=
+          `<span class="star" style="left:${Math.random() * 100}%;` +
+          `top:${Math.random() * 62}%;width:${sz}px;height:${sz}px;` +
+          `--tw:${(Math.random() * 2 + 2).toFixed(1)}s"></span>`;
+      }
+      starsEl.innerHTML = starsHTML;
+
+      // ════════════════════════════════════════════════════════════
+      //  GSAP ScrollTrigger
+      // ════════════════════════════════════════════════════════════
+      gsap.registerPlugin(ScrollTrigger);
+
+      const sky = document.getElementById("sky");
+      const intro = document.getElementById("intro");
+
+      const SKY = {
+        morning: ["#ffe29a", "#ffd28a", "#ffc89e", "#9fd4f0", "#cfeafe"],
+        noon: ["#bfe6ff", "#aadcff", "#a6d8ff", "#8fcdf5", "#cdeeff"],
+        sunset: ["#ffd27a", "#ff9e6b", "#ff7b86", "#a96bbf", "#6a5acd"],
+        dusk: ["#5a4a9c", "#3f3a85", "#33306f", "#23234f", "#1a1a3e"],
+        night: ["#10153a", "#0d1030", "#0a0d28", "#070a20", "#050818"],
+      };
+      function buildGradient(stops) {
+        return (
+          `linear-gradient(to bottom, ${stops[0]} 0%, ${stops[1]} 28%, ` +
+          `${stops[2]} 52%, ${stops[3]} 78%, ${stops[4]} 100%)`
+        );
+      }
+      function hexToRgb(h) {
+        const n = parseInt(h.slice(1), 16);
+        return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+      }
+      const SKY_HEX = [
+        { t: 0.0, c: SKY.morning },
+        { t: 0.25, c: SKY.noon },
+        { t: 0.5, c: SKY.sunset },
+        { t: 0.72, c: SKY.dusk },
+        { t: 1.0, c: SKY.night },
+      ].map((k) => ({ t: k.t, c: k.c.map(hexToRgb) }));
+      function lerp(a, b, f) {
+        return Math.round(a + (b - a) * f);
+      }
+      function setSkyByProgress(prog) {
+        let a = SKY_HEX[0],
+          b = SKY_HEX[SKY_HEX.length - 1];
+        for (let i = 0; i < SKY_HEX.length - 1; i++) {
+          if (prog >= SKY_HEX[i].t && prog <= SKY_HEX[i + 1].t) {
+            a = SKY_HEX[i];
+            b = SKY_HEX[i + 1];
+            break;
+          }
+        }
+        const span = b.t - a.t || 1;
+        const f = gsap.utils.clamp(0, 1, (prog - a.t) / span);
+        const stops = a.c.map((ac, j) => {
+          const bc = b.c[j];
+          return `rgb(${lerp(ac[0], bc[0], f)},${lerp(ac[1], bc[1], f)},${lerp(
+            ac[2],
+            bc[2],
+            f
+          )})`;
+        });
+        sky.style.background = buildGradient(stops);
+      }
+      setSkyByProgress(0);
+
+      function arc(p) {
+        const x = (p - 0.5) * 78;
+        const y = 12 + (1 - Math.sin(p * Math.PI)) * 78;
+        return { x: x + "vw", y: y + "vh" };
+      }
+      function placeCelestial(el, p, opacity) {
+        const { x, y } = arc(p);
+        gsap.set(el, { xPercent: -50, x: x, y: y, opacity: opacity });
+      }
+      placeCelestial(document.getElementById("sun"), 0.04, 1);
+      placeCelestial(document.getElementById("moon"), 0.0, 0);
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#scroll-track",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.6,
+          onUpdate: (self) => {
+            const prog = self.progress;
+            setSkyByProgress(prog);
+            const sunP = gsap.utils.clamp(0, 1, prog / 0.62);
+            const sunOpacity = gsap.utils.clamp(0, 1, (0.7 - prog) / 0.18);
+            placeCelestial(
+              document.getElementById("sun"),
+              0.04 + sunP * 0.96,
+              prog < 0.7 ? 1 : sunOpacity
+            );
+            const moonP = gsap.utils.clamp(0, 0.5, ((prog - 0.6) / 0.4) * 0.5);
+            const moonOpacity = gsap.utils.clamp(0, 1, (prog - 0.6) / 0.12);
+            placeCelestial(document.getElementById("moon"), moonP, moonOpacity);
+          },
+        },
+      });
+
+      // nubes derivan + se desvanecen
+      gsap.utils.toArray(".cloud").forEach((c, i) => {
+        const depth = parseFloat(c.dataset.depth) || 0.4;
+        tl.to(c, { x: (i % 2 ? 1 : -1) * 120 * depth, duration: 4 }, 0);
+        tl.to(c, { opacity: 0, duration: 0.8 }, 2.8);
+      });
+
+      // colinas parallax
+      tl.to("#hills-back", { yPercent: -6, duration: 4 }, 0);
+      tl.to("#hills-mid", { yPercent: -3, duration: 4 }, 0);
+
+      // estrellas
+      tl.to("#stars", { opacity: 1, duration: 1.2 }, 2.9);
+      // estrella fugaz
+      tl.fromTo(
+        "#shooting-star",
+        { opacity: 0, x: 0, y: 0 },
+        { opacity: 1, x: -160, y: 60, duration: 0.5 },
+        3.6
+      ).to("#shooting-star", { opacity: 0, duration: 0.3 }, 4.1);
+
+      // ── Herd: roaming de día + salida nocturna ──
+      exitDinos.forEach((d, i) => {
+        const dir = d._exitLeft ? -1 : 1;
+        // roaming suave durante el día
+        tl.to(
+          d,
+          { x: dir * rand(4, 14) + "vw", duration: 2.6, ease: "none" },
+          0
+        );
+        // salida al anochecer (escalonada)
+        const startT = 2.5 + (i % 6) * 0.06;
+        if (d._flyer) {
+          tl.to(
+            d,
+            { x: dir * 140 + "vw", y: "-40vh", opacity: 0, duration: 1.1 },
+            startT
+          );
+        } else {
+          tl.to(
+            d,
+            { x: dir * 140 + "vw", opacity: 0, duration: 1.1 },
+            startT
+          );
+        }
+      });
+
+      // ── Protagonistas: se miran y se duermen ──
+      // Stego (izq) mira a la derecha → ya mira al bronto.
+      // Bronto (der): el sauropod mira a la derecha; lo volteamos para que
+      // mire hacia el stego (izquierda).
+      gsap.set("#bronto", { scaleX: -1, transformOrigin: "bottom center" });
+
+      // de noche se inclinan suavemente el uno hacia el otro (sin despegarse del suelo)
+      tl.to("#stego", { rotation: 4, duration: 0.8 }, 3.3);
+      tl.to("#bronto", { rotation: 4, duration: 0.8 }, 3.3);
+      // se acercan y se juntan (solapamiento leve)
+      tl.to("#main-dinos", { gap: "0px", duration: 0.8 }, 3.3);
+      tl.to("#bronto", { marginLeft: "-14px", duration: 0.8 }, 3.3);
+
+      // ojos a dormir: ocultar ojo abierto, mostrar párpado
+      tl.to(".eye-open", { opacity: 0, duration: 0.4 }, 3.7);
+      tl.to(".sleep-lid", { opacity: 1, duration: 0.4 }, 3.7);
+
+      // corazón de amor
+      tl.to(
+        "#love-heart",
+        { opacity: 1, scale: 1, y: "-8px", duration: 0.8, ease: "back.out(2)" },
+        3.6
+      );
+
+      // Z de sueño
+      tl.to("#zzz1", { opacity: 1, x: "8px", y: "-30px", duration: 1 }, 3.9);
+      tl.to("#zzz2", { opacity: 1, x: "24px", y: "-52px", duration: 1 }, 4.1);
+      tl.to("#zzz3", { opacity: 1, x: "42px", y: "-74px", duration: 1 }, 4.3);
+
+      // ── Mensajes de la historia durante el día→noche ──
+      // Cada uno aparece y desaparece antes del siguiente; el último se va
+      // justo antes de que entre el mensaje final.
+      const storyMsgs = gsap.utils.toArray(".story-msg");
+      const storyBeats = [0.4, 1.4, 2.4, 3.3];
+      gsap.set(storyMsgs, { y: 14 });
+      storyMsgs.forEach((el, i) => {
+        const t = storyBeats[i];
+        tl.to(el, { opacity: 1, y: 0, duration: 0.5, ease: "power1.out" }, t);
+        tl.to(el, { opacity: 0, y: -10, duration: 0.5, ease: "power1.in" }, t + 0.8);
+      });
+
+      // mensaje final
+      tl.to("#final", { opacity: 1, y: 0, duration: 1 }, 4.5);
+      tl.add(() => {}, 5.2);
+
+      // ── Intro fade ──
+      let introGone = false;
+      ScrollTrigger.create({
+        trigger: "#scroll-track",
+        start: "top top",
+        end: "+=120",
+        onUpdate: (self) => {
+          if (!introGone && self.progress > 0.04) {
+            introGone = true;
+            intro.style.opacity = "0";
+            setTimeout(() => (intro.style.display = "none"), 600);
+          }
+        },
+      });
+
+      // ════════════════════════════════════════════════════════════
+      //  Corazones voladores (escena final) — repartidos en todo el ancho
+      // ════════════════════════════════════════════════════════════
+      const heartsBox = document.getElementById("hearts");
+      const HEART_CHARS = ["💛", "💖", "💕", "🦕", "💗", "🧡"];
+      let heartsStarted = false;
+      let heartsTimer = null;
+
+      function spawnHeart() {
+        const h = document.createElement("div");
+        h.className = "fly-heart";
+        h.textContent = HEART_CHARS[(Math.random() * HEART_CHARS.length) | 0];
+        const size = 18 + Math.random() * 26;
+        h.style.setProperty("--hs", size + "px");
+        heartsBox.appendChild(h);
+        // posición inicial: repartida en TODO el ancho, desde abajo
+        const startX = Math.random() * window.innerWidth;
+        const startY = window.innerHeight + 40;
+        gsap.fromTo(
+          h,
+          { x: startX, y: startY, opacity: 0, rotation: -20 + Math.random() * 40 },
+          {
+            x: startX + (Math.random() - 0.5) * 180,
+            y: -120,
+            opacity: 1,
+            rotation: -40 + Math.random() * 80,
+            duration: 4 + Math.random() * 3,
+            ease: "power1.out",
+            onComplete: () => h.remove(),
+          }
+        );
+        gsap.to(h, { opacity: 0, duration: 1, delay: 3.2 });
+      }
+
+      function startHearts() {
+        if (heartsStarted) return;
+        heartsStarted = true;
+        for (let i = 0; i < 10; i++) setTimeout(spawnHeart, i * 110);
+        heartsTimer = setInterval(spawnHeart, 360);
+      }
+
+      ScrollTrigger.create({
+        trigger: "#scroll-track",
+        start: "bottom bottom",
+        end: "bottom bottom",
+        onEnter: () => startHearts(),
+        onUpdate: (self) => {
+          if (self.progress >= 0.99 && !heartsStarted) startHearts();
+        },
+      });
+
+      // ── Botón reiniciar ──
+      document.getElementById("reset-btn").addEventListener("click", () => {
+        window.scrollTo(0, 0);
+        location.reload();
+      });
+
+      // recalcular posiciones de corazones al cambiar tamaño
+      window.addEventListener("load", () => ScrollTrigger.refresh());
+    </script>
+  </body>
+</html>
