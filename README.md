@@ -1,47 +1,61 @@
-# Astro Starter Kit: Minimal
+# epulla.github.io
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Personal portfolio of Erick Pulla, live at https://epulla.github.io.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+## Stack
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- Astro 6, built as a static site
+- React, used only for the theme toggle island
+- Tailwind CSS v4 and DaisyUI v5
+- DaisyUI themes: `acid` light and `dracula` dark
+- TypeScript
 
-## 🚀 Project Structure
+## Requirements
 
-Inside of your Astro project, you'll see the following folders and files:
+- Node.js 22
+- pnpm
+
+## Commands
+
+Run commands from project root:
+
+| Command | Purpose |
+| --- | --- |
+| `pnpm install` | Install dependencies |
+| `pnpm run dev` | Start dev server at `localhost:4321` |
+| `pnpm run build` | Run `astro check`, then build to `dist/` |
+| `pnpm run preview` | Preview production build locally |
+
+## Project Structure
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── features/{card,icons,layout,theme-toggle,timeline,ui}/components/
+│   └── index.ts
+├── layouts/
+├── pages/
+│   └── index.astro          # Portfolio page
+└── styles/
+    └── global.css           # Tailwind and DaisyUI configuration
+public/
+├── images/
+├── cv/
+└── scripts/
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+The `@/*` path alias points to `src/*`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Adding A Project
 
-Any static assets, like images, can be placed in the `public/` directory.
+Add a `LinkCard` in the `#projects` section of `src/pages/index.astro`.
 
-## 🧞 Commands
+Add new technology icons to `src/features/icons/components` as
+`<Name>Icon.astro`. Use an inline SVG, a `size` prop, and a default size of
+`24`. Export each icon from `src/features/icons/components/index.ts`.
 
-All commands are run from the root of the project, from a terminal:
+## Deployment
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+GitHub Pages deploys through `.github/workflows/deploy.yml` on every push to
+`main`.
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Dependabot checks npm dependencies weekly and GitHub Actions monthly.
