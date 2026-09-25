@@ -7,8 +7,10 @@ import {
 } from "@/features/ui/components";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import {
+  AppleIcon,
   AstroIcon,
   ChromeIcon,
+  ClaudeIcon,
   CopyIcon,
   DaisyUiIcon,
   DjangoIcon,
@@ -18,9 +20,12 @@ import {
   FastApiIcon,
   FirebaseIcon,
   FlutterIcon,
+  GithubActionsIcon,
   GithubIcon,
+  HuggingFaceIcon,
   LinkedinIcon,
   NextIcon,
+  OpenCodeIcon,
   P5Icon,
   PrismaIcon,
   PythonIcon,
@@ -28,11 +33,14 @@ import {
   RedisIcon,
   SupabaseIcon,
   SvelteIcon,
+  SwiftIcon,
   TailwindIcon,
   TwilioIcon,
   TwitterIcon,
   TypescriptIcon,
+  VercelIcon,
   ViteIcon,
+  VitestIcon,
 } from "@/features/icons/components";
 import {
   TimeLine,
@@ -236,6 +244,85 @@ import { CardContent } from "@/features/card/components";
 
   <section id="projects" class="flex flex-col gap-3">
     <SectionTitle>Projects</SectionTitle>
+    <LinkCard url="https://chismesillo-app.vercel.app">
+      <CardTitle>
+        <div class="flex items-center gap-3">Chismesillo</div>
+      </CardTitle>
+      <CardContent>
+        Transcribe long audio files with Whisper entirely in the browser: no
+        uploads, no backend, no API keys. Audio is streamed in windows through
+        Web Workers, so memory stays flat even for multi-hour podcasts. Exports
+        to SRT, VTT, JSON, TXT and CSV (<a
+          class="underline"
+          href="https://github.com/epulla/chismesillo.app"
+          target="_blank"
+          rel="noopener noreferrer">source code</a
+        >).
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="Astro">
+            <AstroIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Typescript">
+            <TypescriptIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Tailwind CSS">
+            <TailwindIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="DaisyUI">
+            <DaisyUiIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Hugging Face (transformers.js)">
+            <HuggingFaceIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://github.com/epulla/snipzy">
+      <CardTitle>
+        <div class="flex items-center gap-3">Snipzy</div>
+      </CardTitle>
+      <CardContent>
+        Native macOS menu-bar screenshot tool. Capture a region, annotate it,
+        then copy or save it as PNG. It also includes on-device OCR to grab text
+        from any capture.
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="Swift">
+            <SwiftIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="macOS (AppKit + Vision)">
+            <AppleIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://github.com/epulla/i-am-burned-out">
+      <CardTitle>
+        <div class="flex items-center gap-3">i-am-burned-out</div>
+      </CardTitle>
+      <CardContent>
+        Agent skill that puts a burned-out senior dev inside your coding agent:
+        answer first, minimal code, and never cuts validation, security or
+        tests. Works with Claude Code, OpenCode, Codex, Gemini CLI and more.
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="Claude Code">
+            <ClaudeIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="OpenCode">
+            <OpenCodeIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Typescript">
+            <TypescriptIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
     <LinkCard>
       <CardTitle>
         <div class="flex items-center gap-3">Prod Tickets</div>
@@ -495,6 +582,53 @@ import { CardContent } from "@/features/card/components";
           <DaisyUiIcon size={56} />
         </HoverableIcon>
         DaisyUI
+      </IconCard>
+    </div>
+  </section>
+  <section id="tools" class="flex flex-col gap-3">
+    <SectionTitle>Tools</SectionTitle>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <IconCard>
+        <HoverableIcon dataTippyContent="My daily coding partner">
+          <ClaudeIcon size={56} />
+        </HoverableIcon>
+        Claude Code
+      </IconCard>
+      <IconCard>
+        <HoverableIcon>
+          <OpenCodeIcon size={56} />
+        </HoverableIcon>
+        OpenCode
+      </IconCard>
+      <IconCard>
+        <HoverableIcon dataTippyContent="Whisper models running in the browser">
+          <HuggingFaceIcon size={56} />
+        </HoverableIcon>
+        Hugging Face
+      </IconCard>
+      <IconCard>
+        <HoverableIcon dataTippyContent="For native macOS apps">
+          <SwiftIcon size={56} />
+        </HoverableIcon>
+        Swift
+      </IconCard>
+      <IconCard>
+        <HoverableIcon>
+          <VercelIcon size={56} />
+        </HoverableIcon>
+        Vercel
+      </IconCard>
+      <IconCard>
+        <HoverableIcon>
+          <VitestIcon size={56} />
+        </HoverableIcon>
+        Vitest
+      </IconCard>
+      <IconCard>
+        <HoverableIcon>
+          <GithubActionsIcon size={56} />
+        </HoverableIcon>
+        GitHub Actions
       </IconCard>
     </div>
   </section>
