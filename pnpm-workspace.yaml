@@ -2,3 +2,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   '@tailwindcss/oxide': true
+overrides:
+  '@tailwindcss/vite>vite': 7.3.6
