@@ -3,4 +3,5 @@ allowBuilds:
   sharp: true
   '@tailwindcss/oxide': true
 overrides:
+  '@astrojs/react>vite': 7.3.6
   '@tailwindcss/vite>vite': 7.3.6
