@@ -8,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://epulla.github.io",
   base: "/",
+  compressHTML: true,
   integrations: [react()],
 
   vite: {
