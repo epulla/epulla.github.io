@@ -22,6 +22,7 @@ import {
   FlutterIcon,
   GithubActionsIcon,
   GithubIcon,
+  GoIcon,
   HuggingFaceIcon,
   LinkedinIcon,
   NextIcon,
@@ -31,6 +32,7 @@ import {
   PythonIcon,
   ReactIcon,
   RedisIcon,
+  SqliteIcon,
   SupabaseIcon,
   SvelteIcon,
   SwiftIcon,
@@ -41,6 +43,7 @@ import {
   VercelIcon,
   ViteIcon,
   VitestIcon,
+  WailsIcon,
 } from "@/features/icons/components";
 import {
   TimeLine,
@@ -244,6 +247,91 @@ import { CardContent } from "@/features/card/components";
 
   <section id="projects" class="flex flex-col gap-3">
     <SectionTitle>Projects</SectionTitle>
+    <LinkCard url="https://github.com/epulla/patio">
+      <CardTitle>
+        <div class="flex items-center gap-3">Patio</div>
+      </CardTitle>
+      <CardContent>
+        Open-source desktop workspace for AI chats, kanban boards and automation.
+        Works with Claude Code, Codex, Copilot, opencode and local AI on
+        macOS, Windows and Linux.
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="Go">
+            <GoIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Wails">
+            <WailsIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="React">
+            <ReactIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="SQLite">
+            <SqliteIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://chromewebstore.google.com/detail/tabjury/mbpkdfnnnncfbbdhadhofjdikngjlehk">
+      <CardTitle>
+        <div class="flex items-center gap-3">TabJury</div>
+      </CardTitle>
+      <CardContent>
+        Browser extension that reuses open tabs and finds duplicates. Put unused
+        tabs to sleep or close them automatically according to your rules.
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="Typescript">
+            <TypescriptIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Chrome Extension">
+            <ChromeIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://github.com/epulla/ziran">
+      <CardTitle>
+        <div class="flex items-center gap-3">Ziran</div>
+      </CardTitle>
+      <CardContent>
+        Keyboard-first window switcher that lives in the macOS menu bar.
+        Requires macOS 14 or later and installs via Homebrew.
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="Swift">
+            <SwiftIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="macOS">
+            <AppleIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
+    <LinkCard url="https://github.com/epulla/opencode-anthropic-login-via-cli">
+      <CardTitle>
+        <div class="flex items-center gap-3">OpenCode Anthropic Auth</div>
+      </CardTitle>
+      <CardContent>
+        OpenCode plugin for using Anthropic models with your Claude Pro or Max
+        subscription. No API key needed.
+        <span class="flex gap-3 pt-3 items-center">
+          <HoverableIcon dataTippyContent="OpenCode">
+            <OpenCodeIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Claude">
+            <ClaudeIcon />
+          </HoverableIcon>
+          +
+          <HoverableIcon dataTippyContent="Typescript">
+            <TypescriptIcon />
+          </HoverableIcon>
+        </span>
+      </CardContent>
+    </LinkCard>
     <LinkCard url="https://chismesillo-app.vercel.app">
       <CardTitle>
         <div class="flex items-center gap-3">Chismesillo</div>
