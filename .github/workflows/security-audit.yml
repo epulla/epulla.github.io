@@ -1,0 +1,60 @@
+name: Security Audit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: pnpm audit + osv-scanner
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: pnpm audit
+        id: pnpm-audit
+        continue-on-error: true
+        run: pnpm audit
+
+      - name: Install osv-scanner
+        env:
+          OSV_VERSION: v2.3.8
+          OSV_SHA256: bc98e15319ed0d515e3f9235287ba53cdc5535d576d24fd573978ecfe9ab92dc
+        run: |
+          curl -fsSL -o "${RUNNER_TEMP}/osv-scanner" \
+            "https://github.com/google/osv-scanner/releases/download/${OSV_VERSION}/osv-scanner_linux_amd64"
+          echo "${OSV_SHA256}  ${RUNNER_TEMP}/osv-scanner" | sha256sum -c -
+          chmod +x "${RUNNER_TEMP}/osv-scanner"
+          "${RUNNER_TEMP}/osv-scanner" --version
+
+      - name: Run osv-scanner
+        id: osv-audit
+        continue-on-error: true
+        run: '"${RUNNER_TEMP}/osv-scanner" --lockfile=pnpm-lock.yaml'
+
+      - name: Require both audits to pass
+        if: always()
+        env:
+          PNPM_OUTCOME: ${{ steps.pnpm-audit.outcome }}
+          OSV_OUTCOME: ${{ steps.osv-audit.outcome }}
+        run: |
+          echo "pnpm audit: ${PNPM_OUTCOME}; osv-scanner: ${OSV_OUTCOME}"
+          test "${PNPM_OUTCOME}" = success && test "${OSV_OUTCOME}" = success
