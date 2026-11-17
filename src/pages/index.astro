@@ -1,5 +1,6 @@
 ---
 import {
+  Chip,
   HoverableIcon,
   Paragraph,
   SectionTitle,
@@ -52,10 +53,10 @@ import {
   TimeLineTime,
   TimeLineTitle,
 } from "@/features/timeline/components";
-import { CardTitle, IconCard, LinkCard } from "@/features/card/components";
+import { CardTitle, LinkCard } from "@/features/card/components";
 import { CardContent } from "@/features/card/components";
 import { T } from "@/features/i18n/components";
-import { ui } from "@/features/i18n/ui";
+import { ui, type UiKey } from "@/features/i18n/ui";
 
 const socials = [
   { href: "https://www.linkedin.com/in/erickpulla/", tip: "LinkedIn", label: "social.linkedin", Icon: LinkedinIcon },
@@ -63,6 +64,49 @@ const socials = [
   { href: "https://x.com/erick_pulla", tip: "X", label: "social.x", Icon: XIcon },
   { href: "/docs/FullStack_CV_english_ErickPulla.pdf", tip: "CV", label: "social.cv", Icon: DocumentIcon },
 ] as const;
+
+const stack: {
+  group: UiKey;
+  items: { name: string; tip?: UiKey; Icon: typeof ReactIcon }[];
+}[] = [
+  {
+    group: "stack.frontend",
+    items: [
+      { name: "React", tip: "tip.react", Icon: ReactIcon },
+      { name: "Next.js", Icon: NextIcon },
+      { name: "Svelte", tip: "tip.svelte", Icon: SvelteIcon },
+      { name: "Astro", tip: "tip.astro", Icon: AstroIcon },
+      { name: "Tailwind CSS", tip: "tip.tailwind", Icon: TailwindIcon },
+      { name: "DaisyUI", tip: "tip.daisyui", Icon: DaisyUiIcon },
+      { name: "p5.js", tip: "tip.p5", Icon: P5Icon },
+    ],
+  },
+  {
+    group: "stack.backend",
+    items: [
+      { name: "Python", tip: "tip.python", Icon: PythonIcon },
+      { name: "FastAPI", Icon: FastApiIcon },
+      { name: "Django", Icon: DjangoIcon },
+      { name: "Express", Icon: ExpressIcon },
+      { name: "Firebase", tip: "tip.firebase", Icon: FirebaseIcon },
+      { name: "Supabase", tip: "tip.supabase", Icon: SupabaseIcon },
+      { name: "Drizzle", tip: "tip.drizzle", Icon: DrizzleIcon },
+      { name: "Prisma", Icon: PrismaIcon },
+    ],
+  },
+  {
+    group: "stack.tools",
+    items: [
+      { name: "Claude Code", tip: "tip.claude", Icon: ClaudeIcon },
+      { name: "OpenCode", Icon: OpenCodeIcon },
+      { name: "Hugging Face", tip: "tip.huggingFace", Icon: HuggingFaceIcon },
+      { name: "Swift", tip: "tip.swift", Icon: SwiftIcon },
+      { name: "Vercel", Icon: VercelIcon },
+      { name: "Vitest", Icon: VitestIcon },
+      { name: "GitHub Actions", Icon: GithubActionsIcon },
+    ],
+  },
+];
 
 const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
 ---
@@ -507,153 +551,23 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
   </section>
   <section id="techs" class="flex flex-col gap-3">
     <SectionTitle><T k="section.techs" /></SectionTitle>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      <IconCard>
-        <HoverableIcon tip="tip.react">
-          <ReactIcon size={56} />
-        </HoverableIcon>
-        React
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <NextIcon size={56} />
-        </HoverableIcon>
-        Next.js
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.python">
-          <PythonIcon size={56} />
-        </HoverableIcon>
-        Python
-      </IconCard>
-      <IconCard>
-        <HoverableIcon
-          tip="tip.firebase"
-        >
-          <FirebaseIcon size={56} />
-        </HoverableIcon>
-        Firebase
-      </IconCard>
-      <IconCard>
-        <HoverableIcon
-          tip="tip.supabase"
-        >
-          <SupabaseIcon size={56} />
-        </HoverableIcon>
-        Supabase
-      </IconCard>
-      <IconCard>
-        <HoverableIcon
-          tip="tip.svelte"
-        >
-          <SvelteIcon size={56} />
-        </HoverableIcon>
-        Svelte
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.drizzle">
-          <DrizzleIcon size={56} />
-        </HoverableIcon>
-        Drizzle
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <PrismaIcon size={56} />
-        </HoverableIcon>
-        Prisma
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <ExpressIcon size={56} />
-        </HoverableIcon>
-        Express
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <FastApiIcon size={56} />
-        </HoverableIcon>
-        FastAPI
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <DjangoIcon size={56} />
-        </HoverableIcon>
-        Django
-      </IconCard>
-      <IconCard>
-        <HoverableIcon
-          tip="tip.astro"
-        >
-          <AstroIcon size={56} />
-        </HoverableIcon>
-        Astro
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.p5">
-          <P5Icon size={56} />
-        </HoverableIcon>
-        p5.js
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.tailwind">
-          <TailwindIcon size={56} />
-        </HoverableIcon>
-        Tailwind CSS
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.daisyui">
-          <DaisyUiIcon size={56} />
-        </HoverableIcon>
-        DaisyUI
-      </IconCard>
-    </div>
-  </section>
-  <section id="tools" class="flex flex-col gap-3">
-    <SectionTitle><T k="section.tools" /></SectionTitle>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      <IconCard>
-        <HoverableIcon tip="tip.claude">
-          <ClaudeIcon size={56} />
-        </HoverableIcon>
-        Claude Code
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <OpenCodeIcon size={56} />
-        </HoverableIcon>
-        OpenCode
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.huggingFace">
-          <HuggingFaceIcon size={56} />
-        </HoverableIcon>
-        Hugging Face
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.swift">
-          <SwiftIcon size={56} />
-        </HoverableIcon>
-        Swift
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <VercelIcon size={56} />
-        </HoverableIcon>
-        Vercel
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <VitestIcon size={56} />
-        </HoverableIcon>
-        Vitest
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <GithubActionsIcon size={56} />
-        </HoverableIcon>
-        GitHub Actions
-      </IconCard>
-    </div>
+    {
+      stack.map(({ group, items }) => (
+        <div class="flex flex-col gap-2">
+          <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">
+            <T k={group} />
+          </h3>
+          <ul class="flex flex-wrap gap-2">
+            {items.map(({ name, tip, Icon }) => (
+              <Chip tip={tip}>
+                <Icon size={20} />
+                {name}
+              </Chip>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </section>
   <section id="education" class="flex flex-col gap-3">
     <SectionTitle><T k="section.education" /></SectionTitle>

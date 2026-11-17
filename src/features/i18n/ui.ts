@@ -23,9 +23,12 @@ const en = {
 
   "section.experience": "Experience",
   "section.projects": "Projects",
-  "section.techs": "Favorite Techs",
-  "section.tools": "Tools",
+  "section.techs": "Tech & Tools",
   "section.education": "Education",
+
+  "stack.frontend": "Frontend",
+  "stack.backend": "Backend & data",
+  "stack.tools": "Tools & platforms",
 
   "loc.usa": "Incline Village, NV, USA",
 
@@ -144,9 +147,12 @@ const es: Record<UiKey, string> = {
 
   "section.experience": "Experiencia",
   "section.projects": "Proyectos",
-  "section.techs": "Tecnologías favoritas",
-  "section.tools": "Herramientas",
+  "section.techs": "Tecnologías y herramientas",
   "section.education": "Educación",
+
+  "stack.frontend": "Frontend",
+  "stack.backend": "Backend y datos",
+  "stack.tools": "Herramientas y plataformas",
 
   "loc.usa": "Incline Village, NV, EE. UU.",
 
