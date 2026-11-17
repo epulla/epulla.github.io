@@ -44,6 +44,8 @@ const ogImage = new URL("/og-image.png", Astro.site);
     <meta name="twitter:description" content={ui.en["meta.description"]} />
     <meta name="twitter:image" content={ogImage} />
     <script is:inline>
+      document.documentElement.classList.add("js");
+
       window.setLang = (lang) => {
         document.documentElement.lang = lang;
         const title = document.querySelector("title");
@@ -106,5 +108,43 @@ const ogImage = new URL("/og-image.png", Astro.site);
     </main>
     <Footer />
     <Tooltip />
+    <script>
+      const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+
+      const revealer = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("revealed");
+            revealer.unobserve(entry.target);
+          }),
+        { rootMargin: "0px 0px -10% 0px" },
+      );
+      document
+        .querySelectorAll("[data-reveal]")
+        .forEach((el) => revealer.observe(el));
+
+      document.addEventListener("langchange", () => {
+        if (motion.matches)
+          document
+            .querySelector("main")
+            ?.animate([{ opacity: 0.3 }, { opacity: 1 }], {
+              duration: 250,
+              easing: "ease-out",
+            });
+      });
+
+      let themeTimer: number | undefined;
+      document.addEventListener("themechange", () => {
+        if (!motion.matches) return;
+        const root = document.documentElement;
+        root.classList.add("theme-transition");
+        clearTimeout(themeTimer);
+        themeTimer = window.setTimeout(
+          () => root.classList.remove("theme-transition"),
+          350,
+        );
+      });
+    </script>
   </body>
 </html>

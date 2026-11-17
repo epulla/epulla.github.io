@@ -314,7 +314,7 @@ const stack: {
       </div>
     </div>
   </section>
-  <section id="experience" class="flex flex-col gap-3">
+  <section id="experience" data-reveal class="flex flex-col gap-3">
     <SectionTitle><T k="section.experience" /></SectionTitle>
     <TimeLine>
       <TimeLineItem>
@@ -411,12 +411,13 @@ const stack: {
     </TimeLine>
   </section>
 
-  <section id="projects" class="flex flex-col gap-3">
+  <section id="projects" data-reveal class="flex flex-col gap-3">
     <SectionTitle><T k="section.projects" /></SectionTitle>
     <div class="grid sm:grid-cols-2 gap-4">
       {
         featured.map(({ title, url, desc, stack, image, contain }, i) => (
           <article
+            data-reveal
             class:list={[
               "group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow hover:border-razzmatazz-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-razzmatazz-500 transition",
               { "sm:col-span-2": i === 0 },
@@ -493,7 +494,7 @@ const stack: {
       }
     </ul>
   </section>
-  <section id="techs" class="flex flex-col gap-3">
+  <section id="techs" data-reveal class="flex flex-col gap-3">
     <SectionTitle><T k="section.techs" /></SectionTitle>
     {
       stack.map(({ group, items }) => (
@@ -513,7 +514,7 @@ const stack: {
       ))
     }
   </section>
-  <section id="education" class="flex flex-col gap-3">
+  <section id="education" data-reveal class="flex flex-col gap-3">
     <SectionTitle><T k="section.education" /></SectionTitle>
     <TimeLine>
       <TimeLineItem>
