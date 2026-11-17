@@ -52,7 +52,7 @@ section[id] {
       border-color 0.15s;
   }
 
-  .js [data-reveal]:not(.revealed) {
+  .reveal-ready [data-reveal]:not(.revealed) {
     opacity: 0;
     transform: translateY(16px);
   }

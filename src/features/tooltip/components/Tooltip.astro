@@ -29,18 +29,28 @@
     tooltip.style.top = `${top + window.scrollY}px`;
   };
 
-  const show = (el: HTMLElement, content = text(el)) => {
-    target = el;
-    tooltip.textContent = content;
-    tooltip.hidden = false;
-    el.setAttribute("aria-describedby", "tooltip");
-    place(el);
+  const describe = (el: HTMLElement, on: boolean) => {
+    const ids = (el.getAttribute("aria-describedby") ?? "")
+      .split(" ")
+      .filter((id) => id && id !== "tooltip");
+    if (on) ids.push("tooltip");
+    if (ids.length) el.setAttribute("aria-describedby", ids.join(" "));
+    else el.removeAttribute("aria-describedby");
   };
 
   const hide = () => {
     tooltip.hidden = true;
-    target?.removeAttribute("aria-describedby");
+    if (target) describe(target, false);
     target = null;
+  };
+
+  const show = (el: HTMLElement, content = text(el)) => {
+    if (target !== el) hide();
+    target = el;
+    tooltip.textContent = content;
+    tooltip.hidden = false;
+    describe(el, true);
+    place(el);
   };
 
   const tipTarget = (event: Event) =>
@@ -50,6 +60,9 @@
     const el = tipTarget(event);
     if (el && el !== target) show(el);
     else if (!el && target) hide();
+  });
+  document.addEventListener("mouseout", (event) => {
+    if (!event.relatedTarget) hide();
   });
   document.addEventListener("focusin", (event) => {
     const el = tipTarget(event);

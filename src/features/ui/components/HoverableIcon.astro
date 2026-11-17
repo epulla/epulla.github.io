@@ -10,7 +10,8 @@ const { label, tip } = Astro.props;
 ---
 
 <span
-  class="transition hover:scale-125"
+  class="rounded transition hover:scale-125 focus-visible:scale-125 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-razzmatazz-500"
+  tabindex={tip || label ? 0 : undefined}
   data-tip={tip ? ui.en[tip] : label}
   data-tip-es={tip && ui.es[tip]}
 >

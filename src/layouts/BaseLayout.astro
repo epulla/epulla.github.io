@@ -44,8 +44,6 @@ const ogImage = new URL("/og-image.png", Astro.site);
     <meta name="twitter:description" content={ui.en["meta.description"]} />
     <meta name="twitter:image" content={ogImage} />
     <script is:inline>
-      document.documentElement.classList.add("js");
-
       window.setLang = (lang) => {
         document.documentElement.lang = lang;
         const title = document.querySelector("title");
@@ -120,9 +118,12 @@ const ogImage = new URL("/og-image.png", Astro.site);
           }),
         { rootMargin: "0px 0px -10% 0px" },
       );
-      document
-        .querySelectorAll("[data-reveal]")
-        .forEach((el) => revealer.observe(el));
+      document.querySelectorAll("[data-reveal]").forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight)
+          el.classList.add("revealed");
+        else revealer.observe(el);
+      });
+      document.documentElement.classList.add("reveal-ready");
 
       document.addEventListener("langchange", () => {
         if (motion.matches)
