@@ -1,0 +1,4 @@
+[[IgnoredVulns]]
+id = "GHSA-fc5q-39xc-vjpf"
+ignoreUntil = 2027-01-17
+reason = "picomatch ReDoS, no patched release yet; build-time only with trusted globs (PROJ-351)"

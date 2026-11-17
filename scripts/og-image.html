@@ -1,0 +1,71 @@
+<!doctype html>
+<!--
+  Source of public/og-image.png. Regenerate from the repo root with:
+  npx playwright screenshot --viewport-size=1200,630 scripts/og-image.html public/og-image.png
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Geist";
+        src: url("../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2");
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: "Geist Mono";
+        src: url("../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2");
+        font-weight: 100 900;
+      }
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        width: 1200px;
+        height: 630px;
+        display: flex;
+        align-items: center;
+        gap: 64px;
+        padding: 0 96px;
+        background: radial-gradient(circle at 85% 15%, #5b001e 0%, transparent 45%), #1f2937;
+        color: #fff;
+        font-family: "Geist", sans-serif;
+      }
+      img {
+        width: 300px;
+        height: 300px;
+        border-radius: 32px;
+        border: 4px solid #ff5fb0;
+        object-fit: cover;
+      }
+      h1 {
+        font-size: 92px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+      p {
+        margin-top: 20px;
+        font-family: "Geist Mono", monospace;
+        font-size: 40px;
+        font-weight: 700;
+        color: #ff5fb0;
+      }
+      small {
+        display: block;
+        margin-top: 48px;
+        font-size: 28px;
+        color: #9ca3af;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="../public/images/profile_photo.png" alt="" />
+    <div>
+      <h1>Erick Pulla</h1>
+      <p>Fullstack developer</p>
+      <small>epulla.github.io</small>
+    </div>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 ---
 import {
-  HoverableIcon,
+  Chip,
   Paragraph,
   SectionTitle,
   Title,
@@ -16,6 +16,7 @@ import {
   DjangoIcon,
   DocumentIcon,
   DrizzleIcon,
+  ExternalLinkIcon,
   ExpressIcon,
   FastApiIcon,
   FirebaseIcon,
@@ -38,12 +39,12 @@ import {
   SwiftIcon,
   TailwindIcon,
   TwilioIcon,
-  TwitterIcon,
   TypescriptIcon,
   VercelIcon,
   ViteIcon,
   VitestIcon,
   WailsIcon,
+  XIcon,
 } from "@/features/icons/components";
 import {
   TimeLine,
@@ -52,12 +53,217 @@ import {
   TimeLineTime,
   TimeLineTitle,
 } from "@/features/timeline/components";
-import { CardTitle, IconCard, LinkCard } from "@/features/card/components";
-import { CardContent } from "@/features/card/components";
+import { StackIcons, type StackItem } from "@/features/card/components";
+import { Image } from "astro:assets";
+import patioImg from "@/assets/projects/patio.png";
+import sendaImg from "@/assets/projects/senda.png";
+import tabjuryImg from "@/assets/projects/tabjury.png";
+import chismesilloImg from "@/assets/projects/chismesillo.png";
+import snipzyImg from "@/assets/projects/snipzy.png";
 import { T } from "@/features/i18n/components";
-import { ui } from "@/features/i18n/ui";
+import { ui, type UiKey } from "@/features/i18n/ui";
 
-const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
+const socials = [
+  { href: "https://www.linkedin.com/in/erickpulla/", tip: "LinkedIn", label: "social.linkedin", Icon: LinkedinIcon },
+  { href: "https://github.com/epulla", tip: "GitHub", label: "social.github", Icon: GithubIcon },
+  { href: "https://x.com/erick_pulla", tip: "X", label: "social.x", Icon: XIcon },
+  { href: "/docs/FullStack_CV_english_ErickPulla.pdf", tip: "CV", label: "social.cv", Icon: DocumentIcon },
+] as const;
+
+const ts: StackItem = { label: "Typescript", Icon: TypescriptIcon };
+const chromeExt: StackItem = { tip: "tip.chromeExtension", Icon: ChromeIcon };
+
+const featured = [
+  {
+    title: "Patio",
+    url: "https://github.com/epulla/patio",
+    desc: "proj.patio",
+    image: patioImg,
+    stack: [
+      { label: "Go", Icon: GoIcon },
+      { label: "Wails", Icon: WailsIcon },
+      { label: "React", Icon: ReactIcon },
+      { label: "SQLite", Icon: SqliteIcon },
+    ],
+  },
+  {
+    title: "Senda",
+    url: "https://github.com/epulla/senda",
+    desc: "proj.senda",
+    image: sendaImg,
+    stack: [ts, chromeExt],
+  },
+  {
+    title: "TabJury",
+    url: "https://chromewebstore.google.com/detail/tabjury/mbpkdfnnnncfbbdhadhofjdikngjlehk",
+    desc: "proj.tabjury",
+    image: tabjuryImg,
+    stack: [ts, chromeExt],
+  },
+  {
+    title: "Chismesillo",
+    url: "https://chismesillo-app.vercel.app",
+    desc: "proj.chismesillo",
+    image: chismesilloImg,
+    stack: [
+      { label: "Astro", Icon: AstroIcon },
+      ts,
+      { label: "Tailwind CSS", Icon: TailwindIcon },
+      { label: "DaisyUI", Icon: DaisyUiIcon },
+      { label: "Hugging Face (transformers.js)", Icon: HuggingFaceIcon },
+    ],
+  },
+  {
+    title: "Snipzy",
+    url: "https://github.com/epulla/snipzy",
+    desc: "proj.snipzy",
+    image: snipzyImg,
+    contain: true,
+    stack: [
+      { label: "Swift", Icon: SwiftIcon },
+      { label: "macOS (AppKit + Vision)", Icon: AppleIcon },
+    ],
+  },
+] satisfies { title: string; url: string; desc: UiKey; image: ImageMetadata; contain?: boolean; stack: StackItem[] }[];
+
+const more: { title?: string; titleKey?: UiKey; url?: string; desc: UiKey; stack: StackItem[] }[] = [
+  {
+    title: "Ziran",
+    url: "https://github.com/epulla/ziran",
+    desc: "proj.ziran",
+    stack: [
+      { label: "Swift", Icon: SwiftIcon },
+      { label: "macOS", Icon: AppleIcon },
+    ],
+  },
+  {
+    title: "OpenCode Anthropic Auth",
+    url: "https://github.com/epulla/opencode-anthropic-login-via-cli",
+    desc: "proj.anthropicAuth",
+    stack: [
+      { label: "OpenCode", Icon: OpenCodeIcon },
+      { label: "Claude", Icon: ClaudeIcon },
+      ts,
+    ],
+  },
+  {
+    title: "i-am-burned-out",
+    url: "https://github.com/epulla/i-am-burned-out",
+    desc: "proj.burnedOut",
+    stack: [
+      { label: "Claude Code", Icon: ClaudeIcon },
+      { label: "OpenCode", Icon: OpenCodeIcon },
+      ts,
+    ],
+  },
+  {
+    title: "Prod Tickets",
+    desc: "proj.prodTickets",
+    stack: [{ label: "Svelte", Icon: SvelteIcon }, ts],
+  },
+  {
+    titleKey: "proj.portfolio.title",
+    url: "https://epulla.github.io/",
+    desc: "proj.portfolio",
+    stack: [
+      { label: "Astro", Icon: AstroIcon },
+      { label: "React", Icon: ReactIcon },
+    ],
+  },
+  {
+    title: "Easy Web Macros",
+    url: "https://github.com/epulla/easy-web-macros",
+    desc: "proj.easyWebMacros",
+    stack: [
+      { label: "Svelte", Icon: SvelteIcon },
+      { label: "Vite", Icon: ViteIcon },
+      { label: "Chrome API", Icon: ChromeIcon },
+    ],
+  },
+  {
+    title: "Moodle API Handler",
+    url: "https://github.com/epulla/moodle-api-handler",
+    desc: "proj.moodle",
+    stack: [
+      { label: "Svelte", Icon: SvelteIcon },
+      { label: "Firebase", Icon: FirebaseIcon },
+    ],
+  },
+  {
+    title: "Quicknote",
+    url: "https://github.com/epulla/quicknote",
+    desc: "proj.quicknote",
+    stack: [
+      { label: "React", Icon: ReactIcon },
+      { label: "FastAPI", Icon: FastApiIcon },
+      { label: "Redis", Icon: RedisIcon },
+    ],
+  },
+  {
+    title: "Twilio Video Call App",
+    url: "https://github.com/epulla/twilio_minimal_video_call_app",
+    desc: "proj.twilio",
+    stack: [
+      { label: "FastAPI", Icon: FastApiIcon },
+      { label: "Twilio", Icon: TwilioIcon },
+    ],
+  },
+  {
+    title: "Mobile Pokedex App",
+    url: "https://github.com/epulla/pokedex-flutter",
+    desc: "proj.pokedex",
+    stack: [{ label: "Flutter", Icon: FlutterIcon }],
+  },
+  {
+    title: "Bingo Generator",
+    url: "https://github.com/epulla/BingoGenerator",
+    desc: "proj.bingo",
+    stack: [{ label: "Python", Icon: PythonIcon }],
+  },
+];
+
+const stack: {
+  group: UiKey;
+  items: { name: string; tip?: UiKey; Icon: typeof ReactIcon }[];
+}[] = [
+  {
+    group: "stack.frontend",
+    items: [
+      { name: "React", tip: "tip.react", Icon: ReactIcon },
+      { name: "Next.js", Icon: NextIcon },
+      { name: "Svelte", tip: "tip.svelte", Icon: SvelteIcon },
+      { name: "Astro", tip: "tip.astro", Icon: AstroIcon },
+      { name: "Tailwind CSS", tip: "tip.tailwind", Icon: TailwindIcon },
+      { name: "DaisyUI", tip: "tip.daisyui", Icon: DaisyUiIcon },
+      { name: "p5.js", tip: "tip.p5", Icon: P5Icon },
+    ],
+  },
+  {
+    group: "stack.backend",
+    items: [
+      { name: "Python", tip: "tip.python", Icon: PythonIcon },
+      { name: "FastAPI", Icon: FastApiIcon },
+      { name: "Django", Icon: DjangoIcon },
+      { name: "Express", Icon: ExpressIcon },
+      { name: "Firebase", tip: "tip.firebase", Icon: FirebaseIcon },
+      { name: "Supabase", tip: "tip.supabase", Icon: SupabaseIcon },
+      { name: "Drizzle", tip: "tip.drizzle", Icon: DrizzleIcon },
+      { name: "Prisma", Icon: PrismaIcon },
+    ],
+  },
+  {
+    group: "stack.tools",
+    items: [
+      { name: "Claude Code", tip: "tip.claude", Icon: ClaudeIcon },
+      { name: "OpenCode", Icon: OpenCodeIcon },
+      { name: "Hugging Face", tip: "tip.huggingFace", Icon: HuggingFaceIcon },
+      { name: "Swift", tip: "tip.swift", Icon: SwiftIcon },
+      { name: "Vercel", Icon: VercelIcon },
+      { name: "Vitest", Icon: VitestIcon },
+      { name: "GitHub Actions", Icon: GithubActionsIcon },
+    ],
+  },
+];
 ---
 
 <BaseLayout titleKey="meta.title">
@@ -67,65 +273,48 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
       src="/images/profile_photo.png"
       alt="Erick Pulla"
     />
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 min-w-0">
       <Title>Erick Pulla</Title>
       <Paragraph><T k="intro.hello" /></Paragraph>
       <div
-        class="flex items-center rounded bg-slate-100 dark:bg-gray-900 py-1 px-2"
+        class="flex items-center gap-2 rounded bg-slate-100 dark:bg-gray-900 py-1 px-2"
       >
-        <input
-          class="bg-inherit font-mono text-gray-500 dark:text-gray-400 w-full text-sm sm:text-base"
-          type="text"
-          value="erickpulladsi@gmail.com"
+        <a
           id="mail"
-          onclick="this.select()"
-          disabled
-        />
+          href="mailto:erickpulladsi@gmail.com"
+          class="flex-1 min-w-0 truncate font-mono text-gray-500 dark:text-gray-400 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 text-xs sm:text-base rounded focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition"
+          >erickpulladsi@gmail.com</a
+        >
         <button
           id="copy-email-btn"
-          data-tippy-content={ui.en["tip.copy"]}
-          data-tippy-es={ui.es["tip.copy"]}
-          class="rounded text-gray-500 dark:text-gray-400 hover:scale-110"
+          type="button"
+          data-tip={ui.en["tip.copy"]}
+          data-tip-es={ui.es["tip.copy"]}
+          data-copied={ui.en["tip.copied"]}
+          data-copied-es={ui.es["tip.copied"]}
+          class="rounded text-gray-500 dark:text-gray-400 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition cursor-pointer"
           ><span class="sr-only"><T k="tip.copy" /></span><CopyIcon /></button
         >
       </div>
-      <div class="flex gap-3">
-        <a
-          href="https://www.linkedin.com/in/erickpulla/"
-          target="_blank"
-          data-tippy-content="Linkedin"
-          class="border border-[#0078d4] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
-          ><LinkedinIcon /></a
-        >
-        <a
-          href="https://github.com/epulla"
-          target="_blank"
-          data-tippy-content="Github"
-          class="border border-[#383838] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
-          ><GithubIcon /></a
-        >
-        <a
-          href="https://twitter.com/erick_pulla"
-          target="_blank"
-          data-tippy-content="Twitter / X"
-          class="border border-[#03A9F4] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
-          ><TwitterIcon /></a
-        >
-        <a
-          href="/docs/FullStack_CV_english_ErickPulla.pdf"
-          target="_blank"
-          data-tippy-content="CV"
-          class="border border-[#000] dark:border-[#fff] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer dark:text-white hover:scale-110"
-        >
-          <span class="hidden sm:inline"><DocumentIcon /></span>
-          <span class="inline-flex sm:hidden h-full items-center px-[4px]"
-            >CV</span
-          >
-        </a>
+      <div class="flex gap-1 -ml-2">
+        {
+          socials.map(({ href, tip, label, Icon }) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-tip={tip}
+              class="flex items-center justify-center size-9 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-700/70 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-razzmatazz-500 transition [&_svg]:size-5"
+            >
+              <span class="sr-only"><T k={label} /></span>
+              <Icon />
+            </a>
+          ))
+        }
       </div>
     </div>
   </section>
-  <section id="experience" class="flex flex-col gap-3">
+  <section id="experience" data-reveal class="flex flex-col gap-3">
     <SectionTitle><T k="section.experience" /></SectionTitle>
     <TimeLine>
       <TimeLineItem>
@@ -177,7 +366,7 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
         </ul>
       </TimeLineItem>
       <TimeLineItem>
-        <TimeLineTime><T k="exp.ioet.time" /></TimeLineTime>
+        <TimeLineTime><T k="exp.gye.time" /></TimeLineTime>
         <TimeLineTitle>
           <T k="exp.gye.title" />
           <TimeLineItalic>Guayaquil, Guayas, Ecuador</TimeLineItalic>
@@ -222,435 +411,110 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
     </TimeLine>
   </section>
 
-  <section id="projects" class="flex flex-col gap-3">
+  <section id="projects" data-reveal class="flex flex-col gap-3">
     <SectionTitle><T k="section.projects" /></SectionTitle>
-    <LinkCard url="https://github.com/epulla/patio">
-      <CardTitle>
-        <div class="flex items-center gap-3">Patio</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.patio" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="Go">
-            <GoIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Wails">
-            <WailsIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="React">
-            <ReactIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="SQLite">
-            <SqliteIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://chromewebstore.google.com/detail/tabjury/mbpkdfnnnncfbbdhadhofjdikngjlehk">
-      <CardTitle>
-        <div class="flex items-center gap-3">TabJury</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.tabjury" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="Typescript">
-            <TypescriptIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon tip="tip.chromeExtension">
-            <ChromeIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/ziran">
-      <CardTitle>
-        <div class="flex items-center gap-3">Ziran</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.ziran" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="Swift">
-            <SwiftIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="macOS">
-            <AppleIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/opencode-anthropic-login-via-cli">
-      <CardTitle>
-        <div class="flex items-center gap-3">OpenCode Anthropic Auth</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.anthropicAuth" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="OpenCode">
-            <OpenCodeIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Claude">
-            <ClaudeIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Typescript">
-            <TypescriptIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://chismesillo-app.vercel.app">
-      <CardTitle>
-        <div class="flex items-center gap-3">Chismesillo</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.chismesillo" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="Astro">
-            <AstroIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Typescript">
-            <TypescriptIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Tailwind CSS">
-            <TailwindIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="DaisyUI">
-            <DaisyUiIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Hugging Face (transformers.js)">
-            <HuggingFaceIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/snipzy">
-      <CardTitle>
-        <div class="flex items-center gap-3">Snipzy</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.snipzy" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="Swift">
-            <SwiftIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="macOS (AppKit + Vision)">
-            <AppleIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/i-am-burned-out">
-      <CardTitle>
-        <div class="flex items-center gap-3">i-am-burned-out</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.burnedOut" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="Claude Code">
-            <ClaudeIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="OpenCode">
-            <OpenCodeIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Typescript">
-            <TypescriptIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard>
-      <CardTitle>
-        <div class="flex items-center gap-3">Prod Tickets</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.prodTickets" />
-        <span class="flex gap-3 pt-3">
-          <HoverableIcon dataTippyContent="Svelte">
-            <SvelteIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Typescript">
-            <TypescriptIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://epulla.github.io/">
-      <CardTitle>
-        <div class="flex items-center gap-3"><T k="proj.portfolio.title" /></div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.portfolio" />
-        <span class="flex gap-3 pt-3">
-          <HoverableIcon dataTippyContent="Astro">
-            <AstroIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="React">
-            <ReactIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/easy-web-macros">
-      <CardTitle>
-        <div class="flex items-center gap-3">Easy Web Macros</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.easyWebMacros" />
-        <span class="flex gap-3 pt-3">
-          <HoverableIcon dataTippyContent="Svelte">
-            <SvelteIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Vite">
-            <ViteIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Chrome API">
-            <ChromeIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/moodle-api-handler">
-      <CardTitle>
-        <div class="flex items-center gap-3">Moodle API Handler</div>
-      </CardTitle>
-      <CardContent>
-        <T k="proj.moodle" />
-        <span class="flex gap-3 pt-3">
-          <HoverableIcon dataTippyContent="Svelte">
-            <SvelteIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Firebase">
-            <FirebaseIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/quicknote">
-      <CardTitle>Quicknote</CardTitle>
-      <CardContent>
-        <T k="proj.quicknote" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="React">
-            <ReactIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="FastAPI">
-            <FastApiIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Redis">
-            <RedisIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/twilio_minimal_video_call_app">
-      <CardTitle>Twilio Video Call App</CardTitle>
-      <CardContent>
-        <T k="proj.twilio" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="FastAPI">
-            <FastApiIcon />
-          </HoverableIcon>
-          +
-          <HoverableIcon dataTippyContent="Twilio">
-            <TwilioIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/pokedex-flutter">
-      <CardTitle>Mobile Pokedex App</CardTitle>
-      <CardContent>
-        <T k="proj.pokedex" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="Flutter">
-            <FlutterIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
-    <LinkCard url="https://github.com/epulla/BingoGenerator">
-      <CardTitle>Bingo Generator</CardTitle>
-      <CardContent>
-        <T k="proj.bingo" />
-        <span class="flex gap-3 pt-3 items-center">
-          <HoverableIcon dataTippyContent="Python">
-            <PythonIcon />
-          </HoverableIcon>
-        </span>
-      </CardContent>
-    </LinkCard>
+    <div class="grid sm:grid-cols-2 gap-4">
+      {
+        featured.map(({ title, url, desc, stack, image, contain }, i) => (
+          <article
+            data-reveal
+            class:list={[
+              "group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow hover:border-razzmatazz-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-razzmatazz-500 transition",
+              { "sm:col-span-2": i === 0 },
+            ]}
+          >
+            <div class="aspect-[16/10] overflow-hidden border-b border-gray-200 bg-slate-100 dark:border-gray-700 dark:bg-gray-900">
+              <Image
+                src={image}
+                alt=""
+                widths={[480, 800, 1200]}
+                sizes={i === 0 ? "(min-width: 768px) 720px, 100vw" : "(min-width: 768px) 360px, (min-width: 640px) 50vw, 100vw"}
+                class:list={[
+                  "size-full group-hover:scale-[1.02] transition duration-300",
+                  contain ? "object-contain p-6" : "object-cover object-top",
+                ]}
+              />
+            </div>
+            <div class="flex flex-1 flex-col gap-2 p-5">
+              <h3 class="flex items-center justify-between gap-2 text-xl font-bold text-gray-900 dark:text-white">
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="rounded after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-razzmatazz-500"
+                >
+                  {title}
+                </a>
+                <span class="text-gray-400 group-hover:text-razzmatazz-500 transition [&_svg]:size-5">
+                  <ExternalLinkIcon />
+                </span>
+              </h3>
+              <p class="text-gray-700 dark:text-gray-400 [&_a]:relative [&_a]:z-10">
+                <T k={desc} />
+              </p>
+              <div class="mt-auto pt-2">
+                <StackIcons stack={stack} />
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+    <h3 class="mt-4 font-mono font-bold text-gray-700 dark:text-gray-300">
+      <T k="section.moreProjects" />
+    </h3>
+    <ul class="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
+      {
+        more.map(({ title, titleKey, url, desc, stack }) => (
+          <li class="relative flex flex-col gap-1 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+            <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+              <h4 class="font-semibold text-gray-900 dark:text-white">
+                {url ? (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-razzmatazz-500"
+                  >
+                    {titleKey ? <T k={titleKey} /> : title}
+                  </a>
+                ) : titleKey ? (
+                  <T k={titleKey} />
+                ) : (
+                  title
+                )}
+              </h4>
+              <StackIcons stack={stack} />
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-400 [&_a]:relative [&_a]:z-10">
+              <T k={desc} />
+            </p>
+          </li>
+        ))
+      }
+    </ul>
   </section>
-  <section id="techs" class="flex flex-col gap-3">
+  <section id="techs" data-reveal class="flex flex-col gap-3">
     <SectionTitle><T k="section.techs" /></SectionTitle>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      <IconCard>
-        <HoverableIcon tip="tip.react">
-          <ReactIcon size={56} />
-        </HoverableIcon>
-        React
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <NextIcon size={56} />
-        </HoverableIcon>
-        Next.js
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.python">
-          <PythonIcon size={56} />
-        </HoverableIcon>
-        Python
-      </IconCard>
-      <IconCard>
-        <HoverableIcon
-          tip="tip.firebase"
-        >
-          <FirebaseIcon size={56} />
-        </HoverableIcon>
-        Firebase
-      </IconCard>
-      <IconCard>
-        <HoverableIcon
-          tip="tip.supabase"
-        >
-          <SupabaseIcon size={56} />
-        </HoverableIcon>
-        Supabase
-      </IconCard>
-      <IconCard>
-        <HoverableIcon
-          tip="tip.svelte"
-        >
-          <SvelteIcon size={56} />
-        </HoverableIcon>
-        Svelte
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.drizzle">
-          <DrizzleIcon size={56} />
-        </HoverableIcon>
-        Drizzle
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <PrismaIcon size={56} />
-        </HoverableIcon>
-        Prisma
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <ExpressIcon size={56} />
-        </HoverableIcon>
-        Express
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <FastApiIcon size={56} />
-        </HoverableIcon>
-        FastAPI
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <DjangoIcon size={56} />
-        </HoverableIcon>
-        Django
-      </IconCard>
-      <IconCard>
-        <HoverableIcon
-          tip="tip.astro"
-        >
-          <AstroIcon size={56} />
-        </HoverableIcon>
-        Astro
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.p5">
-          <P5Icon size={56} />
-        </HoverableIcon>
-        p5.js
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.tailwind">
-          <TailwindIcon size={56} />
-        </HoverableIcon>
-        Tailwind CSS
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.daisyui">
-          <DaisyUiIcon size={56} />
-        </HoverableIcon>
-        DaisyUI
-      </IconCard>
-    </div>
+    {
+      stack.map(({ group, items }) => (
+        <div class="flex flex-col gap-2">
+          <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">
+            <T k={group} />
+          </h3>
+          <ul class="flex flex-wrap gap-2">
+            {items.map(({ name, tip, Icon }) => (
+              <Chip tip={tip}>
+                <Icon size={20} />
+                {name}
+              </Chip>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </section>
-  <section id="tools" class="flex flex-col gap-3">
-    <SectionTitle><T k="section.tools" /></SectionTitle>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      <IconCard>
-        <HoverableIcon tip="tip.claude">
-          <ClaudeIcon size={56} />
-        </HoverableIcon>
-        Claude Code
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <OpenCodeIcon size={56} />
-        </HoverableIcon>
-        OpenCode
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.huggingFace">
-          <HuggingFaceIcon size={56} />
-        </HoverableIcon>
-        Hugging Face
-      </IconCard>
-      <IconCard>
-        <HoverableIcon tip="tip.swift">
-          <SwiftIcon size={56} />
-        </HoverableIcon>
-        Swift
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <VercelIcon size={56} />
-        </HoverableIcon>
-        Vercel
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <VitestIcon size={56} />
-        </HoverableIcon>
-        Vitest
-      </IconCard>
-      <IconCard>
-        <HoverableIcon>
-          <GithubActionsIcon size={56} />
-        </HoverableIcon>
-        GitHub Actions
-      </IconCard>
-    </div>
-  </section>
-  <section id="education" class="flex flex-col gap-3">
+  <section id="education" data-reveal class="flex flex-col gap-3">
     <SectionTitle><T k="section.education" /></SectionTitle>
     <TimeLine>
       <TimeLineItem>
@@ -675,80 +539,19 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
   </section>
 </BaseLayout>
 
-<script is:inline src="https://unpkg.com/@popperjs/core@2"></script>
-<script is:inline src="https://unpkg.com/tippy.js@6"></script>
-<script is:inline define:vars={{ copied }}>
-  tippy("[data-tippy-content]:not(#copy-email-btn)", {
-    placement: "bottom",
-    theme: "light",
-  });
-
-  const copyEmailBtnTippy = tippy("#copy-email-btn", {
-    placement: "bottom",
-    theme: "light",
-    hideOnClick: false,
-  })[0];
-
-  const isEs = () => document.documentElement.lang === "es";
-  const tipText = (el) =>
-    (isEs() && el.dataset.tippyEs) || el.dataset.tippyContent;
-  const localizeTips = () =>
-    document
-      .querySelectorAll("[data-tippy-es]")
-      .forEach((el) => el._tippy?.setContent(tipText(el)));
-  localizeTips();
-  document.addEventListener("langchange", localizeTips);
-
-  // copy mail to clipboard
-  // reference: https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
-  const copyEmailBtn = document.getElementById("copy-email-btn");
+<script>
+  const copyEmailBtn = document.getElementById("copy-email-btn")!;
   copyEmailBtn.addEventListener("click", () => {
-    const mailElement = document.getElementById("mail");
-    // Select the text field
-    mailElement.select();
-    mailElement.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text inside the text field
+    const mailElement = document.getElementById("mail")!;
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(mailElement.value);
-      copyEmailBtnTippy.setContent(isEs() ? copied.es : copied.en);
-
-      setTimeout(() => {
-        copyEmailBtnTippy.setContent(tipText(copyEmailBtn));
-      }, 4000);
+      navigator.clipboard.writeText(mailElement.textContent!.trim());
+      const { copied, copiedEs } = copyEmailBtn.dataset;
+      window.showTip(
+        copyEmailBtn,
+        (document.documentElement.lang === "es" && copiedEs) || copied!,
+      );
     } else {
-      // alert("hey")
-      mailElement.removeAttribute("disabled");
-      mailElement.setAttribute("readonly", true);
-      mailElement.select();
+      window.getSelection()?.selectAllChildren(mailElement);
     }
   });
 </script>
-
-<style is:global>
-  .dark .tippy-box[data-theme~="light"] {
-    background-color: #fff;
-    color: #111827;
-  }
-
-  .dark
-    .tippy-box[data-theme~="light"][data-placement^="top"]
-    > .tippy-arrow::before {
-    border-top-color: #fff;
-  }
-  .dark
-    .tippy-box[data-theme~="light"][data-placement^="bottom"]
-    > .tippy-arrow::before {
-    border-bottom-color: #fff;
-  }
-  .dark
-    .tippy-box[data-theme~="light"][data-placement^="left"]
-    > .tippy-arrow::before {
-    border-left-color: #fff;
-  }
-  .dark
-    .tippy-box[data-theme~="light"][data-placement^="right"]
-    > .tippy-arrow::before {
-    border-right-color: #fff;
-  }
-</style>

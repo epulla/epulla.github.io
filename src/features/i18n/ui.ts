@@ -11,16 +11,27 @@ const accent = (text: string) =>
 const moodleApi = "https://docs.moodle.org/dev/Web_service_API_functions";
 
 const en = {
-  "meta.title": "Portfolio",
+  "meta.title": "Erick Pulla | Fullstack developer",
+  "meta.description":
+    "Portfolio of Erick Pulla, fullstack developer: work experience, open-source projects like Patio, Senda and Snipzy, and the tech I use every day.",
   "lang.change": "Change language",
   "theme.toggle": "Toggle theme",
   "intro.hello": `Hi! I'm a ${accent("fullstack developer ")}who loves building random stuff :)`,
 
+  "nav.experience": "Experience",
+  "nav.projects": "Projects",
+  "nav.techs": "Stack",
+  "nav.education": "Education",
+
   "section.experience": "Experience",
   "section.projects": "Projects",
-  "section.techs": "Favorite Techs",
-  "section.tools": "Tools",
+  "section.moreProjects": "More projects",
+  "section.techs": "Tech & Tools",
   "section.education": "Education",
+
+  "stack.frontend": "Frontend",
+  "stack.backend": "Backend & data",
+  "stack.tools": "Tools & platforms",
 
   "loc.usa": "Incline Village, NV, USA",
 
@@ -42,6 +53,7 @@ const en = {
     "Led the development of a web application (frontend) of statistical dashboard showing metrics about the performance of developers completing Jira tickets during a sprint or a certain time lapse.",
   "exp.ioet.2":
     "Designed and implemented scalable APIs (REST and GraphQL) along with cron jobs for managing first and third party services and reducing time by 90% (from 10 seconds to 1 second)",
+  "exp.gye.time": "September 2021 - November 2021",
   "exp.gye.title": "Data Analyst (Guayaquil Municipality)",
   "exp.gye.1":
     "Collected and cleaned demographic raw data about pregnant women from low-income neighborhoods in Guayaquil.",
@@ -60,6 +72,8 @@ const en = {
 
   "proj.patio":
     "Open-source desktop workspace for AI chats, kanban boards and automation. Works with Claude Code, Codex, Copilot, opencode and local AI on macOS, Windows and Linux.",
+  "proj.senda":
+    "Browser extension plus local MCP server that lets your AI assistant browse, read and act in your own signed-in browser, only in its own tab group and with on-page approvals before sensitive actions.",
   "proj.tabjury":
     "Browser extension that reuses open tabs and finds duplicates. Put unused tabs to sleep or close them automatically according to your rules.",
   "proj.ziran":
@@ -96,6 +110,11 @@ const en = {
   "footer.madeWith": "Made with",
   "footer.by": "by epulla",
 
+  "social.linkedin": "LinkedIn profile",
+  "social.github": "GitHub profile",
+  "social.x": "X profile",
+  "social.cv": "Download CV (PDF)",
+
   "tip.copy": "Copy",
   "tip.copied": "Copied!",
   "tip.chromeExtension": "Chrome Extension",
@@ -119,16 +138,27 @@ const en = {
 export type UiKey = keyof typeof en;
 
 const es: Record<UiKey, string> = {
-  "meta.title": "Portafolio",
+  "meta.title": "Erick Pulla | Desarrollador fullstack",
+  "meta.description":
+    "Portafolio de Erick Pulla, desarrollador fullstack: experiencia laboral, proyectos open source como Patio, Senda y Snipzy, y las tecnologías que uso a diario.",
   "lang.change": "Cambiar idioma",
   "theme.toggle": "Cambiar tema",
   "intro.hello": `¡Hola! Soy ${accent("desarrollador fullstack ")}y me encanta construir cosas random :)`,
 
+  "nav.experience": "Experiencia",
+  "nav.projects": "Proyectos",
+  "nav.techs": "Stack",
+  "nav.education": "Educación",
+
   "section.experience": "Experiencia",
   "section.projects": "Proyectos",
-  "section.techs": "Tecnologías favoritas",
-  "section.tools": "Herramientas",
+  "section.moreProjects": "Más proyectos",
+  "section.techs": "Tecnologías y herramientas",
   "section.education": "Educación",
+
+  "stack.frontend": "Frontend",
+  "stack.backend": "Backend y datos",
+  "stack.tools": "Herramientas y plataformas",
 
   "loc.usa": "Incline Village, NV, EE. UU.",
 
@@ -150,6 +180,7 @@ const es: Record<UiKey, string> = {
     "Lideré el desarrollo del frontend de una aplicación web de dashboards estadísticos con métricas sobre el desempeño de los desarrolladores al completar tickets de Jira durante un sprint o un periodo determinado.",
   "exp.ioet.2":
     "Diseñé e implementé APIs escalables (REST y GraphQL) junto con cron jobs para gestionar servicios propios y de terceros, reduciendo el tiempo en un 90% (de 10 segundos a 1 segundo).",
+  "exp.gye.time": "Septiembre 2021 - noviembre 2021",
   "exp.gye.title": "Analista de datos (Municipio de Guayaquil)",
   "exp.gye.1":
     "Recolecté y limpié datos demográficos en bruto sobre mujeres embarazadas de barrios de bajos ingresos de Guayaquil.",
@@ -169,6 +200,8 @@ const es: Record<UiKey, string> = {
 
   "proj.patio":
     "Espacio de trabajo de escritorio de código abierto para chats de IA, tableros kanban y automatización. Funciona con Claude Code, Codex, Copilot, opencode e IA local en macOS, Windows y Linux.",
+  "proj.senda":
+    "Extensión de navegador y servidor MCP local que permite a tu asistente de IA navegar, leer y actuar en tu propio navegador con tus sesiones, solo en su propio grupo de pestañas y pidiendo tu aprobación en la página antes de acciones sensibles.",
   "proj.tabjury":
     "Extensión de navegador que reutiliza pestañas abiertas y encuentra duplicadas. Pon a dormir las pestañas que no usas o ciérralas automáticamente según tus reglas.",
   "proj.ziran":
@@ -204,6 +237,11 @@ const es: Record<UiKey, string> = {
 
   "footer.madeWith": "Hecho con",
   "footer.by": "por epulla",
+
+  "social.linkedin": "Perfil de LinkedIn",
+  "social.github": "Perfil de GitHub",
+  "social.x": "Perfil de X",
+  "social.cv": "Descargar CV (PDF)",
 
   "tip.copy": "Copiar",
   "tip.copied": "¡Copiado!",

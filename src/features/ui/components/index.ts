@@ -1,3 +1,4 @@
+export { default as Chip } from "./Chip.astro";
 export { default as HoverableIcon } from "./HoverableIcon.astro";
 export { default as Paragraph } from "./Paragraph.astro";
 export { default as SectionTitle } from "./SectionTitle.astro";

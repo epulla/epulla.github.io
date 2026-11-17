@@ -35,3 +35,25 @@ html:not([lang="es"]) [data-i18n="es"],
 html[lang="es"] [data-i18n="en"] {
   display: none;
 }
+
+section[id] {
+  scroll-margin-top: 7rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  [data-reveal] {
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out,
+      border-color 0.15s;
+  }
+
+  .reveal-ready [data-reveal]:not(.revealed) {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}

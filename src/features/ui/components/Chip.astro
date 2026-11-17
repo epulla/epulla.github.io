@@ -1,0 +1,18 @@
+---
+import { ui, type UiKey } from "@/features/i18n/ui";
+
+interface Props {
+  tip?: UiKey;
+}
+
+const { tip } = Astro.props;
+---
+
+<li
+  class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-800 dark:text-gray-200 hover:border-razzmatazz-400 dark:hover:border-razzmatazz-500 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition"
+  tabindex={tip ? 0 : undefined}
+  data-tip={tip && ui.en[tip]}
+  data-tip-es={tip && ui.es[tip]}
+>
+  <slot />
+</li>

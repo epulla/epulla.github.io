@@ -3,4 +3,6 @@
 
 interface Window {
   setLang(lang: string): void;
+  setTheme(theme: "light" | "dark"): void;
+  showTip(el: HTMLElement, content: string): void;
 }

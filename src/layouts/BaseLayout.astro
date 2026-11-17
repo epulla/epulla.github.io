@@ -1,5 +1,6 @@
 ---
 import { Header, Footer } from "@/features/layout/components";
+import { Tooltip } from "@/features/tooltip/components";
 import { ui, type UiKey } from "@/features/i18n/ui";
 import "@/styles/global.css";
 
@@ -8,22 +9,47 @@ interface Props {
 }
 
 const { titleKey } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og-image.png", Astro.site);
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title data-en={ui.en[titleKey]} data-es={ui.es[titleKey]}
       >{ui.en[titleKey]}</title
     >
+    <meta
+      name="description"
+      content={ui.en["meta.description"]}
+      data-en={ui.en["meta.description"]}
+      data-es={ui.es["meta.description"]}
+    />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={ui.en[titleKey]} />
+    <meta property="og:description" content={ui.en["meta.description"]} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@erick_pulla" />
+    <meta name="twitter:title" content={ui.en[titleKey]} />
+    <meta name="twitter:description" content={ui.en["meta.description"]} />
+    <meta name="twitter:image" content={ogImage} />
     <script is:inline>
       window.setLang = (lang) => {
         document.documentElement.lang = lang;
         const title = document.querySelector("title");
         if (title?.dataset[lang]) title.textContent = title.dataset[lang];
+        const description = document.querySelector('meta[name="description"]');
+        if (description?.dataset[lang]) description.content = description.dataset[lang];
         document.dispatchEvent(new CustomEvent("langchange"));
       };
 
@@ -44,6 +70,33 @@ const { titleKey } = Astro.props;
         }
         window.setLang(lang);
       })();
+
+      window.setTheme = (theme) => {
+        document.documentElement.dataset.theme =
+          theme === "dark" ? "dracula" : "acid";
+        document.dispatchEvent(new CustomEvent("themechange", { detail: theme }));
+      };
+
+      (() => {
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        // "theme" was always written by the old script, so it isn't a real choice.
+        try {
+          localStorage.removeItem("theme");
+        } catch {}
+        const stored = () => {
+          try {
+            const theme = localStorage.getItem("themeChoice");
+            return theme === "dark" || theme === "light" ? theme : null;
+          } catch {
+            return null;
+          }
+        };
+        const system = () => (media.matches ? "dark" : "light");
+        window.setTheme(stored() ?? system());
+        media.addEventListener("change", () => {
+          if (!stored()) window.setTheme(system());
+        });
+      })();
     </script>
   </head>
   <body class="bg-slate-50 dark:bg-gray-800">
@@ -52,25 +105,35 @@ const { titleKey } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <Tooltip />
+    <script>
+      const motion = window.matchMedia("(prefers-reduced-motion: no-preference)");
+
+      const revealer = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("revealed");
+            revealer.unobserve(entry.target);
+          }),
+        { rootMargin: "0px 0px -10% 0px" },
+      );
+      document.querySelectorAll("[data-reveal]").forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight)
+          el.classList.add("revealed");
+        else revealer.observe(el);
+      });
+      document.documentElement.classList.add("reveal-ready");
+
+      document.addEventListener("langchange", () => {
+        if (motion.matches)
+          document
+            .querySelector("main")
+            ?.animate([{ opacity: 0.3 }, { opacity: 1 }], {
+              duration: 250,
+              easing: "ease-out",
+            });
+      });
+    </script>
   </body>
 </html>
-
-<script is:inline>
-  // reference: https://www.kevinzunigacuellar.com/blog/dark-mode-in-astro/
-  const theme = (() => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-      return localStorage.getItem("theme");
-    }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  })();
-
-  if (theme === "light") {
-    document.documentElement.classList.remove("dark");
-  } else {
-    document.documentElement.classList.add("dark");
-  }
-  window.localStorage.setItem("theme", theme);
-</script>

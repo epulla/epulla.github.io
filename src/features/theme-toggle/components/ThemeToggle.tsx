@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ui } from "@/features/i18n/ui";
 
+type Theme = "light" | "dark";
+
+const currentTheme = (): Theme =>
+  document.documentElement.dataset.theme === "dracula" ? "dark" : "light";
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "light");
+  const [theme, setTheme] = useState<Theme>(currentTheme);
+
+  useEffect(() => {
+    const sync = () => setTheme(currentTheme());
+    document.addEventListener("themechange", sync);
+    return () => document.removeEventListener("themechange", sync);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTheme(e.target.checked ? "dark" : "light");
+    const next: Theme = e.target.checked ? "dark" : "light";
+    try {
+      localStorage.setItem("themeChoice", next);
+    } catch {}
+    window.setTheme(next);
   };
-
-  if (theme === "dark") {
-    document.documentElement.setAttribute("data-theme", "dracula");
-  } else {
-    document.documentElement.setAttribute("data-theme", "acid");
-  }
-  localStorage.setItem("theme", theme);
 
   return (
     <label className="swap swap-rotate rounded-full transition-transform hover:scale-125">
@@ -27,7 +35,6 @@ export default function ThemeToggle() {
         className="theme-controller"
         onChange={handleChange}
         checked={theme === "dark"}
-        // checked={localStorage.getItem("theme") === "dark"}
       />
 
       {/* sun icon */}

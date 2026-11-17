@@ -1,0 +1,81 @@
+<div
+  id="tooltip"
+  role="tooltip"
+  hidden
+  class="absolute z-[60] max-w-64 px-2.5 py-1.5 rounded-md text-sm text-center pointer-events-none bg-gray-900 text-white shadow-lg dark:bg-white dark:text-gray-900"
+>
+</div>
+
+<script>
+  const tooltip = document.getElementById("tooltip")!;
+  let target: HTMLElement | null = null;
+
+  const text = (el: HTMLElement) =>
+    (document.documentElement.lang === "es" && el.dataset.tipEs) ||
+    el.dataset.tip ||
+    "";
+
+  const place = (el: HTMLElement) => {
+    const rect = el.getBoundingClientRect();
+    const width = tooltip.offsetWidth;
+    const height = tooltip.offsetHeight;
+    const left = Math.min(
+      Math.max(rect.left + rect.width / 2 - width / 2, 8),
+      document.documentElement.clientWidth - width - 8,
+    );
+    const below = rect.bottom + 8 + height <= window.innerHeight;
+    const top = below ? rect.bottom + 8 : rect.top - height - 8;
+    tooltip.style.left = `${left + window.scrollX}px`;
+    tooltip.style.top = `${top + window.scrollY}px`;
+  };
+
+  const describe = (el: HTMLElement, on: boolean) => {
+    const ids = (el.getAttribute("aria-describedby") ?? "")
+      .split(" ")
+      .filter((id) => id && id !== "tooltip");
+    if (on) ids.push("tooltip");
+    if (ids.length) el.setAttribute("aria-describedby", ids.join(" "));
+    else el.removeAttribute("aria-describedby");
+  };
+
+  const hide = () => {
+    tooltip.hidden = true;
+    if (target) describe(target, false);
+    target = null;
+  };
+
+  const show = (el: HTMLElement, content = text(el)) => {
+    if (target !== el) hide();
+    target = el;
+    tooltip.textContent = content;
+    tooltip.hidden = false;
+    describe(el, true);
+    place(el);
+  };
+
+  const tipTarget = (event: Event) =>
+    (event.target as Element).closest?.<HTMLElement>("[data-tip]") ?? null;
+
+  document.addEventListener("mouseover", (event) => {
+    const el = tipTarget(event);
+    if (el && el !== target) show(el);
+    else if (!el && target) hide();
+  });
+  document.addEventListener("mouseout", (event) => {
+    if (!event.relatedTarget) hide();
+  });
+  document.addEventListener("focusin", (event) => {
+    const el = tipTarget(event);
+    if (el) show(el);
+  });
+  document.addEventListener("focusout", hide);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") hide();
+  });
+  window.showTip = (el, content) => {
+    show(el, content);
+    setTimeout(() => {
+      if (target === el) show(el);
+    }, 4000);
+  };
+</script>
