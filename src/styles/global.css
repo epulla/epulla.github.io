@@ -56,13 +56,4 @@ section[id] {
     opacity: 0;
     transform: translateY(16px);
   }
-
-  .theme-transition,
-  .theme-transition * {
-    transition:
-      background-color 0.3s,
-      border-color 0.3s,
-      color 0.3s,
-      fill 0.3s !important;
-  }
 }

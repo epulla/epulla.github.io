@@ -134,18 +134,6 @@ const ogImage = new URL("/og-image.png", Astro.site);
               easing: "ease-out",
             });
       });
-
-      let themeTimer: number | undefined;
-      document.addEventListener("themechange", () => {
-        if (!motion.matches) return;
-        const root = document.documentElement;
-        root.classList.add("theme-transition");
-        clearTimeout(themeTimer);
-        themeTimer = window.setTimeout(
-          () => root.classList.remove("theme-transition"),
-          350,
-        );
-      });
     </script>
   </body>
 </html>
