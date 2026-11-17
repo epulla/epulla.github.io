@@ -1,5 +1,9 @@
 @import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
 @theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
   --color-razzmatazz-50: #fff0f7;
   --color-razzmatazz-100: #ffe4f2;
   --color-razzmatazz-200: #ffc8e7;
