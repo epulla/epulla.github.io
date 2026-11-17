@@ -42,6 +42,7 @@ const en = {
     "Led the development of a web application (frontend) of statistical dashboard showing metrics about the performance of developers completing Jira tickets during a sprint or a certain time lapse.",
   "exp.ioet.2":
     "Designed and implemented scalable APIs (REST and GraphQL) along with cron jobs for managing first and third party services and reducing time by 90% (from 10 seconds to 1 second)",
+  "exp.gye.time": "September 2021 - November 2021",
   "exp.gye.title": "Data Analyst (Guayaquil Municipality)",
   "exp.gye.1":
     "Collected and cleaned demographic raw data about pregnant women from low-income neighborhoods in Guayaquil.",
@@ -152,6 +153,7 @@ const es: Record<UiKey, string> = {
     "Lideré el desarrollo del frontend de una aplicación web de dashboards estadísticos con métricas sobre el desempeño de los desarrolladores al completar tickets de Jira durante un sprint o un periodo determinado.",
   "exp.ioet.2":
     "Diseñé e implementé APIs escalables (REST y GraphQL) junto con cron jobs para gestionar servicios propios y de terceros, reduciendo el tiempo en un 90% (de 10 segundos a 1 segundo).",
+  "exp.gye.time": "Septiembre 2021 - noviembre 2021",
   "exp.gye.title": "Analista de datos (Municipio de Guayaquil)",
   "exp.gye.1":
     "Recolecté y limpié datos demográficos en bruto sobre mujeres embarazadas de barrios de bajos ingresos de Guayaquil.",
