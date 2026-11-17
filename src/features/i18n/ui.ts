@@ -60,6 +60,8 @@ const en = {
 
   "proj.patio":
     "Open-source desktop workspace for AI chats, kanban boards and automation. Works with Claude Code, Codex, Copilot, opencode and local AI on macOS, Windows and Linux.",
+  "proj.senda":
+    "Browser extension plus local MCP server that lets your AI assistant browse, read and act in your own signed-in browser, only in its own tab group and with on-page approvals before sensitive actions.",
   "proj.tabjury":
     "Browser extension that reuses open tabs and finds duplicates. Put unused tabs to sleep or close them automatically according to your rules.",
   "proj.ziran":
@@ -169,6 +171,8 @@ const es: Record<UiKey, string> = {
 
   "proj.patio":
     "Espacio de trabajo de escritorio de código abierto para chats de IA, tableros kanban y automatización. Funciona con Claude Code, Codex, Copilot, opencode e IA local en macOS, Windows y Linux.",
+  "proj.senda":
+    "Extensión de navegador y servidor MCP local que permite a tu asistente de IA navegar, leer y actuar en tu propio navegador con tus sesiones, solo en su propio grupo de pestañas y pidiendo tu aprobación en la página antes de acciones sensibles.",
   "proj.tabjury":
     "Extensión de navegador que reutiliza pestañas abiertas y encuentra duplicadas. Pon a dormir las pestañas que no usas o ciérralas automáticamente según tus reglas.",
   "proj.ziran":
