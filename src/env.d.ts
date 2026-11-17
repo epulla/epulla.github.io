@@ -3,4 +3,5 @@
 
 interface Window {
   setLang(lang: string): void;
+  setTheme(theme: "light" | "dark"): void;
 }

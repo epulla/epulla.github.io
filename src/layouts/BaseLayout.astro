@@ -44,6 +44,33 @@ const { titleKey } = Astro.props;
         }
         window.setLang(lang);
       })();
+
+      window.setTheme = (theme) => {
+        document.documentElement.dataset.theme =
+          theme === "dark" ? "dracula" : "acid";
+        document.dispatchEvent(new CustomEvent("themechange", { detail: theme }));
+      };
+
+      (() => {
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        // "theme" was always written by the old script, so it isn't a real choice.
+        try {
+          localStorage.removeItem("theme");
+        } catch {}
+        const stored = () => {
+          try {
+            const theme = localStorage.getItem("themeChoice");
+            return theme === "dark" || theme === "light" ? theme : null;
+          } catch {
+            return null;
+          }
+        };
+        const system = () => (media.matches ? "dark" : "light");
+        window.setTheme(stored() ?? system());
+        media.addEventListener("change", () => {
+          if (!stored()) window.setTheme(system());
+        });
+      })();
     </script>
   </head>
   <body class="bg-slate-50 dark:bg-gray-800">
@@ -54,23 +81,3 @@ const { titleKey } = Astro.props;
     <Footer />
   </body>
 </html>
-
-<script is:inline>
-  // reference: https://www.kevinzunigacuellar.com/blog/dark-mode-in-astro/
-  const theme = (() => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-      return localStorage.getItem("theme");
-    }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  })();
-
-  if (theme === "light") {
-    document.documentElement.classList.remove("dark");
-  } else {
-    document.documentElement.classList.add("dark");
-  }
-  window.localStorage.setItem("theme", theme);
-</script>
