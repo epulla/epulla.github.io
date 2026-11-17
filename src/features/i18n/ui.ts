@@ -23,6 +23,7 @@ const en = {
 
   "section.experience": "Experience",
   "section.projects": "Projects",
+  "section.moreProjects": "More projects",
   "section.techs": "Tech & Tools",
   "section.education": "Education",
 
@@ -147,6 +148,7 @@ const es: Record<UiKey, string> = {
 
   "section.experience": "Experiencia",
   "section.projects": "Proyectos",
+  "section.moreProjects": "Más proyectos",
   "section.techs": "Tecnologías y herramientas",
   "section.education": "Educación",
 

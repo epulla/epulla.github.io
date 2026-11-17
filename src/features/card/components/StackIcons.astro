@@ -1,0 +1,23 @@
+---
+import { HoverableIcon } from "@/features/ui/components";
+import type { UiKey } from "@/features/i18n/ui";
+import type { ReactIcon } from "@/features/icons/components";
+
+export type StackItem = { label?: string; tip?: UiKey; Icon: typeof ReactIcon };
+
+interface Props {
+  stack: StackItem[];
+}
+
+const { stack } = Astro.props;
+---
+
+<span class="relative z-10 flex flex-wrap gap-3 items-center">
+  {
+    stack.map(({ label, tip, Icon }) => (
+      <HoverableIcon dataTippyContent={label} tip={tip}>
+        <Icon />
+      </HoverableIcon>
+    ))
+  }
+</span>
