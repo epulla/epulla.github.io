@@ -34,7 +34,7 @@ import T from "./T.astro";
   <ul
     id="lang-menu"
     hidden
-    class="absolute right-0 mt-2 min-w-36 p-1.5 flex flex-col gap-0.5 rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
+    class="absolute right-0 mt-2 min-w-32 p-1 flex flex-col gap-0.5 rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
   >
     {
       Object.entries(languages).map(([code, label]) => (
@@ -44,7 +44,7 @@ import T from "./T.astro";
             lang={code}
             data-lang-option={code}
             aria-pressed="false"
-            class="w-full text-left px-3 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 aria-pressed:font-semibold aria-pressed:text-razzmatazz-600 dark:aria-pressed:text-razzmatazz-400 transition cursor-pointer"
+            class="w-full text-left text-sm px-3 py-1.5 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 aria-pressed:font-semibold aria-pressed:text-razzmatazz-600 dark:aria-pressed:text-razzmatazz-400 transition cursor-pointer"
           >
             {label}
           </button>
