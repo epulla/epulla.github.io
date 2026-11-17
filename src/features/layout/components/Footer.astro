@@ -1,6 +1,7 @@
 ---
 import { AstroIcon, ReactIcon, HeartIcon } from "@/features/icons/components";
 import { HoverableIcon, Paragraph } from "@/features/ui/components";
+import { T } from "@/features/i18n/components";
 ---
 
 <footer
@@ -16,13 +17,13 @@ import { HoverableIcon, Paragraph } from "@/features/ui/components";
     </HoverableIcon>
   </section>
   <section id="made-by" class="flex gap-2">
-    <Paragraph>Made with</Paragraph>
+    <Paragraph><T k="footer.madeWith" /></Paragraph>
     <Paragraph>
       <span
         class="text-[#fff0] block hover:text-razzmatazz-400 transition hover:scale-125"
         ><HeartIcon /></span
       >
     </Paragraph>
-    <Paragraph>by epulla</Paragraph>
+    <Paragraph><T k="footer.by" /></Paragraph>
   </section>
 </footer>

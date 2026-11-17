@@ -54,9 +54,13 @@ import {
 } from "@/features/timeline/components";
 import { CardTitle, IconCard, LinkCard } from "@/features/card/components";
 import { CardContent } from "@/features/card/components";
+import { T } from "@/features/i18n/components";
+import { ui } from "@/features/i18n/ui";
+
+const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
 ---
 
-<BaseLayout title="Portfolio">
+<BaseLayout titleKey="meta.title">
   <section id="intro" class="flex gap-4 items-center">
     <img
       class="w-[115px] sm:w-[150px] md:w-[200px] rounded-xl border border-razzmatazz-400 dark:border-razzmatazz-700 hover:translate-x-1 transition"
@@ -65,11 +69,7 @@ import { CardContent } from "@/features/card/components";
     />
     <div class="flex flex-col gap-2">
       <Title>Erick Pulla</Title>
-      <Paragraph>
-        Hi! I'm a <span class="text-razzmatazz-600 dark:text-razzmatazz-400"
-          >fullstack developer
-        </span>who loves building random stuff :)
-      </Paragraph>
+      <Paragraph><T k="intro.hello" /></Paragraph>
       <div
         class="flex items-center rounded bg-slate-100 dark:bg-gray-900 py-1 px-2"
       >
@@ -83,7 +83,8 @@ import { CardContent } from "@/features/card/components";
         />
         <button
           id="copy-email-btn"
-          data-tippy-content="Copy"
+          data-tippy-content={ui.en["tip.copy"]}
+          data-tippy-es={ui.es["tip.copy"]}
           class="rounded text-gray-500 dark:text-gray-400 hover:scale-110"
           ><CopyIcon /></button
         >
@@ -125,137 +126,96 @@ import { CardContent } from "@/features/card/components";
     </div>
   </section>
   <section id="experience" class="flex flex-col gap-3">
-    <SectionTitle>Experience</SectionTitle>
+    <SectionTitle><T k="section.experience" /></SectionTitle>
     <TimeLine>
       <TimeLineItem>
-        <TimeLineTime>March 2026 - now</TimeLineTime>
+        <TimeLineTime><T k="exp.ube.time" /></TimeLineTime>
         <TimeLineTitle>
-          Master's Professor (Bolivarian University of Ecuador)<TimeLineItalic>
+          <T k="exp.ube.title" /><TimeLineItalic>
             Durán, Guayas, Ecuador
           </TimeLineItalic>
         </TimeLineTitle>
         <ul class="list-disc ml-4">
           <li>
-            <Paragraph>
-              Teach the course "Chatbots y Asistentes Virtuales en el Aula"
-              (Chatbots and Virtual Assistants in the Classroom) in the Master's
-              in Artificial Intelligence for Education.
-            </Paragraph>
+            <Paragraph><T k="exp.ube.1" /></Paragraph>
           </li>
         </ul>
       </TimeLineItem>
       <TimeLineItem>
-        <TimeLineTime>April 2023 - now</TimeLineTime>
+        <TimeLineTime><T k="exp.novacomp.time" /></TimeLineTime>
         <TimeLineTitle>
-          Senior Software Engineer (Novacomp)<TimeLineItalic>
+          <T k="exp.novacomp.title" /><TimeLineItalic>
             San José, Costa Rica
           </TimeLineItalic>
         </TimeLineTitle>
         <ul class="list-disc ml-4">
           <li>
-            <Paragraph>
-              Developed cron job solutions in Apache Airflow for ACH files and
-              reports deliveries according to stakeholders' requirements such as
-              schedule, days (weekdays/holidays/weekend).
-            </Paragraph>
+            <Paragraph><T k="exp.novacomp.1" /></Paragraph>
           </li>
           <li>
-            <Paragraph>
-              Supported production as On Call Person to watch any incident,
-              requirement or special events during the day along with BizOps,
-              DevOps and Backend team.
-            </Paragraph>
+            <Paragraph><T k="exp.novacomp.2" /></Paragraph>
           </li>
           <li>
-            <Paragraph>
-              Created data dashboards for different teams across the company
-              (BizOps, Partners, Product owners) using React, GraphQL,
-              JavaScript and PostgreSQL
-            </Paragraph>
+            <Paragraph><T k="exp.novacomp.3" /></Paragraph>
           </li>
         </ul>
       </TimeLineItem>
       <TimeLineItem>
-        <TimeLineTime>December 2021 - April 2023</TimeLineTime>
+        <TimeLineTime><T k="exp.ioet.time" /></TimeLineTime>
         <TimeLineTitle>
-          Software Engineer (IOET)<TimeLineItalic>
-            Incline Village, NV, USA
+          <T k="exp.ioet.title" /><TimeLineItalic>
+            <T k="loc.usa" />
           </TimeLineItalic>
         </TimeLineTitle>
         <ul class="list-disc ml-4">
           <li>
-            <Paragraph>
-              Led the development of a web application (frontend) of statistical
-              dashboard showing metrics about the performance of developers
-              completing Jira tickets during a sprint or a certain time lapse.
-            </Paragraph>
+            <Paragraph><T k="exp.ioet.1" /></Paragraph>
           </li>
           <li>
-            <Paragraph>
-              Designed and implemented scalable APIs (REST and GraphQL) along
-              with cron jobs for managing first and third party services and
-              reducing time by 90% (from 10 seconds to 1 second)
-            </Paragraph>
+            <Paragraph><T k="exp.ioet.2" /></Paragraph>
           </li>
         </ul>
       </TimeLineItem>
       <TimeLineItem>
-        <TimeLineTime>December 2021 - April 2023</TimeLineTime>
+        <TimeLineTime><T k="exp.ioet.time" /></TimeLineTime>
         <TimeLineTitle>
-          Data Analyst (Guayaquil Municipality)
+          <T k="exp.gye.title" />
           <TimeLineItalic>Guayaquil, Guayas, Ecuador</TimeLineItalic>
         </TimeLineTitle>
         <ul class="list-disc ml-4">
           <li>
-            <Paragraph>
-              Collected and cleaned demographic raw data about pregnant women
-              from low-income neighborhoods in Guayaquil.
-            </Paragraph>
+            <Paragraph><T k="exp.gye.1" /></Paragraph>
           </li>
           <li>
-            <Paragraph>
-              Led the development and design of a frontend application that
-              helped to track syphilis cases in Guayaquil city using Google
-              Maps.
-            </Paragraph>
+            <Paragraph><T k="exp.gye.2" /></Paragraph>
           </li>
         </ul>
         <br />
       </TimeLineItem>
       <TimeLineItem>
-        <TimeLineTime>February 2020 - January 2021</TimeLineTime>
+        <TimeLineTime><T k="exp.priscila.time" /></TimeLineTime>
         <TimeLineTitle>
-          Software Engineer (Fish Industry Santa Priscila)
+          <T k="exp.priscila.title" />
           <TimeLineItalic>Guayaquil, Guayas, Ecuador</TimeLineItalic>
         </TimeLineTitle>
         <ul class="list-disc ml-4">
           <li>
-            <Paragraph>
-              Developed an automated bot that browses the Ecuadorian tax website
-              to extract relevant information for the company.
-            </Paragraph>
+            <Paragraph><T k="exp.priscila.1" /></Paragraph>
           </li>
           <li>
-            <Paragraph>
-              Developed and implemented an e-learning system for seasonal
-              evaluation of workers and trained HR staff to manage it.
-            </Paragraph>
+            <Paragraph><T k="exp.priscila.2" /></Paragraph>
           </li>
         </ul>
       </TimeLineItem>
       <TimeLineItem>
-        <TimeLineTime>February 2019 - February 2020</TimeLineTime>
+        <TimeLineTime><T k="exp.casagrande.time" /></TimeLineTime>
         <TimeLineTitle>
-          Master Assistant (Casa Grande University)
+          <T k="exp.casagrande.title" />
           <TimeLineItalic>Guayaquil, Guayas, Ecuador</TimeLineItalic>
         </TimeLineTitle>
         <ul class="list-disc ml-4">
           <li>
-            <Paragraph>
-              Designed and developed mini games that helped a class lesson be
-              more interactive for students (games such as roulette with prizes,
-              tic tac toe, dice roller, coin flipper).
-            </Paragraph>
+            <Paragraph><T k="exp.casagrande.1" /></Paragraph>
           </li>
         </ul>
       </TimeLineItem>
@@ -263,15 +223,13 @@ import { CardContent } from "@/features/card/components";
   </section>
 
   <section id="projects" class="flex flex-col gap-3">
-    <SectionTitle>Projects</SectionTitle>
+    <SectionTitle><T k="section.projects" /></SectionTitle>
     <LinkCard url="https://github.com/epulla/patio">
       <CardTitle>
         <div class="flex items-center gap-3">Patio</div>
       </CardTitle>
       <CardContent>
-        Open-source desktop workspace for AI chats, kanban boards and automation.
-        Works with Claude Code, Codex, Copilot, opencode and local AI on
-        macOS, Windows and Linux.
+        <T k="proj.patio" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="Go">
             <GoIcon />
@@ -296,14 +254,13 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">TabJury</div>
       </CardTitle>
       <CardContent>
-        Browser extension that reuses open tabs and finds duplicates. Put unused
-        tabs to sleep or close them automatically according to your rules.
+        <T k="proj.tabjury" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="Typescript">
             <TypescriptIcon />
           </HoverableIcon>
           +
-          <HoverableIcon dataTippyContent="Chrome Extension">
+          <HoverableIcon tip="tip.chromeExtension">
             <ChromeIcon />
           </HoverableIcon>
         </span>
@@ -314,8 +271,7 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">Ziran</div>
       </CardTitle>
       <CardContent>
-        Keyboard-first window switcher that lives in the macOS menu bar.
-        Requires macOS 14 or later and installs via Homebrew.
+        <T k="proj.ziran" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="Swift">
             <SwiftIcon />
@@ -332,8 +288,7 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">OpenCode Anthropic Auth</div>
       </CardTitle>
       <CardContent>
-        OpenCode plugin for using Anthropic models with your Claude Pro or Max
-        subscription. No API key needed.
+        <T k="proj.anthropicAuth" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="OpenCode">
             <OpenCodeIcon />
@@ -354,15 +309,7 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">Chismesillo</div>
       </CardTitle>
       <CardContent>
-        Transcribe long audio files with Whisper entirely in the browser: no
-        uploads, no backend, no API keys. Audio is streamed in windows through
-        Web Workers, so memory stays flat even for multi-hour podcasts. Exports
-        to SRT, VTT, JSON, TXT and CSV (<a
-          class="underline"
-          href="https://github.com/epulla/chismesillo.app"
-          target="_blank"
-          rel="noopener noreferrer">source code</a
-        >).
+        <T k="proj.chismesillo" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="Astro">
             <AstroIcon />
@@ -391,9 +338,7 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">Snipzy</div>
       </CardTitle>
       <CardContent>
-        Native macOS menu-bar screenshot tool. Capture a region, annotate it,
-        then copy or save it as PNG. It also includes on-device OCR to grab text
-        from any capture.
+        <T k="proj.snipzy" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="Swift">
             <SwiftIcon />
@@ -410,9 +355,7 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">i-am-burned-out</div>
       </CardTitle>
       <CardContent>
-        Agent skill that puts a burned-out senior dev inside your coding agent:
-        answer first, minimal code, and never cuts validation, security or
-        tests. Works with Claude Code, OpenCode, Codex, Gemini CLI and more.
+        <T k="proj.burnedOut" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="Claude Code">
             <ClaudeIcon />
@@ -433,9 +376,7 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">Prod Tickets</div>
       </CardTitle>
       <CardContent>
-        Jira clone made with SvelteKit (frontend) and Nest.js (backend) for
-        ticketing. This project was implemented for the ITB (Instituto
-        Tecnológico Bolivariano) and released privately in 09/2024.
+        <T k="proj.prodTickets" />
         <span class="flex gap-3 pt-3">
           <HoverableIcon dataTippyContent="Svelte">
             <SvelteIcon />
@@ -449,12 +390,10 @@ import { CardContent } from "@/features/card/components";
     </LinkCard>
     <LinkCard url="https://epulla.github.io/">
       <CardTitle>
-        <div class="flex items-center gap-3">Portfolio</div>
+        <div class="flex items-center gap-3"><T k="proj.portfolio.title" /></div>
       </CardTitle>
       <CardContent>
-        Personal portfolio made with Astro and React. This project was created
-        to show my projects, experiences and techs that I love and deployed
-        using Github Pages.
+        <T k="proj.portfolio" />
         <span class="flex gap-3 pt-3">
           <HoverableIcon dataTippyContent="Astro">
             <AstroIcon />
@@ -471,8 +410,7 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">Easy Web Macros</div>
       </CardTitle>
       <CardContent>
-        Google Chrome extension that lets you record your web actions and
-        replay them with a single click.
+        <T k="proj.easyWebMacros" />
         <span class="flex gap-3 pt-3">
           <HoverableIcon dataTippyContent="Svelte">
             <SvelteIcon />
@@ -493,17 +431,7 @@ import { CardContent } from "@/features/card/components";
         <div class="flex items-center gap-3">Moodle API Handler</div>
       </CardTitle>
       <CardContent>
-        Moodle API Handler is an open-source tiny app that helps to manage your <a
-          class="underline"
-          href="https://docs.moodle.org/dev/Web_service_API_functions"
-          target="_blank"
-          rel="noopener noreferrer">API functions from Moodle</a
-        > (you can read more about Moodle WebServices <a
-          class="underline"
-          href="https://docs.moodle.org/dev/Web_service_API_functions"
-          target="_blank"
-          rel="noopener noreferrer">here</a
-        >).
+        <T k="proj.moodle" />
         <span class="flex gap-3 pt-3">
           <HoverableIcon dataTippyContent="Svelte">
             <SvelteIcon />
@@ -518,9 +446,7 @@ import { CardContent } from "@/features/card/components";
     <LinkCard url="https://github.com/epulla/quicknote">
       <CardTitle>Quicknote</CardTitle>
       <CardContent>
-        Quicknote is an open-source app that helps you create and share
-        volatile, text-only messages. It's perfect for quickly sharing
-        passwords, private tokens, private credentials and gossip :)
+        <T k="proj.quicknote" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="React">
             <ReactIcon />
@@ -539,12 +465,7 @@ import { CardContent } from "@/features/card/components";
     <LinkCard url="https://github.com/epulla/twilio_minimal_video_call_app">
       <CardTitle>Twilio Video Call App</CardTitle>
       <CardContent>
-        This is a minimal application for video calling (Peer-to-Peer) using <a
-          class="underline"
-          href="https://www.twilio.com/docs"
-          target="_blank"
-          rel="noopener noreferrer">Twilio API</a
-        > (you need Twilio credentials to use the app).
+        <T k="proj.twilio" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="FastAPI">
             <FastApiIcon />
@@ -559,13 +480,7 @@ import { CardContent } from "@/features/card/components";
     <LinkCard url="https://github.com/epulla/pokedex-flutter">
       <CardTitle>Mobile Pokedex App</CardTitle>
       <CardContent>
-        This is a project about showing an interactive Pokedex in a mobile
-        version. This project was created using Flutter, Dart and <a
-          class="underline"
-          href="https://pokeapi.co/"
-          target="_blank"
-          rel="noopener noreferrer">PokéApi</a
-        > (free pókemon API).
+        <T k="proj.pokedex" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="Flutter">
             <FlutterIcon />
@@ -576,8 +491,7 @@ import { CardContent } from "@/features/card/components";
     <LinkCard url="https://github.com/epulla/BingoGenerator">
       <CardTitle>Bingo Generator</CardTitle>
       <CardContent>
-        This project is a Bingo generator (Ecuador version). It is one of my
-        very first projects as a programming student. Hope you like it! :D
+        <T k="proj.bingo" />
         <span class="flex gap-3 pt-3 items-center">
           <HoverableIcon dataTippyContent="Python">
             <PythonIcon />
@@ -587,10 +501,10 @@ import { CardContent } from "@/features/card/components";
     </LinkCard>
   </section>
   <section id="techs" class="flex flex-col gap-3">
-    <SectionTitle>Favorite Techs</SectionTitle>
+    <SectionTitle><T k="section.techs" /></SectionTitle>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       <IconCard>
-        <HoverableIcon dataTippyContent="Love it! specially the community!">
+        <HoverableIcon tip="tip.react">
           <ReactIcon size={56} />
         </HoverableIcon>
         React
@@ -602,14 +516,14 @@ import { CardContent } from "@/features/card/components";
         Next.js
       </IconCard>
       <IconCard>
-        <HoverableIcon dataTippyContent="My first language <3">
+        <HoverableIcon tip="tip.python">
           <PythonIcon size={56} />
         </HoverableIcon>
         Python
       </IconCard>
       <IconCard>
         <HoverableIcon
-          dataTippyContent="Really nice service! Specially its NoSQL database (FireStore) and realtime changes"
+          tip="tip.firebase"
         >
           <FirebaseIcon size={56} />
         </HoverableIcon>
@@ -617,7 +531,7 @@ import { CardContent } from "@/features/card/components";
       </IconCard>
       <IconCard>
         <HoverableIcon
-          dataTippyContent="Damn good service! Specially its SQL database and realtime changes"
+          tip="tip.supabase"
         >
           <SupabaseIcon size={56} />
         </HoverableIcon>
@@ -625,14 +539,14 @@ import { CardContent } from "@/features/card/components";
       </IconCard>
       <IconCard>
         <HoverableIcon
-          dataTippyContent="I personally love it along with SvelteKit"
+          tip="tip.svelte"
         >
           <SvelteIcon size={56} />
         </HoverableIcon>
         Svelte
       </IconCard>
       <IconCard>
-        <HoverableIcon dataTippyContent="My favourite ORM!">
+        <HoverableIcon tip="tip.drizzle">
           <DrizzleIcon size={56} />
         </HoverableIcon>
         Drizzle
@@ -663,26 +577,26 @@ import { CardContent } from "@/features/card/components";
       </IconCard>
       <IconCard>
         <HoverableIcon
-          dataTippyContent="Perfect. Everything, down to the last minute details"
+          tip="tip.astro"
         >
           <AstroIcon size={56} />
         </HoverableIcon>
         Astro
       </IconCard>
       <IconCard>
-        <HoverableIcon dataTippyContent="Best JS library ever!">
+        <HoverableIcon tip="tip.p5">
           <P5Icon size={56} />
         </HoverableIcon>
         p5.js
       </IconCard>
       <IconCard>
-        <HoverableIcon dataTippyContent="Best CSS library ever!">
+        <HoverableIcon tip="tip.tailwind">
           <TailwindIcon size={56} />
         </HoverableIcon>
         Tailwind CSS
       </IconCard>
       <IconCard>
-        <HoverableIcon dataTippyContent="Best Tailwind library ever!">
+        <HoverableIcon tip="tip.daisyui">
           <DaisyUiIcon size={56} />
         </HoverableIcon>
         DaisyUI
@@ -690,10 +604,10 @@ import { CardContent } from "@/features/card/components";
     </div>
   </section>
   <section id="tools" class="flex flex-col gap-3">
-    <SectionTitle>Tools</SectionTitle>
+    <SectionTitle><T k="section.tools" /></SectionTitle>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       <IconCard>
-        <HoverableIcon dataTippyContent="My daily coding partner">
+        <HoverableIcon tip="tip.claude">
           <ClaudeIcon size={56} />
         </HoverableIcon>
         Claude Code
@@ -705,13 +619,13 @@ import { CardContent } from "@/features/card/components";
         OpenCode
       </IconCard>
       <IconCard>
-        <HoverableIcon dataTippyContent="Whisper models running in the browser">
+        <HoverableIcon tip="tip.huggingFace">
           <HuggingFaceIcon size={56} />
         </HoverableIcon>
         Hugging Face
       </IconCard>
       <IconCard>
-        <HoverableIcon dataTippyContent="For native macOS apps">
+        <HoverableIcon tip="tip.swift">
           <SwiftIcon size={56} />
         </HoverableIcon>
         Swift
@@ -737,25 +651,25 @@ import { CardContent } from "@/features/card/components";
     </div>
   </section>
   <section id="education" class="flex flex-col gap-3">
-    <SectionTitle>Education</SectionTitle>
+    <SectionTitle><T k="section.education" /></SectionTitle>
     <TimeLine>
       <TimeLineItem>
-        <TimeLineTime>March 2026</TimeLineTime>
+        <TimeLineTime><T k="edu.master.time" /></TimeLineTime>
         <TimeLineTitle>
-          Master's Degree (Casa Grande University)<TimeLineItalic>
+          <T k="edu.master.title" /><TimeLineItalic>
             Guayaquil, Guayas, Ecuador
           </TimeLineItalic>
         </TimeLineTitle>
-        <Paragraph>Master in Cybersecurity</Paragraph>
+        <Paragraph><T k="edu.master.desc" /></Paragraph>
       </TimeLineItem>
       <TimeLineItem>
-        <TimeLineTime>February 2017 - March 2022</TimeLineTime>
+        <TimeLineTime><T k="edu.eng.time" /></TimeLineTime>
         <TimeLineTitle>
-          Engineer Degree (ESPOL)<TimeLineItalic>
+          <T k="edu.eng.title" /><TimeLineItalic>
             Guayaquil, Guayas, Ecuador
           </TimeLineItalic>
         </TimeLineTitle>
-        <Paragraph>Major in Computer Science Engineering</Paragraph>
+        <Paragraph><T k="edu.eng.desc" /></Paragraph>
       </TimeLineItem>
     </TimeLine>
   </section>
@@ -763,8 +677,8 @@ import { CardContent } from "@/features/card/components";
 
 <script is:inline src="https://unpkg.com/@popperjs/core@2"></script>
 <script is:inline src="https://unpkg.com/tippy.js@6"></script>
-<script is:inline>
-  tippy("[data-tippy-content]", {
+<script is:inline define:vars={{ copied }}>
+  tippy("[data-tippy-content]:not(#copy-email-btn)", {
     placement: "bottom",
     theme: "light",
   });
@@ -774,6 +688,16 @@ import { CardContent } from "@/features/card/components";
     theme: "light",
     hideOnClick: false,
   })[0];
+
+  const isEs = () => document.documentElement.lang === "es";
+  const tipText = (el) =>
+    (isEs() && el.dataset.tippyEs) || el.dataset.tippyContent;
+  const localizeTips = () =>
+    document
+      .querySelectorAll("[data-tippy-es]")
+      .forEach((el) => el._tippy?.setContent(tipText(el)));
+  localizeTips();
+  document.addEventListener("langchange", localizeTips);
 
   // copy mail to clipboard
   // reference: https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
@@ -787,10 +711,10 @@ import { CardContent } from "@/features/card/components";
     // Copy the text inside the text field
     if (navigator.clipboard) {
       navigator.clipboard.writeText(mailElement.value);
-      copyEmailBtnTippy.setContent("Copied!");
+      copyEmailBtnTippy.setContent(isEs() ? copied.es : copied.en);
 
       setTimeout(() => {
-        copyEmailBtnTippy.setContent("Copy");
+        copyEmailBtnTippy.setContent(tipText(copyEmailBtn));
       }, 4000);
     } else {
       // alert("hey")

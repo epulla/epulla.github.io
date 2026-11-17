@@ -13,3 +13,8 @@
   --color-info-content: #fff;
 }
 @variant dark (&:where([data-theme=dracula], [data-theme=dracula] *));
+
+html:not([lang="es"]) [data-i18n="es"],
+html[lang="es"] [data-i18n="en"] {
+  display: none;
+}

@@ -1,7 +1,18 @@
 ---
-const { dataTippyContent } = Astro.props;
+import { ui, type UiKey } from "@/features/i18n/ui";
+
+interface Props {
+  dataTippyContent?: string;
+  tip?: UiKey;
+}
+
+const { dataTippyContent, tip } = Astro.props;
 ---
 
-<span class="transition hover:scale-125" data-tippy-content={dataTippyContent}>
+<span
+  class="transition hover:scale-125"
+  data-tippy-content={tip ? ui.en[tip] : dataTippyContent}
+  data-tippy-es={tip && ui.es[tip]}
+>
   <slot />
 </span>
