@@ -13,6 +13,7 @@ const moodleApi = "https://docs.moodle.org/dev/Web_service_API_functions";
 const en = {
   "meta.title": "Portfolio",
   "lang.change": "Change language",
+  "theme.toggle": "Toggle theme",
   "intro.hello": `Hi! I'm a ${accent("fullstack developer ")}who loves building random stuff :)`,
 
   "section.experience": "Experience",
@@ -120,6 +121,7 @@ export type UiKey = keyof typeof en;
 const es: Record<UiKey, string> = {
   "meta.title": "Portafolio",
   "lang.change": "Cambiar idioma",
+  "theme.toggle": "Cambiar tema",
   "intro.hello": `¡Hola! Soy ${accent("desarrollador fullstack ")}y me encanta construir cosas random :)`,
 
   "section.experience": "Experiencia",
