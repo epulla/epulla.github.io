@@ -99,6 +99,11 @@ const en = {
   "footer.madeWith": "Made with",
   "footer.by": "by epulla",
 
+  "social.linkedin": "LinkedIn profile",
+  "social.github": "GitHub profile",
+  "social.x": "X profile",
+  "social.cv": "Download CV (PDF)",
+
   "tip.copy": "Copy",
   "tip.copied": "Copied!",
   "tip.chromeExtension": "Chrome Extension",
@@ -210,6 +215,11 @@ const es: Record<UiKey, string> = {
 
   "footer.madeWith": "Hecho con",
   "footer.by": "por epulla",
+
+  "social.linkedin": "Perfil de LinkedIn",
+  "social.github": "Perfil de GitHub",
+  "social.x": "Perfil de X",
+  "social.cv": "Descargar CV (PDF)",
 
   "tip.copy": "Copiar",
   "tip.copied": "¡Copiado!",

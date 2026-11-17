@@ -38,12 +38,12 @@ import {
   SwiftIcon,
   TailwindIcon,
   TwilioIcon,
-  TwitterIcon,
   TypescriptIcon,
   VercelIcon,
   ViteIcon,
   VitestIcon,
   WailsIcon,
+  XIcon,
 } from "@/features/icons/components";
 import {
   TimeLine,
@@ -57,6 +57,13 @@ import { CardContent } from "@/features/card/components";
 import { T } from "@/features/i18n/components";
 import { ui } from "@/features/i18n/ui";
 
+const socials = [
+  { href: "https://www.linkedin.com/in/erickpulla/", tip: "LinkedIn", label: "social.linkedin", Icon: LinkedinIcon },
+  { href: "https://github.com/epulla", tip: "GitHub", label: "social.github", Icon: GithubIcon },
+  { href: "https://x.com/erick_pulla", tip: "X", label: "social.x", Icon: XIcon },
+  { href: "/docs/FullStack_CV_english_ErickPulla.pdf", tip: "CV", label: "social.cv", Icon: DocumentIcon },
+] as const;
+
 const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
 ---
 
@@ -67,61 +74,42 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
       src="/images/profile_photo.png"
       alt="Erick Pulla"
     />
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 min-w-0">
       <Title>Erick Pulla</Title>
       <Paragraph><T k="intro.hello" /></Paragraph>
       <div
-        class="flex items-center rounded bg-slate-100 dark:bg-gray-900 py-1 px-2"
+        class="flex items-center gap-2 rounded bg-slate-100 dark:bg-gray-900 py-1 px-2"
       >
-        <input
-          class="bg-inherit font-mono text-gray-500 dark:text-gray-400 w-full text-sm sm:text-base"
-          type="text"
-          value="erickpulladsi@gmail.com"
+        <a
           id="mail"
-          onclick="this.select()"
-          disabled
-        />
+          href="mailto:erickpulladsi@gmail.com"
+          class="flex-1 min-w-0 truncate font-mono text-gray-500 dark:text-gray-400 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 text-xs sm:text-base rounded focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition"
+          >erickpulladsi@gmail.com</a
+        >
         <button
           id="copy-email-btn"
+          type="button"
           data-tippy-content={ui.en["tip.copy"]}
           data-tippy-es={ui.es["tip.copy"]}
-          class="rounded text-gray-500 dark:text-gray-400 hover:scale-110"
+          class="rounded text-gray-500 dark:text-gray-400 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition cursor-pointer"
           ><span class="sr-only"><T k="tip.copy" /></span><CopyIcon /></button
         >
       </div>
-      <div class="flex gap-3">
-        <a
-          href="https://www.linkedin.com/in/erickpulla/"
-          target="_blank"
-          data-tippy-content="Linkedin"
-          class="border border-[#0078d4] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
-          ><LinkedinIcon /></a
-        >
-        <a
-          href="https://github.com/epulla"
-          target="_blank"
-          data-tippy-content="Github"
-          class="border border-[#383838] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
-          ><GithubIcon /></a
-        >
-        <a
-          href="https://twitter.com/erick_pulla"
-          target="_blank"
-          data-tippy-content="Twitter / X"
-          class="border border-[#03A9F4] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer hover:scale-110"
-          ><TwitterIcon /></a
-        >
-        <a
-          href="/docs/FullStack_CV_english_ErickPulla.pdf"
-          target="_blank"
-          data-tippy-content="CV"
-          class="border border-[#000] dark:border-[#fff] hover:bg-slate-300 dark:hover:bg-gray-500 rounded-xl p-0.5 transition cursor-pointer dark:text-white hover:scale-110"
-        >
-          <span class="hidden sm:inline"><DocumentIcon /></span>
-          <span class="inline-flex sm:hidden h-full items-center px-[4px]"
-            >CV</span
-          >
-        </a>
+      <div class="flex gap-1 -ml-2">
+        {
+          socials.map(({ href, tip, label, Icon }) => (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-tippy-content={tip}
+              class="flex items-center justify-center size-9 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-700/70 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-razzmatazz-500 transition [&_svg]:size-5"
+            >
+              <span class="sr-only"><T k={label} /></span>
+              <Icon />
+            </a>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -716,28 +704,18 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
   localizeTips();
   document.addEventListener("langchange", localizeTips);
 
-  // copy mail to clipboard
-  // reference: https://www.w3schools.com/howto/howto_js_copy_clipboard.asp
   const copyEmailBtn = document.getElementById("copy-email-btn");
   copyEmailBtn.addEventListener("click", () => {
     const mailElement = document.getElementById("mail");
-    // Select the text field
-    mailElement.select();
-    mailElement.setSelectionRange(0, 99999); // For mobile devices
-
-    // Copy the text inside the text field
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(mailElement.value);
+      navigator.clipboard.writeText(mailElement.textContent.trim());
       copyEmailBtnTippy.setContent(isEs() ? copied.es : copied.en);
 
       setTimeout(() => {
         copyEmailBtnTippy.setContent(tipText(copyEmailBtn));
       }, 4000);
     } else {
-      // alert("hey")
-      mailElement.removeAttribute("disabled");
-      mailElement.setAttribute("readonly", true);
-      mailElement.select();
+      window.getSelection().selectAllChildren(mailElement);
     }
   });
 </script>

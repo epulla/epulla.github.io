@@ -33,7 +33,7 @@ export { default as SvelteIcon } from "./SvelteIcon.astro";
 export { default as SwiftIcon } from "./SwiftIcon.astro";
 export { default as TailwindIcon } from "./TailwindIcon.astro";
 export { default as TwilioIcon } from "./TwilioIcon.astro";
-export { default as TwitterIcon } from "./TwitterIcon.astro";
+export { default as XIcon } from "./XIcon.astro";
 export { default as TypescriptIcon } from "./TypescriptIcon.astro";
 export { default as VercelIcon } from "./VercelIcon.astro";
 export { default as ViteIcon } from "./ViteIcon.astro";
