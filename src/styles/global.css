@@ -1,4 +1,17 @@
 @import "tailwindcss";
+@theme {
+  --color-razzmatazz-50: #fff0f7;
+  --color-razzmatazz-100: #ffe4f2;
+  --color-razzmatazz-200: #ffc8e7;
+  --color-razzmatazz-300: #ff9cd1;
+  --color-razzmatazz-400: #ff5fb0;
+  --color-razzmatazz-500: #ff3090;
+  --color-razzmatazz-600: #ec0964;
+  --color-razzmatazz-700: #d70050;
+  --color-razzmatazz-800: #b10341;
+  --color-razzmatazz-900: #93083a;
+  --color-razzmatazz-950: #5b001e;
+}
 @plugin "daisyui" {
   themes:
     acid --default,
