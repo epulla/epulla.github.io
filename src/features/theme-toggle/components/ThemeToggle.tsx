@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ui } from "@/features/i18n/ui";
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "light");
@@ -16,7 +17,10 @@ export default function ThemeToggle() {
 
   return (
     <label className="swap swap-rotate rounded-full transition-transform hover:scale-125">
-      <span className="sr-only">Toggle theme</span>
+      <span className="sr-only">
+        <span data-i18n="en" lang="en">{ui.en["theme.toggle"]}</span>
+        <span data-i18n="es" lang="es">{ui.es["theme.toggle"]}</span>
+      </span>
       {/* this hidden checkbox controls the state */}
       <input
         type="checkbox"
