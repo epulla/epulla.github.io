@@ -1,11 +1,84 @@
 ---
 import { ThemeToggle } from "@/features/theme-toggle/components";
-import { LanguageSwitcher } from "@/features/i18n/components";
+import { LanguageSwitcher, T } from "@/features/i18n/components";
+import type { UiKey } from "@/features/i18n/ui";
+
+const links: { id: string; label: UiKey }[] = [
+  { id: "experience", label: "nav.experience" },
+  { id: "projects", label: "nav.projects" },
+  { id: "techs", label: "nav.techs" },
+  { id: "education", label: "nav.education" },
+];
 ---
 
-<header class="w-full sticky top-0 backdrop-blur-lg py-4 px-5 z-50">
-  <div class="max-w-3xl mx-auto flex justify-end items-center gap-3">
-    <LanguageSwitcher />
-    <ThemeToggle client:only="react" />
+<header
+  id="site-header"
+  class="group w-full sticky top-0 backdrop-blur-lg py-3 px-5 z-50"
+>
+  <div
+    class="max-w-3xl mx-auto flex flex-wrap sm:flex-nowrap items-center gap-x-3 gap-y-1"
+  >
+    <a
+      href="#"
+      class="font-semibold text-gray-900 dark:text-white whitespace-nowrap rounded focus-visible:outline-2 focus-visible:outline-razzmatazz-500 invisible opacity-0 group-data-scrolled:visible group-data-scrolled:opacity-100 transition-[opacity,visibility]"
+      >Erick Pulla</a
+    >
+    <nav
+      class="order-last sm:order-none basis-full sm:basis-auto sm:ml-auto"
+    >
+      <ul class="flex justify-between sm:justify-end sm:gap-1">
+        {
+          links.map(({ id, label }) => (
+            <li>
+              <a
+                href={`#${id}`}
+                data-nav-link={id}
+                class="block px-2 py-1.5 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-700/70 aria-[current=true]:text-razzmatazz-600 dark:aria-[current=true]:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition"
+              >
+                <T k={label} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="flex items-center gap-3 ml-auto sm:ml-0">
+      <LanguageSwitcher />
+      <ThemeToggle client:only="react" />
+    </div>
   </div>
 </header>
+
+<script>
+  const header = document.getElementById("site-header")!;
+  const intro = document.getElementById("intro");
+  if (intro) {
+    new IntersectionObserver(([entry]) => {
+      header.toggleAttribute("data-scrolled", !entry.isIntersecting);
+    }).observe(intro);
+  }
+
+  const links = document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]");
+  const sections = [...links]
+    .map((link) => document.getElementById(link.dataset.navLink!))
+    .filter((section) => section !== null);
+  const updateCurrent = () => {
+    const atBottom =
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 2;
+    const current = atBottom
+      ? sections.at(-1)
+      : sections.findLast(
+          (section) =>
+            section.getBoundingClientRect().top <= window.innerHeight * 0.35,
+        );
+    links.forEach((link) =>
+      link.setAttribute(
+        "aria-current",
+        String(link.dataset.navLink === current?.id),
+      ),
+    );
+  };
+  window.addEventListener("scroll", updateCurrent, { passive: true });
+  updateCurrent();
+</script>

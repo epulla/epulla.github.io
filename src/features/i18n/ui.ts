@@ -16,6 +16,11 @@ const en = {
   "theme.toggle": "Toggle theme",
   "intro.hello": `Hi! I'm a ${accent("fullstack developer ")}who loves building random stuff :)`,
 
+  "nav.experience": "Experience",
+  "nav.projects": "Projects",
+  "nav.techs": "Stack",
+  "nav.education": "Education",
+
   "section.experience": "Experience",
   "section.projects": "Projects",
   "section.techs": "Favorite Techs",
@@ -131,6 +136,11 @@ const es: Record<UiKey, string> = {
   "lang.change": "Cambiar idioma",
   "theme.toggle": "Cambiar tema",
   "intro.hello": `¡Hola! Soy ${accent("desarrollador fullstack ")}y me encanta construir cosas random :)`,
+
+  "nav.experience": "Experiencia",
+  "nav.projects": "Proyectos",
+  "nav.techs": "Stack",
+  "nav.education": "Educación",
 
   "section.experience": "Experiencia",
   "section.projects": "Proyectos",

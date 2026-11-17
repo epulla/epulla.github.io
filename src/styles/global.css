@@ -35,3 +35,13 @@ html:not([lang="es"]) [data-i18n="es"],
 html[lang="es"] [data-i18n="en"] {
   display: none;
 }
+
+section[id] {
+  scroll-margin-top: 7rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
