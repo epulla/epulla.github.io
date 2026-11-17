@@ -73,7 +73,7 @@ import T from "./T.astro";
       ),
     );
 
-  btn.addEventListener("click", () => setOpen(menu.hidden));
+  btn.addEventListener("click", () => setOpen(menu.hidden !== false));
 
   options.forEach((option) =>
     option.addEventListener("click", () => {

@@ -2,6 +2,12 @@ allowBuilds:
   esbuild: true
   sharp: true
   '@tailwindcss/oxide': true
+minimumReleaseAgeExclude:
+  - astro@7.4.4
 overrides:
-  '@astrojs/react>vite': 7.3.6
-  '@tailwindcss/vite>vite': 7.3.6
+  '@emnapi/runtime': 1.11.3
+  'picomatch@2': ^2.3.2
+  'defu@6': ^6.1.5
+  'fast-uri@3': ^3.1.9
+  'source-map-js@1': ^1.2.2
+  vite: ^8.3.5
