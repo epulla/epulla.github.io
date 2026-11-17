@@ -11,7 +11,9 @@ const accent = (text: string) =>
 const moodleApi = "https://docs.moodle.org/dev/Web_service_API_functions";
 
 const en = {
-  "meta.title": "Portfolio",
+  "meta.title": "Erick Pulla | Fullstack developer",
+  "meta.description":
+    "Portfolio of Erick Pulla, fullstack developer: work experience, open-source projects like Patio, Senda and Snipzy, and the tech I use every day.",
   "lang.change": "Change language",
   "theme.toggle": "Toggle theme",
   "intro.hello": `Hi! I'm a ${accent("fullstack developer ")}who loves building random stuff :)`,
@@ -136,7 +138,9 @@ const en = {
 export type UiKey = keyof typeof en;
 
 const es: Record<UiKey, string> = {
-  "meta.title": "Portafolio",
+  "meta.title": "Erick Pulla | Desarrollador fullstack",
+  "meta.description":
+    "Portafolio de Erick Pulla, desarrollador fullstack: experiencia laboral, proyectos open source como Patio, Senda y Snipzy, y las tecnologías que uso a diario.",
   "lang.change": "Cambiar idioma",
   "theme.toggle": "Cambiar tema",
   "intro.hello": `¡Hola! Soy ${accent("desarrollador fullstack ")}y me encanta construir cosas random :)`,

@@ -264,8 +264,6 @@ const stack: {
     ],
   },
 ];
-
-const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
 ---
 
 <BaseLayout titleKey="meta.title">
@@ -290,8 +288,10 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
         <button
           id="copy-email-btn"
           type="button"
-          data-tippy-content={ui.en["tip.copy"]}
-          data-tippy-es={ui.es["tip.copy"]}
+          data-tip={ui.en["tip.copy"]}
+          data-tip-es={ui.es["tip.copy"]}
+          data-copied={ui.en["tip.copied"]}
+          data-copied-es={ui.es["tip.copied"]}
           class="rounded text-gray-500 dark:text-gray-400 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition cursor-pointer"
           ><span class="sr-only"><T k="tip.copy" /></span><CopyIcon /></button
         >
@@ -303,7 +303,7 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              data-tippy-content={tip}
+              data-tip={tip}
               class="flex items-center justify-center size-9 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-700/70 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-razzmatazz-500 transition [&_svg]:size-5"
             >
               <span class="sr-only"><T k={label} /></span>
@@ -538,70 +538,19 @@ const copied = { en: ui.en["tip.copied"], es: ui.es["tip.copied"] };
   </section>
 </BaseLayout>
 
-<script is:inline src="https://unpkg.com/@popperjs/core@2"></script>
-<script is:inline src="https://unpkg.com/tippy.js@6"></script>
-<script is:inline define:vars={{ copied }}>
-  tippy("[data-tippy-content]:not(#copy-email-btn)", {
-    placement: "bottom",
-    theme: "light",
-  });
-
-  const copyEmailBtnTippy = tippy("#copy-email-btn", {
-    placement: "bottom",
-    theme: "light",
-    hideOnClick: false,
-  })[0];
-
-  const isEs = () => document.documentElement.lang === "es";
-  const tipText = (el) =>
-    (isEs() && el.dataset.tippyEs) || el.dataset.tippyContent;
-  const localizeTips = () =>
-    document
-      .querySelectorAll("[data-tippy-es]")
-      .forEach((el) => el._tippy?.setContent(tipText(el)));
-  localizeTips();
-  document.addEventListener("langchange", localizeTips);
-
-  const copyEmailBtn = document.getElementById("copy-email-btn");
+<script>
+  const copyEmailBtn = document.getElementById("copy-email-btn")!;
   copyEmailBtn.addEventListener("click", () => {
-    const mailElement = document.getElementById("mail");
+    const mailElement = document.getElementById("mail")!;
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(mailElement.textContent.trim());
-      copyEmailBtnTippy.setContent(isEs() ? copied.es : copied.en);
-
-      setTimeout(() => {
-        copyEmailBtnTippy.setContent(tipText(copyEmailBtn));
-      }, 4000);
+      navigator.clipboard.writeText(mailElement.textContent!.trim());
+      const { copied, copiedEs } = copyEmailBtn.dataset;
+      window.showTip(
+        copyEmailBtn,
+        (document.documentElement.lang === "es" && copiedEs) || copied!,
+      );
     } else {
-      window.getSelection().selectAllChildren(mailElement);
+      window.getSelection()?.selectAllChildren(mailElement);
     }
   });
 </script>
-
-<style is:global>
-  .dark .tippy-box[data-theme~="light"] {
-    background-color: #fff;
-    color: #111827;
-  }
-
-  .dark
-    .tippy-box[data-theme~="light"][data-placement^="top"]
-    > .tippy-arrow::before {
-    border-top-color: #fff;
-  }
-  .dark
-    .tippy-box[data-theme~="light"][data-placement^="bottom"]
-    > .tippy-arrow::before {
-    border-bottom-color: #fff;
-  }
-  .dark
-    .tippy-box[data-theme~="light"][data-placement^="left"]
-    > .tippy-arrow::before {
-    border-left-color: #fff;
-  }
-  .dark
-    .tippy-box[data-theme~="light"][data-placement^="right"]
-    > .tippy-arrow::before {
-    border-right-color: #fff;
-  }
-</style>
