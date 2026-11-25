@@ -112,7 +112,7 @@ const en = {
   "social.linkedin": "LinkedIn profile",
   "social.github": "GitHub profile",
   "social.x": "X profile",
-  "social.cv": "Download CV (PDF)",
+  "social.cv": "Print CV",
 
   "tip.copy": "Copy",
   "tip.copied": "Copied!",
@@ -239,7 +239,7 @@ const es: Record<UiKey, string> = {
   "social.linkedin": "Perfil de LinkedIn",
   "social.github": "Perfil de GitHub",
   "social.x": "Perfil de X",
-  "social.cv": "Descargar CV (PDF)",
+  "social.cv": "Imprimir CV",
 
   "tip.copy": "Copiar",
   "tip.copied": "¡Copiado!",

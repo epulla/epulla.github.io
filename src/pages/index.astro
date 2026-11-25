@@ -67,8 +67,10 @@ const socials = [
   { href: "https://www.linkedin.com/in/erickpulla/", tip: "LinkedIn", label: "social.linkedin", Icon: LinkedinIcon },
   { href: "https://github.com/epulla", tip: "GitHub", label: "social.github", Icon: GithubIcon },
   { href: "https://x.com/erick_pulla", tip: "X", label: "social.x", Icon: XIcon },
-  { href: "/docs/FullStack_CV_english_ErickPulla.pdf", tip: "CV", label: "social.cv", Icon: DocumentIcon },
 ] as const;
+
+const socialClass =
+  "flex items-center justify-center size-9 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-700/70 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-razzmatazz-500 transition [&_svg]:size-5";
 
 const ts: StackItem = { label: "Typescript", Icon: TypescriptIcon };
 const chromeExt: StackItem = { tip: "tip.chromeExtension", Icon: ChromeIcon };
@@ -269,7 +271,7 @@ const stack: {
 <BaseLayout titleKey="meta.title">
   <section id="intro" class="flex gap-4 items-center">
     <img
-      class="w-[115px] sm:w-[150px] md:w-[200px] rounded-xl border border-razzmatazz-400 dark:border-razzmatazz-700 hover:translate-x-1 transition"
+      class="w-[115px] sm:w-[150px] md:w-[200px] print:w-[100px] rounded-xl border border-razzmatazz-400 dark:border-razzmatazz-700 hover:translate-x-1 transition"
       src="/images/profile_photo.png"
       alt="Erick Pulla"
     />
@@ -292,11 +294,11 @@ const stack: {
           data-tip-es={ui.es["tip.copy"]}
           data-copied={ui.en["tip.copied"]}
           data-copied-es={ui.es["tip.copied"]}
-          class="rounded text-gray-500 dark:text-gray-400 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition cursor-pointer"
+          class="rounded text-gray-500 dark:text-gray-400 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-razzmatazz-500 transition cursor-pointer print:hidden"
           ><span class="sr-only"><T k="tip.copy" /></span><CopyIcon /></button
         >
       </div>
-      <div class="flex gap-1 -ml-2">
+      <div class="flex gap-1 -ml-2 print:hidden">
         {
           socials.map(({ href, tip, label, Icon }) => (
             <a
@@ -304,14 +306,21 @@ const stack: {
               target="_blank"
               rel="noopener noreferrer"
               data-tip={tip}
-              class="flex items-center justify-center size-9 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200/70 dark:hover:bg-gray-700/70 hover:text-razzmatazz-600 dark:hover:text-razzmatazz-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-razzmatazz-500 transition [&_svg]:size-5"
+              class={socialClass}
             >
               <span class="sr-only"><T k={label} /></span>
               <Icon />
             </a>
           ))
         }
+        <button type="button" onclick="print()" data-tip="CV" class:list={[socialClass, "cursor-pointer"]}>
+          <span class="sr-only"><T k="social.cv" /></span>
+          <DocumentIcon />
+        </button>
       </div>
+      <p class="hidden print:block font-mono text-xs text-gray-500">
+        linkedin.com/in/erickpulla · github.com/epulla
+      </p>
     </div>
   </section>
   <section id="experience" data-reveal class="flex flex-col gap-3">
@@ -419,11 +428,11 @@ const stack: {
           <article
             data-reveal
             class:list={[
-              "group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow hover:border-razzmatazz-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-razzmatazz-500 transition",
+              "break-inside-avoid group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow print:shadow-none hover:border-razzmatazz-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-razzmatazz-500 transition",
               { "sm:col-span-2": i === 0 },
             ]}
           >
-            <div class="aspect-[16/10] overflow-hidden border-b border-gray-200 bg-slate-100 dark:border-gray-700 dark:bg-gray-900">
+            <div class="aspect-[16/10] overflow-hidden print:hidden border-b border-gray-200 bg-slate-100 dark:border-gray-700 dark:bg-gray-900">
               <Image
                 src={image}
                 alt=""
@@ -435,7 +444,7 @@ const stack: {
                 ]}
               />
             </div>
-            <div class="flex flex-1 flex-col gap-2 p-5">
+            <div class="flex flex-1 flex-col gap-2 p-5 print:p-3">
               <h3 class="flex items-center justify-between gap-2 text-xl font-bold text-gray-900 dark:text-white">
                 <a
                   href={url}
@@ -445,14 +454,14 @@ const stack: {
                 >
                   {title}
                 </a>
-                <span class="text-gray-400 group-hover:text-razzmatazz-500 transition [&_svg]:size-5">
+                <span class="text-gray-400 group-hover:text-razzmatazz-500 transition [&_svg]:size-5 print:hidden">
                   <ExternalLinkIcon />
                 </span>
               </h3>
               <p class="text-gray-700 dark:text-gray-400 [&_a]:relative [&_a]:z-10">
                 <T k={desc} />
               </p>
-              <div class="mt-auto pt-2">
+              <div class="mt-auto pt-2 print:sr-only">
                 <StackIcons stack={stack} />
               </div>
             </div>
@@ -463,10 +472,10 @@ const stack: {
     <h3 class="mt-4 font-mono font-bold text-gray-700 dark:text-gray-300">
       <T k="section.moreProjects" />
     </h3>
-    <ul class="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
+    <ul class="divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 bg-white shadow print:shadow-none dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
       {
         more.map(({ title, titleKey, url, desc, stack }) => (
-          <li class="relative flex flex-col gap-1 p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+          <li class="break-inside-avoid relative flex flex-col gap-1 p-4 print:p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
             <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
               <h4 class="font-semibold text-gray-900 dark:text-white">
                 {url ? (
@@ -484,7 +493,7 @@ const stack: {
                   title
                 )}
               </h4>
-              <StackIcons stack={stack} />
+              <span class="print:sr-only"><StackIcons stack={stack} /></span>
             </div>
             <p class="text-sm text-gray-700 dark:text-gray-400 [&_a]:relative [&_a]:z-10">
               <T k={desc} />

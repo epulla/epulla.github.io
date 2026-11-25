@@ -101,7 +101,7 @@ const ogImage = new URL("/og-image.png", Astro.site);
   </head>
   <body class="bg-slate-50 dark:bg-gray-800">
     <Header />
-    <main class="max-w-3xl mx-auto flex flex-col gap-16 px-5">
+    <main class="max-w-3xl print:max-w-none mx-auto flex flex-col gap-16 print:gap-6 px-5 print:px-0">
       <slot />
     </main>
     <Footer />
