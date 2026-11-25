@@ -29,7 +29,13 @@
   --color-error-content: #fff;
   --color-info-content: #fff;
 }
-@variant dark (&:where([data-theme=dracula], [data-theme=dracula] *));
+@custom-variant dark {
+  @media screen {
+    &:where([data-theme=dracula], [data-theme=dracula] *) {
+      @slot;
+    }
+  }
+}
 
 html:not([lang="es"]) [data-i18n="es"],
 html[lang="es"] [data-i18n="en"] {
@@ -40,7 +46,7 @@ section[id] {
   scroll-margin-top: 7rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media screen and (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
   }
@@ -55,5 +61,33 @@ section[id] {
   .reveal-ready [data-reveal]:not(.revealed) {
     opacity: 0;
     transform: translateY(16px);
+  }
+}
+
+@page {
+  margin: 1.5cm;
+}
+
+@media print {
+  :root {
+    background: #fff;
+    color-scheme: light;
+    font-size: 11px;
+  }
+
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  #projects :is(h3, h4) a[href^="http"]::after {
+    content: attr(href);
+    display: block;
+    position: static;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: normal;
+    color: var(--color-gray-500);
+    word-break: break-all;
   }
 }
